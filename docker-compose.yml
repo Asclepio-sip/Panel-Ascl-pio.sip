@@ -1,0 +1,16 @@
+services:
+  postgres_login:
+
+    container_name: postgres_login
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: login
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - tela-de-login_pgdata:/var/lib/postgresql/data
+volumes:
+  tela-de-login_pgdata:

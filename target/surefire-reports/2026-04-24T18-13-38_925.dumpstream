@@ -1,0 +1,5 @@
+# Created at 2026-04-24T18:13:39.612
+Boot Manifest-JAR contains absolute paths in classpath 'E:\DEV\Projeto-SAAS\java\PromoFarma\projeto_base_de_telas_e_login\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+
