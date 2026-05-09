@@ -2,7 +2,7 @@ package projeto_base_de_telas_e_login.config.bootstrap;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-import projeto_base_de_telas_e_login.domain.UseCase.Categoria.CategoriaUseCase;
+import projeto_base_de_telas_e_login.service.Categoria.CategoriaUseCase;
 
 import java.util.List;
 

@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import projeto_base_de_telas_e_login.adapter.out.persistence.User.UserRepository;
+import projeto_base_de_telas_e_login.persistence.User.UserRepository;
 import java.io.IOException;
 
 @Component

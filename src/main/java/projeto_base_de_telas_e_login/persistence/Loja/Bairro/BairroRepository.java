@@ -1,0 +1,12 @@
+package projeto_base_de_telas_e_login.persistence.Loja.Bairro;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface BairroRepository extends JpaRepository<BairroEntity, Long> {
+    Optional<BairroEntity> findByNome(String nome);
+
+}
