@@ -1,16 +1,19 @@
-package projeto_base_de_telas_e_login.model.categoria;
+package projeto_base_de_telas_e_login.persistence.categoria;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "categoria")
 public class Categoria {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "nome_categoria", nullable = false, unique = true)
     private String nomeCategoria;
 
     public Categoria() {}
-
-    public Categoria(Long id, String nomeCategoria) {
-        this.id = id;
-        this.nomeCategoria = nomeCategoria;
-    }
 
     public Long getId() {
         return id;

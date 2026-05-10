@@ -1,55 +1,45 @@
 package projeto_base_de_telas_e_login.controllers.TelaProdutos;
 
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import projeto_base_de_telas_e_login.controllers.TelaProdutos.api.CategoriaApi;
 import projeto_base_de_telas_e_login.dto.Categoria.CriarCategoriaDTO;
-import projeto_base_de_telas_e_login.service.Categoria.CategoriaUseCase;
-import projeto_base_de_telas_e_login.model.categoria.Categoria;
+import projeto_base_de_telas_e_login.persistence.categoria.Categoria;
+import projeto_base_de_telas_e_login.service.Categoria.CategoriaService;
 
 import java.util.List;
 
-
 @RestController
-@RequestMapping("categorias")
-public class TelaCategoria {
+public class TelaCategoria implements CategoriaApi {
 
-    private final CategoriaUseCase categoriaUseCase;
+    private final CategoriaService categoriaService;
 
-    public TelaCategoria(CategoriaUseCase categoriaUseCase) {
-        this.categoriaUseCase = categoriaUseCase;
+    public TelaCategoria(CategoriaService categoriaService) {
+        this.categoriaService = categoriaService;
     }
 
-    @GetMapping
-    public List<Categoria> listar() {
-        return categoriaUseCase.listarTodas();
+    @Override
+    public ResponseEntity<List<Categoria>> listar() {
+        List<Categoria> categorias = categoriaService.listarTodas();
+        return ResponseEntity.ok(categorias);
     }
 
-
-    @PostMapping
-    public Categoria criar(@RequestBody @Valid CriarCategoriaDTO dto) {
-        return categoriaUseCase.criar(dto.nomeCategoria());
+    @Override
+    public ResponseEntity<Categoria> criar(CriarCategoriaDTO dto) {
+        Categoria categoria = categoriaService.criar(dto.nomeCategoria());
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoria);
     }
 
-    @PutMapping("/{id}")
-    public Categoria editar(
-            @PathVariable Long id,
-            @RequestBody @Valid CriarCategoriaDTO dto
-    ) {
-        return categoriaUseCase.editar(id, dto.nomeCategoria());
+    @Override
+    public ResponseEntity<Categoria> editar(Long id, CriarCategoriaDTO dto) {
+        Categoria categoria = categoriaService.editar(id, dto.nomeCategoria());
+        return ResponseEntity.ok(categoria);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletar(@PathVariable Long id) {
-        try {
-            categoriaUseCase.deletar(id);
-            return ResponseEntity.ok().build();
-        } catch (IllegalStateException e) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(e.getMessage());
-        }
+    @Override
+    public ResponseEntity<Void> deletar(Long id) {
+        categoriaService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
-
 }

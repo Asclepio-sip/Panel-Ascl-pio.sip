@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface BairroRepository extends JpaRepository<BairroEntity, Long> {
-    Optional<BairroEntity> findByNome(String nome);
+public interface BairroRepository extends JpaRepository<Bairro, Long> {
+    Optional<Bairro> findByNome(String nome);
 
 }

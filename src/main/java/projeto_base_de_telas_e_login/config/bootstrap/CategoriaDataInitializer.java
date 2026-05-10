@@ -2,17 +2,17 @@ package projeto_base_de_telas_e_login.config.bootstrap;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-import projeto_base_de_telas_e_login.service.Categoria.CategoriaUseCase;
+import projeto_base_de_telas_e_login.service.Categoria.CategoriaService;
 
 import java.util.List;
 
 @Configuration
 public class CategoriaDataInitializer implements CommandLineRunner {
 
-    private final CategoriaUseCase categoriaUseCase;
+    private final CategoriaService categoriaService;
 
-    public CategoriaDataInitializer(CategoriaUseCase categoriaUseCase) {
-        this.categoriaUseCase = categoriaUseCase;
+    public CategoriaDataInitializer(CategoriaService categoriaService) {
+        this.categoriaService = categoriaService;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class CategoriaDataInitializer implements CommandLineRunner {
 
         categoriasPadrao.forEach(nome -> {
             try {
-                categoriaUseCase.criar(nome);
+                categoriaService.criar(nome);
                 System.out.println("Categoria criada: " + nome);
             } catch (Exception e) {
                 System.out.println("Categoria já existe: " + nome);

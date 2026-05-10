@@ -1,6 +1,7 @@
 package projeto_base_de_telas_e_login.dto.Product;
 
-import projeto_base_de_telas_e_login.model.product.Product;
+
+import projeto_base_de_telas_e_login.persistence.Product.Product;
 
 public record ProductoResponseDto (
 

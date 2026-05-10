@@ -6,7 +6,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LojaBairroRepository extends JpaRepository<LojaBairroEntity, Long> {
+public interface LojaBairroRepository
+        extends JpaRepository<LojaBairro, Long> {
 
-    List<LojaBairroEntity> findByLoja_Id(Long lojaId);
+    List<LojaBairro> findByLoja_Id(Long lojaId);
 }

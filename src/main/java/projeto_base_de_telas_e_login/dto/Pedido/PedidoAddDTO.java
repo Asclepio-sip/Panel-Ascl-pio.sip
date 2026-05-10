@@ -1,13 +1,13 @@
 package projeto_base_de_telas_e_login.dto.Pedido;
 
-import projeto_base_de_telas_e_login.persistence.Estoque.EstoqueEntity;
-import projeto_base_de_telas_e_login.model.Loja.Loja;
 import projeto_base_de_telas_e_login.model.Pedido.Enum.FormaDePagamento;
 import projeto_base_de_telas_e_login.model.Pedido.Enum.TipoEntrega;
-import projeto_base_de_telas_e_login.model.Pedido.Pedido;
-import projeto_base_de_telas_e_login.model.ItemPedido.ItemPedido;
-import projeto_base_de_telas_e_login.model.Preco.Preco;
+import projeto_base_de_telas_e_login.persistence.Estoque.Estoque;
+import projeto_base_de_telas_e_login.persistence.ItemPedido.ItemPedido;
+import projeto_base_de_telas_e_login.persistence.Loja.loja.Loja;
+import projeto_base_de_telas_e_login.persistence.Pedido.Pedido;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public record PedidoAddDTO(
@@ -26,34 +26,75 @@ public record PedidoAddDTO(
 
 ) {
 
-    public Pedido toDomain(List<EstoqueEntity> estoquesDaLoja) {
-        Loja lojaStub = new Loja(lojaId, null, null);
+    public Pedido toEntity(
+            Loja loja,
+            List<Estoque> estoquesDaLoja
+    ) {
 
-        return new Pedido(
-                lojaStub,
-                nomeCliente,
-                email,
-                telefone,
-                endereco,
-                bairro,
-                complemento,
-                observacao,
-                tipoEntrega,
-                itens.stream()
-                        .map(itemDto -> {
-                            EstoqueEntity estoque = estoquesDaLoja.stream()
-                                    .filter(e -> e.getProduto().getId().equals(itemDto.produtoId()))
-                                    .findFirst()
-                                    .orElseThrow(() -> new RuntimeException("Produto não encontrado no estoque"));
+        Pedido pedido = new Pedido();
 
-                            return new ItemPedido(
-                                    estoque.getProduto().getName(),           // nome do produto
-                                    new Preco(estoque.getPrecoVenda()),       // preço unitário
-                                    itemDto.quantidade()                      // quantidade do pedido
+        pedido.setLoja(loja);
+
+        pedido.setNomeCliente(nomeCliente);
+        pedido.setEmail(email);
+        pedido.setTelefone(telefone);
+
+        pedido.setEndereco(endereco);
+        pedido.setBairro(bairro);
+        pedido.setComplemento(complemento);
+        pedido.setObservacao(observacao);
+
+        pedido.setTipoEntrega(tipoEntrega);
+        pedido.setFormaDePagamento(formaDePagamento);
+
+        List<ItemPedido> itensEntity = itens.stream()
+                .map(itemDto -> {
+
+                    Estoque estoque = estoquesDaLoja.stream()
+                            .filter(e ->
+                                    e.getProduto().getId()
+                                            .equals(itemDto.produtoId())
+                            )
+                            .findFirst()
+                            .orElseThrow(() ->
+                                    new RuntimeException(
+                                            "Produto não encontrado no estoque"
+                                    )
                             );
-                        })
-                        .toList(),
-                formaDePagamento
-        );
+
+                    ItemPedido item = new ItemPedido();
+
+                    item.setPedido(pedido);
+
+                    item.setNomeProduto(
+                            estoque.getProduto().getName()
+                    );
+
+                    item.setPrecoUnitario(
+                            estoque.getPrecoVenda()
+                    );
+
+                    item.setQuantidade(
+                            itemDto.quantidade()
+                    );
+
+                    item.setSubtotal(
+                            estoque.getPrecoVenda()
+                                    .multiply(
+                                            BigDecimal.valueOf(
+                                                    itemDto.quantidade()
+                                            )
+                                    )
+                    );
+
+                    return item;
+                })
+                .toList();
+
+        pedido.setItens(itensEntity);
+
+        pedido.calcularTotais();
+
+        return pedido;
     }
 }

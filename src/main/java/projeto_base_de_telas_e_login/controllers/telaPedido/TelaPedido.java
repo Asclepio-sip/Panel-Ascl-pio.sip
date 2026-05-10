@@ -1,12 +1,16 @@
 package projeto_base_de_telas_e_login.controllers.telaPedido;
 
-
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
+
 import projeto_base_de_telas_e_login.dto.Pedido.AtualizarStatusPedidoDTO;
+
 import projeto_base_de_telas_e_login.dto.Pedido.DetalhePedidoDTO;
+
 import projeto_base_de_telas_e_login.dto.Pedido.ListaDePedidoDTO;
-import projeto_base_de_telas_e_login.service.Pedido.PedidoUserCase;
+
+import projeto_base_de_telas_e_login.service.Pedido.PedidoService;
 
 import java.util.List;
 
@@ -14,55 +18,83 @@ import java.util.List;
 @RequestMapping("/pedidos")
 public class TelaPedido {
 
-    private final PedidoUserCase pedidoUserCase;
+    private final PedidoService service;
 
     public TelaPedido(
-            PedidoUserCase pedidoUserCase
-    ){
-        this.pedidoUserCase = pedidoUserCase;
+            PedidoService service
+    ) {
+
+        this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<List<ListaDePedidoDTO>> listaDePedidoDoDia(){
-        return ResponseEntity.ok(pedidoUserCase.listarTodos()
-                .stream()
-                .map(ListaDePedidoDTO::fromDomain)
-                .toList());
+    public ResponseEntity<List<ListaDePedidoDTO>>
+    listaDePedidoDoDia() {
+
+        return ResponseEntity.ok(
+                service
+                        .listarPedidosDoDia()
+                        .stream()
+                        .map(ListaDePedidoDTO::fromEntity)
+                        .toList()
+        );
     }
 
     @GetMapping("/todosPedido")
-    public ResponseEntity<List<ListaDePedidoDTO>> todosOsPedidos(){
-        return ResponseEntity.ok(pedidoUserCase.listarTodos()
-                .stream()
-                .map(ListaDePedidoDTO::fromDomain)
-                .toList());
+    public ResponseEntity<List<ListaDePedidoDTO>>
+    todosOsPedidos() {
+
+        return ResponseEntity.ok(
+                service
+                        .listarTodos()
+                        .stream()
+                        .map(ListaDePedidoDTO::fromEntity)
+                        .toList()
+        );
     }
 
-    @GetMapping(value = "/{id}/pdf", produces = "application/pdf")
-    public ResponseEntity<byte[]> imprimirPDF(@PathVariable Long id){
+    @GetMapping("/{id}/pdf")
+    public ResponseEntity<byte[]>
+    imprimirPDF(
+            @PathVariable Long id
+    ) {
 
-        byte[] pdf = pedidoUserCase.imprimirPDF(id);
+        byte[] pdf =
+                service.imprimirPDF(id);
 
         return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=pedido-" + id + ".pdf")
+                .header(
+                        "Content-Disposition",
+                        "attachment; filename=pedido-" + id + ".pdf"
+                )
                 .body(pdf);
     }
+
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Void> atualizarStatus(
+    public ResponseEntity<Void>
+    atualizarStatus(
             @PathVariable Long id,
             @RequestBody AtualizarStatusPedidoDTO dto
     ) {
 
-        pedidoUserCase.atualizarStatusPedido(id, dto.status());
-        return ResponseEntity.noContent().build();
+        service.atualizarStatusPedido(
+                id,
+                dto.status()
+        );
+
+        return ResponseEntity.noContent()
+                .build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DetalhePedidoDTO> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<DetalhePedidoDTO>
+    buscarPorId(
+            @PathVariable Long id
+    ) {
 
         return ResponseEntity.ok(
-                DetalhePedidoDTO.fromDomain(
-                        pedidoUserCase.buscarPorId(id)
+                DetalhePedidoDTO.fromEntity(
+                        service.buscarPorId(id)
                 )
         );
     }

@@ -1,86 +1,118 @@
 package projeto_base_de_telas_e_login.controllers.TelaEstoque;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+
+import projeto_base_de_telas_e_login.controllers.TelaEstoque.api.EstoqueApi;
+import projeto_base_de_telas_e_login.dto.Estoque.AplicarPromocaoDto;
 import projeto_base_de_telas_e_login.dto.Estoque.EstoqueAddDto;
-import projeto_base_de_telas_e_login.service.Estoque.EstoqueUseCase;
+import projeto_base_de_telas_e_login.dto.Estoque.EstoqueListaDto;
+import projeto_base_de_telas_e_login.service.Estoque.EstoqueService;
 
-import java.math.BigDecimal;
-
+import java.util.List;
 
 @RestController
-@RequestMapping("/estoque")
-public class TelaEstoque {
+public class TelaEstoque implements EstoqueApi {
 
-    private final EstoqueUseCase useCase;
+    private final EstoqueService useCase;
 
-    public TelaEstoque(EstoqueUseCase useCase) {
+    public TelaEstoque(EstoqueService useCase) {
         this.useCase = useCase;
     }
 
-    // 🔥 POST - criar
-    @PostMapping
-    public ResponseEntity<Void> criar(@RequestBody EstoqueAddDto dto) {
+    @Override
+    public ResponseEntity<Void> criar(EstoqueAddDto dto) {
+
         useCase.criar(dto);
-        return ResponseEntity.status(201).build();
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
     }
 
-    // 🔥 PUT - atualizar
-    @PutMapping
-    public ResponseEntity<Void> atualizar(@RequestBody EstoqueAddDto dto) {
-        useCase.atualizar(dto.lojaID(),dto.produtoId(),dto.quantidade(),dto.precoVenda());
-        return ResponseEntity.ok().build();
-    }
+    @Override
+    public ResponseEntity<Void> atualizar(EstoqueAddDto dto) {
 
-    // 🔥 PATCH - promoção Paracetamol  Loja Entrega Express
-    @PatchMapping("/promocao")
-    public ResponseEntity<Void> aplicarPromocao(
-            @RequestParam Long lojaId,
-            @RequestParam Long produtoId,
-            @RequestParam BigDecimal percentual
-    ) {
-
-        useCase.aplicarPromocao(lojaId, produtoId, percentual);
+        useCase.atualizar(
+                dto.lojaID(),
+                dto.produtoId(),
+                dto.quantidade(),
+                dto.precoVenda()
+        );
 
         return ResponseEntity.ok().build();
     }
 
-    // 🔎 GET - listar todos
-    @GetMapping
-    public ResponseEntity<?> listar()  {
-        return ResponseEntity.ok(useCase.listarTodos());
-    }
+    @Override
+    public ResponseEntity<Void> aplicarPromocao(AplicarPromocaoDto dto) {
 
-    // 🔎 GET - buscar por nome da loja
-    @GetMapping("/loja")
-    public ResponseEntity<?> buscarPorNomeLoja(
-            @RequestParam String nome
-    ) {
-        return ResponseEntity.ok(
-                useCase.buscarPorNomeLoja(nome)
+        useCase.aplicarPromocao(
+                dto.lojaId(),
+                dto.produtoId(),
+                dto.percentual()
         );
+
+        return ResponseEntity.ok().build();
     }
 
-    // 🔎 GET - buscar por nome do produto
-    @GetMapping("/produto")
-    public ResponseEntity<?> buscarPorNomeProduto(
-            @RequestParam String nome
+    @Override
+    public ResponseEntity<List<EstoqueListaDto>> listar() {
+
+        List<EstoqueListaDto> response = useCase
+                .listarTodos()
+                .stream()
+                .map(EstoqueListaDto::fromDomain)
+                .toList();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<List<EstoqueListaDto>> buscarPorNomeLoja(String nome) {
+
+        List<EstoqueListaDto> response = useCase
+                .buscarPorNomeLoja(nome)
+                .stream()
+                .map(EstoqueListaDto::fromDomain)
+                .toList();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<List<EstoqueListaDto>> buscarPorNomeProduto(String nome) {
+
+        List<EstoqueListaDto> response = useCase
+                .buscarPorNomeProduto(nome)
+                .stream()
+                .map(EstoqueListaDto::fromDomain)
+                .toList();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<List<EstoqueListaDto>> filtrar(
+            Long lojaId,
+            String nomeLoja,
+            Boolean semEstoque
     ) {
-        return ResponseEntity.ok(
-                useCase.buscarPorNomeProduto(nome)
-        );
+
+        List<EstoqueListaDto> response = useCase
+                .filtrar(lojaId, nomeLoja, semEstoque)
+                .stream()
+                .map(EstoqueListaDto::fromDomain)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/filtro")
-    public ResponseEntity<?> filtrar(
-            @RequestParam(required = false) Long lojaId,
-            @RequestParam(required = false) String nomeLoja,
-            @RequestParam(required = false) Boolean semEstoque
-    ) {
+    @Override
+    public ResponseEntity<Void> deletar(Long id) {
 
-        return ResponseEntity.ok(
-                useCase.filtrar(lojaId, nomeLoja, semEstoque)
-        );
+        useCase.deletar(id);
+
+        return ResponseEntity.noContent().build();
     }
-
 }

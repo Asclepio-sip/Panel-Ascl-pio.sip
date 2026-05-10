@@ -1,85 +1,54 @@
 package projeto_base_de_telas_e_login.controllers.TelaProdutos;
 
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import projeto_base_de_telas_e_login.dto.Product.ProductoAddDto;
-import projeto_base_de_telas_e_login.dto.Product.ProductoResponseDto;
-import projeto_base_de_telas_e_login.service.Produto.ProdutoUseCase;
-import projeto_base_de_telas_e_login.model.product.Product;
+import org.springframework.web.bind.annotation.RestController;
+import projeto_base_de_telas_e_login.controllers.TelaProdutos.api.ProdutoApi;
+import projeto_base_de_telas_e_login.persistence.Product.Product;
+import projeto_base_de_telas_e_login.service.Produto.ProdutoService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/products")
-public class TelaProdutos{
+public class TelaProdutos implements ProdutoApi {
 
-    private final ProdutoUseCase produtoUseCase;
+    private final ProdutoService produtoService;
 
-    public TelaProdutos(ProdutoUseCase produtoUseCase) {
-        this.produtoUseCase = produtoUseCase;
+    public TelaProdutos(ProdutoService produtoService) {
+        this.produtoService = produtoService;
     }
 
-    // Criar produto
-    @PostMapping
-    public ResponseEntity<ProductoResponseDto> criarProduto(
-            @RequestBody @Valid ProductoAddDto dto
-    ) {
-        Product produto = dto.toDomain();
-        produtoUseCase.save(produto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ProductoResponseDto.fromDomain(produto));
+    @Override
+    public ResponseEntity<List<Product>> listar() {
+
+        return ResponseEntity.ok(
+                produtoService.listarTodos()
+        );
     }
 
-    // Atualizar produto
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductoResponseDto> atualizarProduto(
-            @PathVariable Long id,
-            @RequestBody @Valid ProductoAddDto dto
-    ) {
-        Product produto = dto.toDomain();
-        produto.setId(id); // define o ID para atualizar
-        produtoUseCase.save(produto); // salvar faz update se o ID existir
-        return ResponseEntity.ok(ProductoResponseDto.fromDomain(produto));
+    @Override
+    public ResponseEntity<Product> criar(Product product) {
+
+        Product novo = produtoService.criar(product);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(novo);
     }
 
-    // Deletar produto
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarProduto(@PathVariable Long id) {
-        produtoUseCase.deleteById(id);
+    @Override
+    public ResponseEntity<Product> editar(Long id, Product product) {
+
+        return ResponseEntity.ok(
+                produtoService.editar(id, product)
+        );
+    }
+
+    @Override
+    public ResponseEntity<Void> deletar(Long id) {
+
+        produtoService.deletar(id);
+
         return ResponseEntity.noContent().build();
-    }
-
-    // Listar todos os produtos
-    @GetMapping
-    public ResponseEntity<List<ProductoResponseDto>> listarTodos() {
-        List<Product> produtos = produtoUseCase.findAll();
-        List<ProductoResponseDto> dtoList = produtos.stream()
-                .map(ProductoResponseDto::fromDomain)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtoList);
-    }
-
-    // Listar produtos por categoria
-    @GetMapping("/categoria/{nomeCategoria}")
-    public ResponseEntity<List<ProductoResponseDto>> listarPorCategoria(@PathVariable String nomeCategoria) {
-        List<Product> produtos = produtoUseCase.findByCategoriaNome(nomeCategoria);
-        List<ProductoResponseDto> dtoList = produtos.stream()
-                .map(ProductoResponseDto::fromDomain)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtoList);
-    }
-
-    // Buscar produto por nome (adicional)
-    @GetMapping("/search")
-    public ResponseEntity<List<ProductoResponseDto>> buscarPorNome(@RequestParam String nome) {
-        List<Product> produtos = produtoUseCase.findAll().stream()
-                .filter(p -> p.getName().toLowerCase().contains(nome.toLowerCase()))
-                .toList();
-        List<ProductoResponseDto> dtoList = produtos.stream()
-                .map(ProductoResponseDto::fromDomain)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtoList);
     }
 }

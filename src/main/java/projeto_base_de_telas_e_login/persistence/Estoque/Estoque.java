@@ -1,8 +1,8 @@
 package projeto_base_de_telas_e_login.persistence.Estoque;
 
 import jakarta.persistence.*;
-import projeto_base_de_telas_e_login.persistence.Loja.loja.LojaEntity;
-import projeto_base_de_telas_e_login.persistence.Product.ProductEntity;
+import projeto_base_de_telas_e_login.persistence.Loja.loja.Loja;
+import projeto_base_de_telas_e_login.persistence.Product.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
                 @UniqueConstraint(columnNames = {"loja_id", "produto_id"})
         }
 )
-public class EstoqueEntity {
+public class Estoque {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +22,11 @@ public class EstoqueEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "loja_id")
-    private LojaEntity loja;
+    private Loja loja;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "produto_id")
-    private ProductEntity produto;
+    private Product produto;
 
     @Column(nullable = false)
     private Integer quantidade;
@@ -40,20 +40,26 @@ public class EstoqueEntity {
     @Column(nullable = false)
     private LocalDateTime atualizadoEm;
 
-    protected EstoqueEntity() {}
+    protected Estoque() {}
 
-    public EstoqueEntity(
-            LojaEntity loja,
-            ProductEntity produto,
+    public Estoque(
+            Long id,
+            Loja loja,
+            Product produto,
             Integer quantidade,
             BigDecimal precoVenda,
             BigDecimal percentualDesconto
     ) {
+        this.id = id;
         this.loja = loja;
         this.produto = produto;
         this.quantidade = quantidade;
         this.precoVenda = precoVenda;
-        this.percentualDesconto = percentualDesconto != null ? percentualDesconto : BigDecimal.ZERO;
+        this.percentualDesconto =
+                percentualDesconto != null
+                        ? percentualDesconto
+                        : BigDecimal.ZERO;
+
         this.atualizadoEm = LocalDateTime.now();
     }
 
@@ -61,11 +67,11 @@ public class EstoqueEntity {
         return id;
     }
 
-    public LojaEntity getLoja() {
+    public Loja getLoja() {
         return loja;
     }
 
-    public ProductEntity getProduto() {
+    public Product getProduto() {
         return produto;
     }
 
@@ -83,20 +89,5 @@ public class EstoqueEntity {
 
     public LocalDateTime getAtualizadoEm() {
         return atualizadoEm;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-        this.atualizadoEm = LocalDateTime.now();
-    }
-
-    public void setPrecoVenda(BigDecimal precoVenda) {
-        this.precoVenda = precoVenda;
-        this.atualizadoEm = LocalDateTime.now();
-    }
-
-    public void setPercentualDesconto(BigDecimal percentualDesconto) {
-        this.percentualDesconto = percentualDesconto;
-        this.atualizadoEm = LocalDateTime.now();
     }
 }

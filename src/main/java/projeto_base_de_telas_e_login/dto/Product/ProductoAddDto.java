@@ -1,8 +1,8 @@
 package projeto_base_de_telas_e_login.dto.Product;
 
 import jakarta.validation.constraints.NotBlank;
-import projeto_base_de_telas_e_login.model.categoria.Categoria;
-import projeto_base_de_telas_e_login.model.product.Product;
+import projeto_base_de_telas_e_login.persistence.Product.Product;
+import projeto_base_de_telas_e_login.persistence.categoria.Categoria;
 
 public record ProductoAddDto(
         @NotBlank

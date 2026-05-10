@@ -4,46 +4,41 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projeto_base_de_telas_e_login.dto.loja.Bairro.BairroRequestDTO;
 import projeto_base_de_telas_e_login.dto.loja.Bairro.BairroResponseDTO;
-import projeto_base_de_telas_e_login.service.Loja.Bairro.AdicionarBairroUseCase;
-import projeto_base_de_telas_e_login.model.Loja.Bairro;
+import projeto_base_de_telas_e_login.persistence.Loja.Bairro.Bairro;
+import projeto_base_de_telas_e_login.service.Loja.Bairro.BairroService;
 
 import java.util.List;
-
 @RestController
-@RequestMapping("/bairros")
+@RequestMapping("/bairro")
 public class BairroController {
 
-    private final AdicionarBairroUseCase bairroUseCase;
+    private final BairroService service;
 
-    public BairroController(AdicionarBairroUseCase bairroUseCase) {
-        this.bairroUseCase = bairroUseCase;
+    public BairroController(BairroService service) {
+        this.service = service;
+    }
+
+    @PostMapping
+    public ResponseEntity<BairroResponseDTO> criar(
+            @RequestBody BairroRequestDTO dto
+    ) {
+
+        Bairro bairro = service.criar(dto.nome());
+
+        return ResponseEntity.ok(
+                BairroResponseDTO.fromEntity(bairro)
+        );
     }
 
     @GetMapping
     public ResponseEntity<List<BairroResponseDTO>> listar() {
-        List<Bairro> bairros = bairroUseCase.listar();
-        List<BairroResponseDTO> dtoList = bairros.stream()
-                .map(BairroResponseDTO::fromDomain) // ✅ aqui é o fromDomain
-                .toList();
-        return ResponseEntity.ok(dtoList);
-    }
 
-    @PostMapping
-    public ResponseEntity<BairroResponseDTO> criar(@RequestBody BairroRequestDTO request) {
-        Bairro bairro = bairroUseCase.executar(request.nome());
-        return ResponseEntity.ok(BairroResponseDTO.fromDomain(bairro));
-    }
+        List<BairroResponseDTO> response =
+                service.listar()
+                        .stream()
+                        .map(BairroResponseDTO::fromEntity)
+                        .toList();
 
-    @PutMapping("/{id}")
-    public ResponseEntity<BairroResponseDTO> atualizar(@PathVariable Long id,
-                                                       @RequestBody BairroRequestDTO request) {
-        Bairro bairro = bairroUseCase.atualizar(id, request.nome());
-        return ResponseEntity.ok(BairroResponseDTO.fromDomain(bairro));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        bairroUseCase.deletar(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(response);
     }
 }

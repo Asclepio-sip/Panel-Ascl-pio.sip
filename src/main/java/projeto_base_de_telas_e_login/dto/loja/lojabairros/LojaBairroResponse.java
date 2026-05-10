@@ -1,21 +1,27 @@
 package projeto_base_de_telas_e_login.dto.loja.lojabairros;
 
-import projeto_base_de_telas_e_login.model.Loja.LojaBairro;
+import projeto_base_de_telas_e_login.persistence.Loja.LojaBairro.LojaBairro;
 
 import java.math.BigDecimal;
 
-public record LojaBairroResponse (
-         Long lojaId,
-         Long bairroId,
-         BigDecimal valorFrete
-){
+public record LojaBairroResponse(
 
-    public static LojaBairroResponse fromDomain(LojaBairro lb) {
+        Long id,
+        Long lojaId,
+        Long bairroId,
+        BigDecimal valorFrete
+
+) {
+
+    public static LojaBairroResponse fromEntity(
+            LojaBairro lb
+    ) {
+
         return new LojaBairroResponse(
+                lb.getId(),
                 lb.getLoja().getId(),
                 lb.getBairro().getId(),
                 lb.getValorFrete()
         );
     }
-
 }

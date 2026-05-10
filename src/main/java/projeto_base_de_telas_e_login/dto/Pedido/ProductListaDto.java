@@ -1,6 +1,7 @@
 package projeto_base_de_telas_e_login.dto.Pedido;
 
-import projeto_base_de_telas_e_login.model.product.Product;
+
+import projeto_base_de_telas_e_login.persistence.Product.Product;
 
 public record ProductListaDto(
         Long id,
