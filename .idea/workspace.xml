@@ -4,89 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="88792f31-c9d2-42fd-9c39-246dd5948413" name="Changes" comment="feat:ajuste nos dtos">
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaEstoque/api/EstoqueApi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaProdutos/api/CategoriaApi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaProdutos/api/ProdutoApi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Estoque/AplicarPromocaoDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/LojaBairro/LojaBairro.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Loja/Loja/LojaService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Loja/LojaBairro/LojaBairroService.java" afterDir="false" />
+    <list default="true" id="88792f31-c9d2-42fd-9c39-246dd5948413" name="Changes" comment="feat:ajuste na arquitetura">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/bootstrap/CategoriaDataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/bootstrap/CategoriaDataInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaEstoque/TelaEstoque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaEstoque/TelaEstoque.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaInicial/TelaInicial.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaInicial/TelaInicial.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaLoja/BairroController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaLoja/BairroController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaLoja/LojaBairroController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaLoja/LojaBairroController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaLoja/LojaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaLoja/LojaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaProdutos/TelaCategoria.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaProdutos/TelaCategoria.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaProdutos/TelaProdutos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/TelaProdutos/TelaProdutos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/telaPedido/TelaPedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/controllers/telaPedido/TelaPedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Estoque/EstoqueAddDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Estoque/EstoqueAddDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Estoque/EstoqueListaDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Estoque/EstoqueListaDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Pedido/DetalhePedidoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Pedido/DetalhePedidoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Pedido/ItemPedidoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Pedido/ItemPedidoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Pedido/ListaDePedidoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Pedido/ListaDePedidoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Pedido/PedidoAddDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Pedido/PedidoAddDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Pedido/ProductListaDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Pedido/ProductListaDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Product/ProductoAddDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Product/ProductoAddDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Product/ProductoResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/Product/ProductoResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/loja/Bairro/BairroResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/loja/Bairro/BairroResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/loja/Loja/LojaResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/loja/Loja/LojaResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/loja/lojabairros/LojaBairroResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/dto/loja/lojabairros/LojaBairroResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/model/ItemPedido/ItemPedido.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/model/Loja/Bairro.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/model/Loja/Loja.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/model/Loja/LojaBairro.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/model/Pedido/Pedido.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/model/Preco/Preco.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/model/categoria/Categoria.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/model/estoque/Estoque.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/model/product/Product.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Estoque/EstoqueAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Estoque/EstoqueEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Estoque/Estoque.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Estoque/EstoqueRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Estoque/EstoqueRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/ItemPedido/ItemPedidoEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/ItemPedido/ItemPedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/ItemPedido/ItemPedidoEntityRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/ItemPedido/ItemPedidoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/Bairro/BairroAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/Bairro/BairroEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/Bairro/Bairro.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/Bairro/BairroRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/Bairro/BairroRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/LojaBairro/LojaBairroAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/LojaBairro/LojaBairroEntity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/LojaBairro/LojaBairroRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/LojaBairro/LojaBairroRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/loja/LojaAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/loja/LojaEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/loja/Loja.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/loja/LojaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Loja/loja/LojaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PDF/GeradorPdfAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PDF/GeradorPdfAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PDF/PdfTemplatePedido/ItemPedidoPdfDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PDF/PdfTemplatePedido/ItemPedidoPdfDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PDF/PdfTemplatePedido/PdfPedidoTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PDF/PdfTemplatePedido/PdfPedidoTemplate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PDF/PdfTemplatePedido/PedidoPdfDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PDF/PdfTemplatePedido/PedidoPdfDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PDF/PdfTemplatePedido/PedidoPdfMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PDF/PdfTemplatePedido/PedidoPdfMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PedidoAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PedidoEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/Pedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PedidoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Pedido/PedidoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Product/ProductAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Product/ProductEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Product/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Product/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/Product/ProductRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/categoria/CategoriaAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/categoria/CategoriaEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/categoria/Categoria.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/categoria/CategoriaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/persistence/categoria/CategoriaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/repository/BairroPorta.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/repository/CategoriaPorta.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/repository/EstoquePorta.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/repository/GeradorPdfPort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/repository/GeradorPdfPort.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/repository/LojaBairroPort.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/repository/LojaPorta.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/repository/PedidoPorta.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/repository/ProdutoPorta.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Categoria/CategoriaUseCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Categoria/CategoriaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Estoque/EstoqueUseCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Estoque/EstoqueService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Loja/Bairro/AdicionarBairroUseCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Loja/Bairro/BairroService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Loja/Loja/LojaUseCase.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Loja/LojaBairro/LojaBairroUseCase.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Pedido/PedidoUserCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Pedido/PedidoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Produto/ProdutoUseCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/service/Produto/ProdutoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/bootstrap/CategoriaDataInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/bootstrap/CategoriaDataInitializer.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -212,11 +131,20 @@
       <option name="project" value="LOCAL" />
       <updated>1778364087402</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feat:ajuste na arquitetura">
+      <option name="closed" value="true" />
+      <created>1778446447015</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1778446447015</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat:ajuste nos dtos" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat:ajuste nos dtos" />
+    <MESSAGE value="feat:ajuste na arquitetura" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat:ajuste na arquitetura" />
   </component>
 </project>
