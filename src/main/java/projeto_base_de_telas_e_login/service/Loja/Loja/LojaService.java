@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 
 import projeto_base_de_telas_e_login.dto.loja.Loja.CreateLojaRequest;
 import projeto_base_de_telas_e_login.dto.loja.Loja.LojaResponse;
-import projeto_base_de_telas_e_login.persistence.Loja.loja.Loja;
-import projeto_base_de_telas_e_login.persistence.Loja.loja.LojaRepository;
+import projeto_base_de_telas_e_login.entidade.Loja;
+import projeto_base_de_telas_e_login.repository.LojaRepository;
 
 import java.util.List;
 
@@ -18,19 +18,11 @@ public class LojaService {
         this.repository = repository;
     }
 
-    public LojaResponse criar(
-            CreateLojaRequest request
-    ) {
+    public LojaResponse criar(CreateLojaRequest request) {
 
-        Loja loja = new Loja(
-                null,
-                request.nome(),
-                request.tipoAtendimento()
-        );
+        Loja loja = new Loja(null, request.nome(), request.tipoAtendimento());
 
-        loja.configurarFreteGratis(
-                request.valorMinimoFreteGratis()
-        );
+        loja.configurarFreteGratis(request.valorMinimoFreteGratis());
 
         Loja salva = repository.save(loja);
 
@@ -39,36 +31,20 @@ public class LojaService {
 
     public List<LojaResponse> listar() {
 
-        return repository.findAll()
-                .stream()
-                .map(LojaResponse::fromEntity)
-                .toList();
+        return repository.findAll().stream().map(LojaResponse::fromEntity).toList();
     }
 
-    public LojaResponse atualizar(
-            Long id,
-            CreateLojaRequest request
-    ) {
+    public LojaResponse atualizar(Long id, CreateLojaRequest request) {
 
-        Loja loja = repository.findById(id)
-                .orElseThrow(
-                        () -> new RuntimeException(
-                                "Loja não encontrada"
-                        )
-                );
+        Loja loja = repository.findById(id).orElseThrow(() -> new RuntimeException("Loja não encontrada"));
 
         loja.setNome(request.nome());
 
-        loja.setTipoAtendimento(
-                request.tipoAtendimento()
-        );
+        loja.setTipoAtendimento(request.tipoAtendimento());
 
-        loja.configurarFreteGratis(
-                request.valorMinimoFreteGratis()
-        );
+        loja.configurarFreteGratis(request.valorMinimoFreteGratis());
 
-        Loja atualizada =
-                repository.save(loja);
+        Loja atualizada = repository.save(loja);
 
         return LojaResponse.fromEntity(atualizada);
     }

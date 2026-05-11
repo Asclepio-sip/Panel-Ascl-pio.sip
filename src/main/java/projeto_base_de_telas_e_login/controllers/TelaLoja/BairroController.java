@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projeto_base_de_telas_e_login.dto.loja.Bairro.BairroRequestDTO;
 import projeto_base_de_telas_e_login.dto.loja.Bairro.BairroResponseDTO;
-import projeto_base_de_telas_e_login.persistence.Loja.Bairro.Bairro;
+import projeto_base_de_telas_e_login.entidade.Bairro;
 import projeto_base_de_telas_e_login.service.Loja.Bairro.BairroService;
 
 import java.util.List;

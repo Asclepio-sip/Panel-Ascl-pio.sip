@@ -1,7 +1,6 @@
-package projeto_base_de_telas_e_login.persistence.Product;
+package projeto_base_de_telas_e_login.entidade;
 
 import jakarta.persistence.*;
-import projeto_base_de_telas_e_login.persistence.categoria.Categoria;
 
 @Entity
 @Table(name = "product")
@@ -28,13 +27,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(
-            Long id,
-            String name,
-            String variacao,
-            String imagemBase64,
-            Categoria categoria
-    ) {
+    public Product(Long id, String name, String variacao, String imagemBase64, Categoria categoria) {
         this.id = id;
         this.name = name;
         this.variacao = variacao;
@@ -42,12 +35,7 @@ public class Product {
         this.categoria = categoria;
     }
 
-    public Product(
-            String name,
-            String variacao,
-            String imagemBase64,
-            Categoria categoria
-    ) {
+    public Product(String name, String variacao, String imagemBase64, Categoria categoria) {
         this(null, name, variacao, imagemBase64, categoria);
     }
 

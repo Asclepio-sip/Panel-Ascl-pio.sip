@@ -1,8 +1,7 @@
-package projeto_base_de_telas_e_login.persistence.Loja.loja;
+package projeto_base_de_telas_e_login.entidade;
 
 import jakarta.persistence.*;
 import projeto_base_de_telas_e_login.model.Loja.Enum.TipoAtendimentoLoja;
-import projeto_base_de_telas_e_login.persistence.Loja.LojaBairro.LojaBairro;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,44 +22,31 @@ public class Loja {
 
     private BigDecimal valorMinimoFreteGratis;
 
-    @OneToMany(
-            mappedBy = "loja",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "loja", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LojaBairro> bairros = new ArrayList<>();
 
     public Loja() {
     }
 
-    public Loja(
-            Long id,
-            String nome,
-            TipoAtendimentoLoja tipoAtendimento
-    ) {
+    public Loja(Long id, String nome, TipoAtendimentoLoja tipoAtendimento) {
         this.id = id;
         this.nome = nome;
         this.tipoAtendimento = tipoAtendimento;
     }
 
     public boolean aceitaEntrega() {
-        return tipoAtendimento == TipoAtendimentoLoja.ENTREGA
-                || tipoAtendimento == TipoAtendimentoLoja.AMBOS;
+        return tipoAtendimento == TipoAtendimentoLoja.ENTREGA || tipoAtendimento == TipoAtendimentoLoja.AMBOS;
     }
 
     public boolean aceitaRetirada() {
-        return tipoAtendimento == TipoAtendimentoLoja.RETIRADA
-                || tipoAtendimento == TipoAtendimentoLoja.AMBOS;
+        return tipoAtendimento == TipoAtendimentoLoja.RETIRADA || tipoAtendimento == TipoAtendimentoLoja.AMBOS;
     }
 
     public void configurarFreteGratis(BigDecimal valorMinimo) {
 
-        if (valorMinimo != null
-                && valorMinimo.compareTo(BigDecimal.ZERO) < 0) {
+        if (valorMinimo != null && valorMinimo.compareTo(BigDecimal.ZERO) < 0) {
 
-            throw new RuntimeException(
-                    "Valor mínimo inválido"
-            );
+            throw new RuntimeException("Valor mínimo inválido");
         }
 
         this.valorMinimoFreteGratis = valorMinimo;
@@ -94,16 +80,11 @@ public class Loja {
         this.nome = nome;
     }
 
-    public void setTipoAtendimento(
-            TipoAtendimentoLoja tipoAtendimento
-    ) {
+    public void setTipoAtendimento(TipoAtendimentoLoja tipoAtendimento) {
         this.tipoAtendimento = tipoAtendimento;
     }
 
-    public void setValorMinimoFreteGratis(
-            BigDecimal valorMinimoFreteGratis
-    ) {
-        this.valorMinimoFreteGratis =
-                valorMinimoFreteGratis;
+    public void setValorMinimoFreteGratis(BigDecimal valorMinimoFreteGratis) {
+        this.valorMinimoFreteGratis = valorMinimoFreteGratis;
     }
 }

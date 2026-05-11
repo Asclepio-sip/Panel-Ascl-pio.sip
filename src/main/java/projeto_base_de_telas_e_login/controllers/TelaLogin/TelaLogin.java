@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import projeto_base_de_telas_e_login.dto.User.AuthenticationDTO;
 import projeto_base_de_telas_e_login.dto.User.LoginResponseDTO;
-import projeto_base_de_telas_e_login.persistence.User.UserEntity;
+import projeto_base_de_telas_e_login.entidade.UserEntity;
 import projeto_base_de_telas_e_login.config.security.TokenService;
 
 

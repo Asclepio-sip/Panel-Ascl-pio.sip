@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import projeto_base_de_telas_e_login.persistence.Product.Product;
+import projeto_base_de_telas_e_login.entidade.Product;
 
 import java.util.List;
 

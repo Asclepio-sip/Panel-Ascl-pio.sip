@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import projeto_base_de_telas_e_login.controllers.TelaProdutos.api.CategoriaApi;
 import projeto_base_de_telas_e_login.dto.Categoria.CriarCategoriaDTO;
-import projeto_base_de_telas_e_login.persistence.categoria.Categoria;
+import projeto_base_de_telas_e_login.entidade.Categoria;
 import projeto_base_de_telas_e_login.service.Categoria.CategoriaService;
 
 import java.util.List;

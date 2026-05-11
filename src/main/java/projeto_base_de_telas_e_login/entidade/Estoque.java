@@ -1,19 +1,12 @@
-package projeto_base_de_telas_e_login.persistence.Estoque;
+package projeto_base_de_telas_e_login.entidade;
 
 import jakarta.persistence.*;
-import projeto_base_de_telas_e_login.persistence.Loja.loja.Loja;
-import projeto_base_de_telas_e_login.persistence.Product.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-        name = "estoque",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"loja_id", "produto_id"})
-        }
-)
+@Table(name = "estoque", uniqueConstraints = {@UniqueConstraint(columnNames = {"loja_id", "produto_id"})})
 public class Estoque {
 
     @Id
@@ -40,25 +33,16 @@ public class Estoque {
     @Column(nullable = false)
     private LocalDateTime atualizadoEm;
 
-    protected Estoque() {}
+    protected Estoque() {
+    }
 
-    public Estoque(
-            Long id,
-            Loja loja,
-            Product produto,
-            Integer quantidade,
-            BigDecimal precoVenda,
-            BigDecimal percentualDesconto
-    ) {
+    public Estoque(Long id, Loja loja, Product produto, Integer quantidade, BigDecimal precoVenda, BigDecimal percentualDesconto) {
         this.id = id;
         this.loja = loja;
         this.produto = produto;
         this.quantidade = quantidade;
         this.precoVenda = precoVenda;
-        this.percentualDesconto =
-                percentualDesconto != null
-                        ? percentualDesconto
-                        : BigDecimal.ZERO;
+        this.percentualDesconto = percentualDesconto != null ? percentualDesconto : BigDecimal.ZERO;
 
         this.atualizadoEm = LocalDateTime.now();
     }

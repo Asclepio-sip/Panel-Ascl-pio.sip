@@ -1,6 +1,6 @@
 package projeto_base_de_telas_e_login.dto.Pedido;
 
-import projeto_base_de_telas_e_login.persistence.Pedido.Pedido;
+import projeto_base_de_telas_e_login.entidade.Pedido;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

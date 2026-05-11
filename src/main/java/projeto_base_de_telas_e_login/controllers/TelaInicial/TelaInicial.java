@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import projeto_base_de_telas_e_login.dto.Pedido.PedidoAddDTO;
 import projeto_base_de_telas_e_login.dto.Pedido.ProductListaDto;
 
-import projeto_base_de_telas_e_login.persistence.categoria.Categoria;
+import projeto_base_de_telas_e_login.entidade.Categoria;
 
 import projeto_base_de_telas_e_login.service.Estoque.EstoqueService;
 import projeto_base_de_telas_e_login.service.Pedido.PedidoService;
 import projeto_base_de_telas_e_login.service.Produto.ProdutoService;
 
-import projeto_base_de_telas_e_login.persistence.categoria.CategoriaRepository;
+import projeto_base_de_telas_e_login.repository.CategoriaRepository;
 
 import java.util.List;
 

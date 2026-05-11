@@ -1,4 +1,4 @@
-package projeto_base_de_telas_e_login.persistence.categoria;
+package projeto_base_de_telas_e_login.entidade;
 
 import jakarta.persistence.*;
 
@@ -13,7 +13,8 @@ public class Categoria {
     @Column(name = "nome_categoria", nullable = false, unique = true)
     private String nomeCategoria;
 
-    public Categoria() {}
+    public Categoria() {
+    }
 
     public Long getId() {
         return id;

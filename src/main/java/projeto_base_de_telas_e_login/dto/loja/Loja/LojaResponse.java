@@ -1,6 +1,6 @@
 package projeto_base_de_telas_e_login.dto.loja.Loja;
 
-import projeto_base_de_telas_e_login.persistence.Loja.loja.Loja;
+import projeto_base_de_telas_e_login.entidade.Loja;
 
 import java.math.BigDecimal;
 

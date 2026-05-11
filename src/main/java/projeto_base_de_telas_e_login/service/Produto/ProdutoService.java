@@ -1,42 +1,31 @@
 package projeto_base_de_telas_e_login.service.Produto;
 
 import org.springframework.stereotype.Service;
-import projeto_base_de_telas_e_login.persistence.Product.Product;
-import projeto_base_de_telas_e_login.persistence.Product.ProductRepository;
-import projeto_base_de_telas_e_login.persistence.categoria.Categoria;
-import projeto_base_de_telas_e_login.persistence.categoria.CategoriaRepository;
+import projeto_base_de_telas_e_login.entidade.Product;
+import projeto_base_de_telas_e_login.entidade.Categoria;
+import projeto_base_de_telas_e_login.repository.CategoriaRepository;
 
 import java.util.List;
 
 @Service
 public class ProdutoService {
 
-    private final ProductRepository repository;
+    private final CategoriaRepository.ProductRepository repository;
     private final CategoriaRepository categoriaRepository;
 
-    public ProdutoService(
-            ProductRepository repository,
-            CategoriaRepository categoriaRepository
-    ) {
+    public ProdutoService(CategoriaRepository.ProductRepository repository, CategoriaRepository categoriaRepository) {
         this.repository = repository;
         this.categoriaRepository = categoriaRepository;
     }
 
     public Product criar(Product product) {
 
-        if (product.getCategoria() == null ||
-                product.getCategoria().getNomeCategoria() == null) {
+        if (product.getCategoria() == null || product.getCategoria().getNomeCategoria() == null) {
 
             throw new RuntimeException("Categoria obrigatória");
         }
 
-        Categoria categoria = categoriaRepository
-                .findByNomeCategoria(
-                        product.getCategoria().getNomeCategoria()
-                )
-                .orElseThrow(() ->
-                        new RuntimeException("Categoria não encontrada")
-                );
+        Categoria categoria = categoriaRepository.findByNomeCategoria(product.getCategoria().getNomeCategoria()).orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
         product.setCategoria(categoria);
 
@@ -54,25 +43,15 @@ public class ProdutoService {
 
     public Product editar(Long id, Product atualizado) {
 
-        Product product = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Produto não encontrado")
-                );
+        Product product = repository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         product.setName(atualizado.getName());
         product.setVariacao(atualizado.getVariacao());
         product.setImagemBase64(atualizado.getImagemBase64());
 
-        if (atualizado.getCategoria() != null &&
-                atualizado.getCategoria().getNomeCategoria() != null) {
+        if (atualizado.getCategoria() != null && atualizado.getCategoria().getNomeCategoria() != null) {
 
-            Categoria categoria = categoriaRepository
-                    .findByNomeCategoria(
-                            atualizado.getCategoria().getNomeCategoria()
-                    )
-                    .orElseThrow(() ->
-                            new RuntimeException("Categoria não encontrada")
-                    );
+            Categoria categoria = categoriaRepository.findByNomeCategoria(atualizado.getCategoria().getNomeCategoria()).orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
             product.setCategoria(categoria);
         }
@@ -82,10 +61,7 @@ public class ProdutoService {
 
     public void deletar(Long id) {
 
-        Product product = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Produto não encontrado")
-                );
+        Product product = repository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         repository.delete(product);
     }

@@ -2,10 +2,10 @@ package projeto_base_de_telas_e_login.dto.Pedido;
 
 import projeto_base_de_telas_e_login.model.Pedido.Enum.FormaDePagamento;
 import projeto_base_de_telas_e_login.model.Pedido.Enum.TipoEntrega;
-import projeto_base_de_telas_e_login.persistence.Estoque.Estoque;
-import projeto_base_de_telas_e_login.persistence.ItemPedido.ItemPedido;
-import projeto_base_de_telas_e_login.persistence.Loja.loja.Loja;
-import projeto_base_de_telas_e_login.persistence.Pedido.Pedido;
+import projeto_base_de_telas_e_login.entidade.Estoque;
+import projeto_base_de_telas_e_login.entidade.ItemPedido;
+import projeto_base_de_telas_e_login.entidade.Loja;
+import projeto_base_de_telas_e_login.entidade.Pedido;
 
 import java.math.BigDecimal;
 import java.util.List;

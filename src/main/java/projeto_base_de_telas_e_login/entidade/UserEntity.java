@@ -1,4 +1,4 @@
-package projeto_base_de_telas_e_login.persistence.User;
+package projeto_base_de_telas_e_login.entidade;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,7 +26,8 @@ public class UserEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    public UserEntity() {}
+    public UserEntity() {
+    }
 
     public UserEntity(User user) {
         this.id = user.getId();
@@ -36,20 +37,12 @@ public class UserEntity implements UserDetails {
     }
 
     public User toDomain() {
-        return new User(
-                id,
-                username,
-                password,
-                role,
-                null
-        );
+        return new User(id, username, password, role, null);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(
-                new SimpleGrantedAuthority("ROLE_" + role.name())
-        );
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
@@ -62,8 +55,23 @@ public class UserEntity implements UserDetails {
         return this.username;
     }
 
-    @Override public boolean isAccountNonExpired() { return true; }
-    @Override public boolean isAccountNonLocked() { return true; }
-    @Override public boolean isCredentialsNonExpired() { return true; }
-    @Override public boolean isEnabled() { return true; }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

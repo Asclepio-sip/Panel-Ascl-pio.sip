@@ -1,6 +1,6 @@
 package projeto_base_de_telas_e_login.dto.Estoque;
 
-import projeto_base_de_telas_e_login.persistence.Estoque.Estoque;
+import projeto_base_de_telas_e_login.entidade.Estoque;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -2,8 +2,8 @@ package projeto_base_de_telas_e_login.service.Loja.Bairro;
 
 import org.springframework.stereotype.Service;
 
-import projeto_base_de_telas_e_login.persistence.Loja.Bairro.Bairro;
-import projeto_base_de_telas_e_login.persistence.Loja.Bairro.BairroRepository;
+import projeto_base_de_telas_e_login.entidade.Bairro;
+import projeto_base_de_telas_e_login.repository.BairroRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,15 +20,10 @@ public class BairroService {
     public Bairro criar(String nome) {
 
         if (nome == null || nome.isBlank()) {
-            throw new RuntimeException(
-                    "Nome do bairro não pode ser vazio"
-            );
+            throw new RuntimeException("Nome do bairro não pode ser vazio");
         }
 
-        Bairro bairro = new Bairro(
-                null,
-                nome
-        );
+        Bairro bairro = new Bairro(null, nome);
 
         return bairroRepository.save(bairro);
     }
@@ -45,18 +40,9 @@ public class BairroService {
         return bairroRepository.findByNome(nome);
     }
 
-    public Bairro atualizar(
-            Long id,
-            String nome
-    ) {
+    public Bairro atualizar(Long id, String nome) {
 
-        Bairro bairro = bairroRepository
-                .findById(id)
-                .orElseThrow(
-                        () -> new RuntimeException(
-                                "Bairro não encontrado"
-                        )
-                );
+        Bairro bairro = bairroRepository.findById(id).orElseThrow(() -> new RuntimeException("Bairro não encontrado"));
 
         bairro.setNome(nome);
 

@@ -26,20 +26,13 @@ public class TelaEstoque implements EstoqueApi {
 
         useCase.criar(dto);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Override
     public ResponseEntity<Void> atualizar(EstoqueAddDto dto) {
 
-        useCase.atualizar(
-                dto.lojaID(),
-                dto.produtoId(),
-                dto.quantidade(),
-                dto.precoVenda()
-        );
+        useCase.atualizar(dto.lojaID(), dto.produtoId(), dto.quantidade(), dto.precoVenda());
 
         return ResponseEntity.ok().build();
     }
@@ -47,11 +40,7 @@ public class TelaEstoque implements EstoqueApi {
     @Override
     public ResponseEntity<Void> aplicarPromocao(AplicarPromocaoDto dto) {
 
-        useCase.aplicarPromocao(
-                dto.lojaId(),
-                dto.produtoId(),
-                dto.percentual()
-        );
+        useCase.aplicarPromocao(dto.lojaId(), dto.produtoId(), dto.percentual());
 
         return ResponseEntity.ok().build();
     }
@@ -59,11 +48,7 @@ public class TelaEstoque implements EstoqueApi {
     @Override
     public ResponseEntity<List<EstoqueListaDto>> listar() {
 
-        List<EstoqueListaDto> response = useCase
-                .listarTodos()
-                .stream()
-                .map(EstoqueListaDto::fromDomain)
-                .toList();
+        List<EstoqueListaDto> response = useCase.listarTodos().stream().map(EstoqueListaDto::fromDomain).toList();
 
         return ResponseEntity.ok(response);
     }
@@ -71,11 +56,7 @@ public class TelaEstoque implements EstoqueApi {
     @Override
     public ResponseEntity<List<EstoqueListaDto>> buscarPorNomeLoja(String nome) {
 
-        List<EstoqueListaDto> response = useCase
-                .buscarPorNomeLoja(nome)
-                .stream()
-                .map(EstoqueListaDto::fromDomain)
-                .toList();
+        List<EstoqueListaDto> response = useCase.buscarPorNomeLoja(nome).stream().map(EstoqueListaDto::fromDomain).toList();
 
         return ResponseEntity.ok(response);
     }
@@ -83,27 +64,15 @@ public class TelaEstoque implements EstoqueApi {
     @Override
     public ResponseEntity<List<EstoqueListaDto>> buscarPorNomeProduto(String nome) {
 
-        List<EstoqueListaDto> response = useCase
-                .buscarPorNomeProduto(nome)
-                .stream()
-                .map(EstoqueListaDto::fromDomain)
-                .toList();
+        List<EstoqueListaDto> response = useCase.buscarPorNomeProduto(nome).stream().map(EstoqueListaDto::fromDomain).toList();
 
         return ResponseEntity.ok(response);
     }
 
     @Override
-    public ResponseEntity<List<EstoqueListaDto>> filtrar(
-            Long lojaId,
-            String nomeLoja,
-            Boolean semEstoque
-    ) {
+    public ResponseEntity<List<EstoqueListaDto>> filtrar(Long lojaId, String nomeLoja, Boolean semEstoque) {
 
-        List<EstoqueListaDto> response = useCase
-                .filtrar(lojaId, nomeLoja, semEstoque)
-                .stream()
-                .map(EstoqueListaDto::fromDomain)
-                .toList();
+        List<EstoqueListaDto> response = useCase.filtrar(lojaId, nomeLoja, semEstoque).stream().map(EstoqueListaDto::fromDomain).toList();
 
         return ResponseEntity.ok(response);
     }

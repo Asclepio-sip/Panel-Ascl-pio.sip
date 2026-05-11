@@ -2,8 +2,8 @@ package projeto_base_de_telas_e_login.service.Categoria;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import projeto_base_de_telas_e_login.persistence.categoria.Categoria;
-import projeto_base_de_telas_e_login.persistence.categoria.CategoriaRepository;
+import projeto_base_de_telas_e_login.entidade.Categoria;
+import projeto_base_de_telas_e_login.repository.CategoriaRepository;
 
 import java.util.List;
 import java.util.Set;
@@ -13,14 +13,7 @@ public class CategoriaService {
 
     private final CategoriaRepository repository;
 
-    private static final Set<String> CATEGORIAS_PROTEGIDAS = Set.of(
-            "Medicamentos",
-            "Beleza",
-            "Higiene",
-            "Infantil",
-            "Vitaminas",
-            "Promoções"
-    );
+    private static final Set<String> CATEGORIAS_PROTEGIDAS = Set.of("Medicamentos", "Beleza", "Higiene", "Infantil", "Vitaminas", "Promoções");
 
     public CategoriaService(CategoriaRepository repository) {
         this.repository = repository;
@@ -35,17 +28,12 @@ public class CategoriaService {
     public Categoria criar(String nome) {
 
         if (nome == null || nome.isBlank()) {
-            throw new IllegalArgumentException(
-                    "Nome da categoria é obrigatório"
-            );
+            throw new IllegalArgumentException("Nome da categoria é obrigatório");
         }
 
-        repository.findByNomeCategoria(nome)
-                .ifPresent(c -> {
-                    throw new IllegalArgumentException(
-                            "Categoria já existe"
-                    );
-                });
+        repository.findByNomeCategoria(nome).ifPresent(c -> {
+            throw new IllegalArgumentException("Categoria já existe");
+        });
 
         Categoria categoria = new Categoria();
         categoria.setNomeCategoria(nome);
@@ -56,18 +44,11 @@ public class CategoriaService {
     // EDITAR
     public Categoria editar(Long id, String novoNome) {
 
-        Categoria categoria = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Categoria não encontrada")
-                );
+        Categoria categoria = repository.findById(id).orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
-        if (CATEGORIAS_PROTEGIDAS.contains(
-                categoria.getNomeCategoria()
-        )) {
+        if (CATEGORIAS_PROTEGIDAS.contains(categoria.getNomeCategoria())) {
 
-            throw new IllegalStateException(
-                    "Essa categoria é fundamental e não pode ser editada"
-            );
+            throw new IllegalStateException("Essa categoria é fundamental e não pode ser editada");
         }
 
         categoria.setNomeCategoria(novoNome);
@@ -78,18 +59,11 @@ public class CategoriaService {
     // DELETAR
     public void deletar(Long id) {
 
-        Categoria categoria = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Categoria não encontrada")
-                );
+        Categoria categoria = repository.findById(id).orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
-        if (CATEGORIAS_PROTEGIDAS.contains(
-                categoria.getNomeCategoria()
-        )) {
+        if (CATEGORIAS_PROTEGIDAS.contains(categoria.getNomeCategoria())) {
 
-            throw new IllegalStateException(
-                    "Essa categoria é fundamental e não pode ser deletada"
-            );
+            throw new IllegalStateException("Essa categoria é fundamental e não pode ser deletada");
         }
 
         try {
@@ -97,9 +71,7 @@ public class CategoriaService {
 
         } catch (DataIntegrityViolationException e) {
 
-            throw new IllegalStateException(
-                    "Categoria possui produtos vinculados."
-            );
+            throw new IllegalStateException("Categoria possui produtos vinculados.");
         }
     }
 }

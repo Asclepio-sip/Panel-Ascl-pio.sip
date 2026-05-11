@@ -1,12 +1,10 @@
-package projeto_base_de_telas_e_login.persistence.Pedido;
+package projeto_base_de_telas_e_login.entidade;
 
 import jakarta.persistence.*;
 
 import projeto_base_de_telas_e_login.model.Pedido.Enum.FormaDePagamento;
 import projeto_base_de_telas_e_login.model.Pedido.Enum.StatusDoPedido;
 import projeto_base_de_telas_e_login.model.Pedido.Enum.TipoEntrega;
-import projeto_base_de_telas_e_login.persistence.ItemPedido.ItemPedido;
-import projeto_base_de_telas_e_login.persistence.Loja.loja.Loja;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,8 +17,6 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
 
     private LocalDateTime criadoEm;
 
@@ -49,22 +45,13 @@ public class Pedido {
     @Enumerated(EnumType.STRING)
     private TipoEntrega tipoEntrega;
 
-    @Column(
-            precision = 10,
-            scale = 2
-    )
+    @Column(precision = 10, scale = 2)
     private BigDecimal totalProdutos;
 
-    @Column(
-            precision = 10,
-            scale = 2
-    )
+    @Column(precision = 10, scale = 2)
     private BigDecimal valorFrete;
 
-    @Column(
-            precision = 10,
-            scale = 2
-    )
+    @Column(precision = 10, scale = 2)
     private BigDecimal totalFinal;
 
     private Boolean freteGratis;
@@ -72,35 +59,16 @@ public class Pedido {
     @Enumerated(EnumType.STRING)
     private FormaDePagamento formaDePagamento;
 
-    @OneToMany(
-            mappedBy = "pedido",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itens;
 
     public Pedido() {
     }
 
-    public Pedido(
-            Long id,
-            Long lojaId,
-            String nomeCliente,
-            String email,
-            String telefone,
-            String endereco,
-            String bairro,
-            String complemento,
-            String observacao,
-            TipoEntrega tipoEntrega,
-            List<ItemPedido> itens,
-            FormaDePagamento formaDePagamento
-    ) {
+    public Pedido(Long id, Long lojaId, String nomeCliente, String email, String telefone, String endereco, String bairro, String complemento, String observacao, TipoEntrega tipoEntrega, List<ItemPedido> itens, FormaDePagamento formaDePagamento) {
 
         if (itens == null || itens.isEmpty()) {
-            throw new RuntimeException(
-                    "Pedido precisa ter itens"
-            );
+            throw new RuntimeException("Pedido precisa ter itens");
         }
 
         this.id = id;
@@ -134,33 +102,23 @@ public class Pedido {
 
     public void calcularTotais() {
 
-        this.totalProdutos = itens
-                .stream()
-                .map(ItemPedido::getSubtotal)
-                .reduce(
-                        BigDecimal.ZERO,
-                        BigDecimal::add
-                );
+        this.totalProdutos = itens.stream().map(ItemPedido::getSubtotal).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         this.valorFrete = BigDecimal.ZERO;
 
         this.totalFinal = totalProdutos;
     }
 
-    public void aplicarFrete(
-            BigDecimal frete
-    ) {
+    public void aplicarFrete(BigDecimal frete) {
 
         this.valorFrete = frete;
 
-        this.totalFinal =
-                totalProdutos.add(frete);
+        this.totalFinal = totalProdutos.add(frete);
     }
 
     public Long getId() {
         return id;
     }
-
 
 
     public LocalDateTime getCriadoEm() {
@@ -235,9 +193,7 @@ public class Pedido {
         this.loja = loja;
     }
 
-    public void setStatus(
-            StatusDoPedido status
-    ) {
+    public void setStatus(StatusDoPedido status) {
         this.status = status;
     }
 

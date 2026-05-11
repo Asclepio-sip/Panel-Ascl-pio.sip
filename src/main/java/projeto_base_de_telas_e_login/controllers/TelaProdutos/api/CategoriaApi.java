@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projeto_base_de_telas_e_login.dto.Categoria.CriarCategoriaDTO;
-import projeto_base_de_telas_e_login.persistence.categoria.Categoria;
+import projeto_base_de_telas_e_login.entidade.Categoria;
 
 import java.util.List;
 

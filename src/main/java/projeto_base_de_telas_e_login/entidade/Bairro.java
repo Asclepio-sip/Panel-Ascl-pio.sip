@@ -1,4 +1,4 @@
-package projeto_base_de_telas_e_login.persistence.Loja.Bairro;
+package projeto_base_de_telas_e_login.entidade;
 
 import jakarta.persistence.*;
 

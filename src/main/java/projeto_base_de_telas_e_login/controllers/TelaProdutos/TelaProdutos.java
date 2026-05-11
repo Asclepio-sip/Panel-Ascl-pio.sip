@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import projeto_base_de_telas_e_login.controllers.TelaProdutos.api.ProdutoApi;
-import projeto_base_de_telas_e_login.persistence.Product.Product;
+import projeto_base_de_telas_e_login.entidade.Product;
 import projeto_base_de_telas_e_login.service.Produto.ProdutoService;
 
 import java.util.List;

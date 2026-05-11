@@ -1,8 +1,6 @@
-package projeto_base_de_telas_e_login.persistence.ItemPedido;
+package projeto_base_de_telas_e_login.entidade;
 
 import jakarta.persistence.*;
-
-import projeto_base_de_telas_e_login.persistence.Pedido.Pedido;
 
 import java.math.BigDecimal;
 
@@ -16,18 +14,12 @@ public class ItemPedido {
 
     private String nomeProduto;
 
-    @Column(
-            precision = 10,
-            scale = 2
-    )
+    @Column(precision = 10, scale = 2)
     private BigDecimal precoUnitario;
 
     private Integer quantidade;
 
-    @Column(
-            precision = 10,
-            scale = 2
-    )
+    @Column(precision = 10, scale = 2)
     private BigDecimal subtotal;
 
     @ManyToOne(optional = false)
@@ -37,18 +29,10 @@ public class ItemPedido {
     public ItemPedido() {
     }
 
-    public ItemPedido(
-            Long id,
-            String nomeProduto,
-            BigDecimal precoUnitario,
-            Integer quantidade,
-            Pedido pedido
-    ) {
+    public ItemPedido(Long id, String nomeProduto, BigDecimal precoUnitario, Integer quantidade, Pedido pedido) {
 
         if (quantidade <= 0) {
-            throw new RuntimeException(
-                    "Quantidade inválida"
-            );
+            throw new RuntimeException("Quantidade inválida");
         }
 
         this.id = id;
@@ -56,10 +40,7 @@ public class ItemPedido {
         this.precoUnitario = precoUnitario;
         this.quantidade = quantidade;
 
-        this.subtotal =
-                precoUnitario.multiply(
-                        BigDecimal.valueOf(quantidade)
-                );
+        this.subtotal = precoUnitario.multiply(BigDecimal.valueOf(quantidade));
 
         this.pedido = pedido;
     }
@@ -88,22 +69,15 @@ public class ItemPedido {
         return pedido;
     }
 
-    public void setQuantidade(
-            Integer quantidade
-    ) {
+    public void setQuantidade(Integer quantidade) {
 
         if (quantidade <= 0) {
-            throw new RuntimeException(
-                    "Quantidade inválida"
-            );
+            throw new RuntimeException("Quantidade inválida");
         }
 
         this.quantidade = quantidade;
 
-        this.subtotal =
-                this.precoUnitario.multiply(
-                        BigDecimal.valueOf(quantidade)
-                );
+        this.subtotal = this.precoUnitario.multiply(BigDecimal.valueOf(quantidade));
     }
 
     public void setId(Long id) {
