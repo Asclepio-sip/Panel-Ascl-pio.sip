@@ -1,4 +1,4 @@
-package projeto_base_de_telas_e_login.dto.Pedido;
+package projeto_base_de_telas_e_login.Pedido.dto;
 
 public record ItemPedidoAddDTO(
         Long produtoId,

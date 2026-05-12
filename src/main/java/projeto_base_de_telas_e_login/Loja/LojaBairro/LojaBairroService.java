@@ -1,18 +1,15 @@
-package projeto_base_de_telas_e_login.service.Loja.LojaBairro;
+package projeto_base_de_telas_e_login.Loja.LojaBairro;
 
 import org.springframework.stereotype.Service;
 
-import projeto_base_de_telas_e_login.dto.loja.lojabairros.CreateLojaBairroRequest;
-import projeto_base_de_telas_e_login.dto.loja.lojabairros.LojaBairroResponse;
+import projeto_base_de_telas_e_login.Loja.LojaBairro.dto.CreateLojaBairroRequest;
+import projeto_base_de_telas_e_login.Loja.LojaBairro.dto.LojaBairroResponse;
 
-import projeto_base_de_telas_e_login.entidade.Bairro;
-import projeto_base_de_telas_e_login.repository.BairroRepository;
+import projeto_base_de_telas_e_login.Loja.Bairro.Bairro;
+import projeto_base_de_telas_e_login.Loja.Bairro.BairroRepository;
 
-import projeto_base_de_telas_e_login.entidade.Loja;
-import projeto_base_de_telas_e_login.repository.LojaRepository;
-
-import projeto_base_de_telas_e_login.entidade.LojaBairro;
-import projeto_base_de_telas_e_login.repository.LojaBairroRepository;
+import projeto_base_de_telas_e_login.Loja.Loja.Loja;
+import projeto_base_de_telas_e_login.Loja.Loja.LojaRepository;
 
 import java.util.List;
 

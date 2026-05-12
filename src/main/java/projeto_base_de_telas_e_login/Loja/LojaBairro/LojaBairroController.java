@@ -1,11 +1,9 @@
-package projeto_base_de_telas_e_login.controllers.TelaLoja;
+package projeto_base_de_telas_e_login.Loja.LojaBairro;
 
 import org.springframework.web.bind.annotation.*;
 
 import projeto_base_de_telas_e_login.Loja.LojaBairro.dto.CreateLojaBairroRequest;
 import projeto_base_de_telas_e_login.Loja.LojaBairro.dto.LojaBairroResponse;
-
-import projeto_base_de_telas_e_login.Loja.LojaBairro.LojaBairroService;
 
 import java.util.List;
 

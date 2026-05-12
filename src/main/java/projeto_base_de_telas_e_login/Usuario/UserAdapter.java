@@ -1,21 +1,21 @@
-package projeto_base_de_telas_e_login.entidade;
+package projeto_base_de_telas_e_login.Usuario;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import projeto_base_de_telas_e_login.model.user.User;
-import projeto_base_de_telas_e_login.repository.CategoriaRepository;
-import projeto_base_de_telas_e_login.repository.UserPorta;
+import projeto_base_de_telas_e_login.Usuario.user.User;
+import projeto_base_de_telas_e_login.Categoria.CategoriaRepository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class UserAdapter implements UserPorta {
+public class UserAdapter implements UserUseCase.UserPorta {
 
-    private final CategoriaRepository.UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public UserAdapter(CategoriaRepository.UserRepository userRepository) {
+
+    public UserAdapter(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

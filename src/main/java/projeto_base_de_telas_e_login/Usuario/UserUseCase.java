@@ -1,12 +1,13 @@
-package projeto_base_de_telas_e_login.service.User;
+package projeto_base_de_telas_e_login.Usuario;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import projeto_base_de_telas_e_login.model.user.User;
-import projeto_base_de_telas_e_login.model.user.UserRole;
-import projeto_base_de_telas_e_login.repository.UserPorta;
+import projeto_base_de_telas_e_login.Usuario.user.User;
+import projeto_base_de_telas_e_login.Usuario.user.UserRole;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -58,6 +59,20 @@ public class UserUseCase {
         }
 
         userPorta.save(user);
+    }
+
+    public static interface UserPorta {
+
+        boolean existsByUsername(String username);
+
+        User save(User user);
+
+        User findById(UUID id);
+
+        List<User> findAll();
+
+        Optional<UserDetails> findByLogin(String login);
+
     }
 }
 

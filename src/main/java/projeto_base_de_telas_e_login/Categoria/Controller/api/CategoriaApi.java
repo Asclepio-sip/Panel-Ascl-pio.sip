@@ -1,4 +1,4 @@
-package projeto_base_de_telas_e_login.Produto.Controller.api;
+package projeto_base_de_telas_e_login.Categoria.Controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

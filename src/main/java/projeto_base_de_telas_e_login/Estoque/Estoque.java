@@ -1,6 +1,8 @@
-package projeto_base_de_telas_e_login.entidade;
+package projeto_base_de_telas_e_login.Estoque;
 
 import jakarta.persistence.*;
+import projeto_base_de_telas_e_login.Loja.Loja.Loja;
+import projeto_base_de_telas_e_login.Produto.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

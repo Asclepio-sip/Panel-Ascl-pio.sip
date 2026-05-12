@@ -2,8 +2,8 @@ package projeto_base_de_telas_e_login.config.bootstrap;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-import projeto_base_de_telas_e_login.service.User.UserUseCase;
-import projeto_base_de_telas_e_login.model.user.UserRole;
+import projeto_base_de_telas_e_login.Usuario.UserUseCase;
+import projeto_base_de_telas_e_login.Usuario.user.UserRole;
 
 @Configuration
 public class DataInitializer implements CommandLineRunner {

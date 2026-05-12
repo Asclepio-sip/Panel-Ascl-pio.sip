@@ -1,11 +1,10 @@
-package projeto_base_de_telas_e_login.controllers.TelaLoja;
+package projeto_base_de_telas_e_login.Loja.Loja;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import projeto_base_de_telas_e_login.Loja.Loja.dto.CreateLojaRequest;
 import projeto_base_de_telas_e_login.Loja.Loja.dto.LojaResponse;
-import projeto_base_de_telas_e_login.Loja.Loja.LojaService;
 
 import java.util.List;
 

@@ -4,21 +4,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import projeto_base_de_telas_e_login.Estoque.dto.EstoqueAddDto;
-import projeto_base_de_telas_e_login.Categoria.CategoriaRepository;
+import projeto_base_de_telas_e_login.Estoque.dto.EstoqueCardDto;
 import projeto_base_de_telas_e_login.Loja.Loja.LojaRepository;
-import projeto_base_de_telas_e_login.Produto.repository.ProductRepository;
+import projeto_base_de_telas_e_login.Produto.ProductRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-public class EstoqueImple {
+public class EstoqueService {
 
     private final EstoqueRepository estoqueRepository;
     private final LojaRepository lojaRepository;
     private final ProductRepository productRepository;
 
-    public EstoqueImple(EstoqueRepository estoqueRepository, LojaRepository lojaRepository, ProductRepository productRepository) {
+    public EstoqueService(EstoqueRepository estoqueRepository, LojaRepository lojaRepository, ProductRepository productRepository) {
         this.estoqueRepository = estoqueRepository;
         this.lojaRepository = lojaRepository;
         this.productRepository = productRepository;
@@ -27,31 +27,55 @@ public class EstoqueImple {
     @Transactional
     public void criar(EstoqueAddDto dto) {
 
-        var loja = dto.lojaID() != null ? lojaRepository.findById(dto.lojaID()) : lojaRepository.findByNome(dto.nomeLoja());
-        var lojaFinal = loja.orElseThrow(() -> new RuntimeException("Loja não encontrada"));
 
-        var produto = dto.produtoId() != null ? productRepository.findById(dto.produtoId()) : productRepository.findByName(dto.nomeProduto());
+        if (dto.lojaID() == null && dto.nomeLoja() == null) {
+            throw new RuntimeException("Informe lojaID ou nomeLoja");
+        }
 
-        var produtoFinal = produto.orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+        var loja = dto.lojaID() != null
+                ? lojaRepository.findById(dto.lojaID())
+                : lojaRepository.findByNome(dto.nomeLoja());
 
-        var existente = estoqueRepository.findByLoja_IdAndProduto_Id(lojaFinal.getId(), produtoFinal.getId());
+        System.out.println("Loja encontrada? " + loja.isPresent());
+
+        var lojaFinal = loja.orElseThrow(() ->
+                new RuntimeException("Loja não encontrada"));
+
+        var produto = dto.produtoId() != null
+                ? productRepository.findById(dto.produtoId())
+                : productRepository.findByName(dto.nomeProduto());
+
+        System.out.println("Produto encontrado? " + produto.isPresent());
+
+        var produtoFinal = produto.orElseThrow(() ->
+                new RuntimeException("Produto não encontrado"));
+
+        var existente = estoqueRepository
+                .findByLoja_IdAndProduto_Id(
+                        lojaFinal.getId(),
+                        produtoFinal.getId()
+                );
+
+        System.out.println("Produto já existe no estoque? " + existente.isPresent());
 
         if (existente.isPresent()) {
             throw new RuntimeException("Produto já existe no estoque");
         }
 
-        if (dto.lojaID() == null && dto.nomeLoja() == null) {
-            throw new RuntimeException("Informe lojaId ou nomeLoja");
-        }
-
-        if (dto.produtoId() == null && dto.nomeProduto() == null) {
-            throw new RuntimeException("Informe produtoId ou nomeProduto");
-        }
-
-        Estoque estoque = new Estoque(null, lojaFinal, produtoFinal, dto.quantidade(), dto.precoVenda(), BigDecimal.ZERO);
+        Estoque estoque = new Estoque(
+                null,
+                lojaFinal,
+                produtoFinal,
+                dto.quantidade(),
+                dto.precoVenda(),
+                BigDecimal.ZERO
+        );
 
         estoqueRepository.save(estoque);
+
+        System.out.println("ESTOQUE SALVO COM SUCESSO");
     }
+
 
     public void atualizar(Long lojaId, Long produtoId, Integer quantidade, BigDecimal precoVenda) {
 
@@ -80,8 +104,15 @@ public class EstoqueImple {
     }
 
     @Transactional(readOnly = true)
-    public List<Estoque> listarTodos() {
+    public List<Estoque> lista() {
         return estoqueRepository.findAll();
+    }
+
+    public List<EstoqueCardDto> listarTodos() {
+        return estoqueRepository.findAll()
+                .stream()
+                .map(EstoqueCardDto::from)
+                .toList();
     }
 
     @Transactional(readOnly = true)

@@ -1,9 +1,6 @@
-package projeto_base_de_telas_e_login.service.Loja.Bairro;
+package projeto_base_de_telas_e_login.Loja.Bairro;
 
 import org.springframework.stereotype.Service;
-
-import projeto_base_de_telas_e_login.entidade.Bairro;
-import projeto_base_de_telas_e_login.repository.BairroRepository;
 
 import java.util.List;
 import java.util.Optional;

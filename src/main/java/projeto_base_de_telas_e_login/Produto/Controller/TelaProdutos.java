@@ -1,11 +1,14 @@
-package projeto_base_de_telas_e_login.Produto.TelaProdutos;
+package projeto_base_de_telas_e_login.Produto.Controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import projeto_base_de_telas_e_login.Produto.TelaProdutos.api.ProdutoApi;
+import projeto_base_de_telas_e_login.Produto.Controller.api.ProdutoApi;
 import projeto_base_de_telas_e_login.Produto.Product;
 import projeto_base_de_telas_e_login.Produto.ProdutoService;
+import projeto_base_de_telas_e_login.Produto.dto.ProductoAddDto;
+import projeto_base_de_telas_e_login.Produto.dto.ProductoResponseDto;
+import projeto_base_de_telas_e_login.Produto.dto.ProdutoUpdateDto;
 
 import java.util.List;
 
@@ -19,17 +22,15 @@ public class TelaProdutos implements ProdutoApi {
     }
 
     @Override
-    public ResponseEntity<List<Product>> listar() {
-
+    public ResponseEntity<List<ProductoResponseDto>> listar() {
         return ResponseEntity.ok(
                 produtoService.listarTodos()
         );
     }
 
     @Override
-    public ResponseEntity<Product> criar(Product product) {
-
-        Product novo = produtoService.criar(product);
+    public ResponseEntity<Product> criar(ProductoAddDto dto) {
+        Product novo = produtoService.criar(dto);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -37,10 +38,12 @@ public class TelaProdutos implements ProdutoApi {
     }
 
     @Override
-    public ResponseEntity<Product> editar(Long id, Product product) {
+    public ResponseEntity<ProductoResponseDto> editar(Long id, ProdutoUpdateDto product) {
+
+        Product atualizado = produtoService.editar(id, product);
 
         return ResponseEntity.ok(
-                produtoService.editar(id, product)
+                ProductoResponseDto.fromEntity(atualizado)
         );
     }
 

@@ -1,9 +1,10 @@
-package projeto_base_de_telas_e_login.Pedido;
+package projeto_base_de_telas_e_login.Pedido.Controller;
 
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import projeto_base_de_telas_e_login.Pedido.PedidoService;
 import projeto_base_de_telas_e_login.Pedido.dto.AtualizarStatusPedidoDTO;
 
 import projeto_base_de_telas_e_login.Pedido.dto.DetalhePedidoDTO;

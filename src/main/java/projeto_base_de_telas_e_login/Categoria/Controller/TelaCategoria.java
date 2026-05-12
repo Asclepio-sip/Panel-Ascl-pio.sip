@@ -1,12 +1,12 @@
-package projeto_base_de_telas_e_login.Produto.Controller;
+package projeto_base_de_telas_e_login.Categoria.Controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import projeto_base_de_telas_e_login.Produto.Controller.api.CategoriaApi;
+import projeto_base_de_telas_e_login.Categoria.Controller.api.CategoriaApi;
 import projeto_base_de_telas_e_login.Categoria.dto.CriarCategoria;
 import projeto_base_de_telas_e_login.Categoria.Categoria;
-import projeto_base_de_telas_e_login.Categoria.Service.imple.CategoriaService;
+import projeto_base_de_telas_e_login.Categoria.CategoriaService;
 
 import java.util.List;
 

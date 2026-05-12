@@ -1,7 +1,7 @@
-package projeto_base_de_telas_e_login.dto.Pedido;
+package projeto_base_de_telas_e_login.Pedido.dto;
 
 
-import projeto_base_de_telas_e_login.entidade.Product;
+import projeto_base_de_telas_e_login.Produto.Product;
 
 public record ProductListaDto(
         Long id,

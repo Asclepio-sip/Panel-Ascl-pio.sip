@@ -65,9 +65,10 @@ public class SecurityConfigurations {
                         // =====================
                         //  tela de TelaProdutos
                         // =====================
-
+                        .requestMatchers(HttpMethod.GET,"/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,"/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH,"/products/**").hasRole("ADMIN")
 
                         // =====================
                         //  tela de BairroController

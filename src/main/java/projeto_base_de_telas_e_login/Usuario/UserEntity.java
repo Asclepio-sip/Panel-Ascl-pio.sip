@@ -1,11 +1,11 @@
-package projeto_base_de_telas_e_login.entidade;
+package projeto_base_de_telas_e_login.Usuario;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import projeto_base_de_telas_e_login.model.user.User;
-import projeto_base_de_telas_e_login.model.user.UserRole;
+import projeto_base_de_telas_e_login.Usuario.user.User;
+import projeto_base_de_telas_e_login.Usuario.user.UserRole;
 
 import java.util.Collection;
 import java.util.List;

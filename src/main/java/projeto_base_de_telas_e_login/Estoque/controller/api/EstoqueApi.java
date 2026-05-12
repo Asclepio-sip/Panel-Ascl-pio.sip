@@ -1,4 +1,4 @@
-package projeto_base_de_telas_e_login.controllers.TelaEstoque.api;
+package projeto_base_de_telas_e_login.Estoque.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -9,9 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import projeto_base_de_telas_e_login.Estoque.Estoque.AplicarPromocaoDto;
-import projeto_base_de_telas_e_login.Estoque.Estoque.EstoqueAddDto;
-import projeto_base_de_telas_e_login.Estoque.Estoque.EstoqueListaDto;
+import projeto_base_de_telas_e_login.Estoque.dto.*;
 
 import java.util.List;
 
@@ -41,8 +39,12 @@ public interface EstoqueApi {
     );
 
     @Operation(summary = "Listar estoque")
-    @GetMapping
-    ResponseEntity<List<EstoqueListaDto>> listar();
+    @GetMapping("/relatorio")
+    ResponseEntity<List<EstoqueCardDto>> relatorio();
+
+    @Operation(summary = "Listar estoque")
+    @GetMapping("/completo")
+    ResponseEntity<List<ListaDeEstoqueDasLojasResponse>> completo();
 
     @Operation(summary = "Buscar por loja")
     @GetMapping("/loja")

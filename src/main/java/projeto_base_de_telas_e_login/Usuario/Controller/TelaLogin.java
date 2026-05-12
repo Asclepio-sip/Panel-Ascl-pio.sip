@@ -1,4 +1,4 @@
-package projeto_base_de_telas_e_login.Usuario.TelaLogin;
+package projeto_base_de_telas_e_login.Usuario.Controller;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

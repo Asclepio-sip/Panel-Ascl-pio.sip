@@ -1,6 +1,7 @@
-package projeto_base_de_telas_e_login.entidade;
+package projeto_base_de_telas_e_login.Produto;
 
 import jakarta.persistence.*;
+import projeto_base_de_telas_e_login.Categoria.Categoria;
 
 @Entity
 @Table(name = "product")

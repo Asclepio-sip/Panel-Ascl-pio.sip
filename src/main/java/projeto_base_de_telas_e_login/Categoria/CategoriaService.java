@@ -1,9 +1,7 @@
-package projeto_base_de_telas_e_login.Categoria.Service.imple;
+package projeto_base_de_telas_e_login.Categoria;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import projeto_base_de_telas_e_login.Categoria.Categoria;
-import projeto_base_de_telas_e_login.Categoria.Repository.CategoriaRepository;
 
 import java.util.List;
 import java.util.Set;

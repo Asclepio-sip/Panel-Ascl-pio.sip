@@ -1,11 +1,9 @@
-package projeto_base_de_telas_e_login.service.Loja.Loja;
+package projeto_base_de_telas_e_login.Loja.Loja;
 
 import org.springframework.stereotype.Service;
 
-import projeto_base_de_telas_e_login.dto.loja.Loja.CreateLojaRequest;
-import projeto_base_de_telas_e_login.dto.loja.Loja.LojaResponse;
-import projeto_base_de_telas_e_login.entidade.Loja;
-import projeto_base_de_telas_e_login.repository.LojaRepository;
+import projeto_base_de_telas_e_login.Loja.Loja.dto.CreateLojaRequest;
+import projeto_base_de_telas_e_login.Loja.Loja.dto.LojaResponse;
 
 import java.util.List;
 

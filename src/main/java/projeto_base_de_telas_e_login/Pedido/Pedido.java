@@ -1,10 +1,12 @@
-package projeto_base_de_telas_e_login.entidade;
+package projeto_base_de_telas_e_login.Pedido;
 
 import jakarta.persistence.*;
 
-import projeto_base_de_telas_e_login.model.Pedido.Enum.FormaDePagamento;
-import projeto_base_de_telas_e_login.model.Pedido.Enum.StatusDoPedido;
-import projeto_base_de_telas_e_login.model.Pedido.Enum.TipoEntrega;
+import projeto_base_de_telas_e_login.Pedido.Enum.FormaDePagamento;
+import projeto_base_de_telas_e_login.Pedido.Enum.StatusDoPedido;
+import projeto_base_de_telas_e_login.Pedido.Enum.TipoEntrega;
+import projeto_base_de_telas_e_login.ItemPedido.ItemPedido;
+import projeto_base_de_telas_e_login.Loja.Loja.Loja;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

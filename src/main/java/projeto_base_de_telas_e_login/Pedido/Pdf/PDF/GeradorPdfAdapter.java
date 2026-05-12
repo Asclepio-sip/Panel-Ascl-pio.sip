@@ -1,10 +1,10 @@
-//package projeto_base_de_telas_e_login.persistence.Pedido.PDF;
+//package projeto_base_de_telas_e_login.Pedido.Pdf.PDF;
 //
 //import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 //import org.springframework.stereotype.Component;
 //import projeto_base_de_telas_e_login.persistence.Pedido.PDF.PdfTemplatePedido.PdfPedidoTemplate;
 //import projeto_base_de_telas_e_login.persistence.Pedido.Pedido;
-//import projeto_base_de_telas_e_login.repository.GeradorPdfPort;
+//import projeto_base_de_telas_e_login.Pedido.Pdf.GeradorPdfPort;
 //
 //import java.io.ByteArrayOutputStream;
 //

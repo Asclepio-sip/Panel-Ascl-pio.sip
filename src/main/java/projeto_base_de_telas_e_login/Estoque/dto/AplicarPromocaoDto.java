@@ -1,4 +1,4 @@
-package projeto_base_de_telas_e_login.Estoque.Estoque;
+package projeto_base_de_telas_e_login.Estoque.dto;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;

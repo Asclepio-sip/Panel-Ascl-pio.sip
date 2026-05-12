@@ -1,8 +1,7 @@
-package projeto_base_de_telas_e_login.repository;
+package projeto_base_de_telas_e_login.Loja.LojaBairro;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import projeto_base_de_telas_e_login.entidade.LojaBairro;
 
 import java.util.List;
 

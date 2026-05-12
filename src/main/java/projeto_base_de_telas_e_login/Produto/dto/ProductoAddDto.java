@@ -1,21 +1,19 @@
-package projeto_base_de_telas_e_login.dto.Product;
+package projeto_base_de_telas_e_login.Produto.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import projeto_base_de_telas_e_login.entidade.Product;
-import projeto_base_de_telas_e_login.entidade.Categoria;
+import projeto_base_de_telas_e_login.Produto.Product;
+import projeto_base_de_telas_e_login.Categoria.Categoria;
 
 public record ProductoAddDto(
-        @NotBlank
-         String name,
-         String variacao,
-         String imagemBase64,
-         @NotBlank
-         String categoriaNome
+        @NotBlank String name,
+        String variacao,
+        String imagemBase64,
+        @NotBlank String categoriaNome
 ) {
     public Product toDomain() {
+
         Categoria categoria = new Categoria();
         categoria.setNomeCategoria(this.categoriaNome);
-
 
         return new Product(
                 this.name,

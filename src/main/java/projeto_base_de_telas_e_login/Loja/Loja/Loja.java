@@ -1,7 +1,8 @@
-package projeto_base_de_telas_e_login.entidade;
+package projeto_base_de_telas_e_login.Loja.Loja;
 
 import jakarta.persistence.*;
-import projeto_base_de_telas_e_login.model.Loja.Enum.TipoAtendimentoLoja;
+import projeto_base_de_telas_e_login.Loja.Bairro.Enum.TipoAtendimentoLoja;
+import projeto_base_de_telas_e_login.Loja.LojaBairro.LojaBairro;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

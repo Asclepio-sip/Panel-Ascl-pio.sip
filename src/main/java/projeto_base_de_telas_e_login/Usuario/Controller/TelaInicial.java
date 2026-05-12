@@ -1,20 +1,21 @@
-package projeto_base_de_telas_e_login.Usuario.TelaInicial;
+package projeto_base_de_telas_e_login.Usuario.Controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import projeto_base_de_telas_e_login.Pedido.dto.PedidoAddDTO;
-import projeto_base_de_telas_e_login.Pedido.dto.ProductListaDto;
-
 import projeto_base_de_telas_e_login.Categoria.Categoria;
+import projeto_base_de_telas_e_login.Categoria.CategoriaRepository;
+
 
 import projeto_base_de_telas_e_login.Estoque.EstoqueService;
 import projeto_base_de_telas_e_login.Pedido.PedidoService;
-import projeto_base_de_telas_e_login.Produto.ProdutoService;
+import projeto_base_de_telas_e_login.Pedido.dto.PedidoAddDTO;
+import projeto_base_de_telas_e_login.Pedido.dto.ProductListaDto;
 
-import projeto_base_de_telas_e_login.Categoria.CategoriaRepository;
+import projeto_base_de_telas_e_login.Produto.ProdutoService;
+import projeto_base_de_telas_e_login.Produto.dto.ProductoResponseDto;
 
 import java.util.List;
 
@@ -23,8 +24,11 @@ import java.util.List;
 public class TelaInicial {
 
     private final ProdutoService produtoService;
+
     private final PedidoService pedidoService;
+
     private final CategoriaRepository categoriaRepository;
+
     private final EstoqueService estoqueService;
 
     public TelaInicial(
@@ -33,23 +37,16 @@ public class TelaInicial {
             CategoriaRepository categoriaRepository,
             EstoqueService estoqueService
     ) {
+
         this.produtoService = produtoService;
+
         this.pedidoService = pedidoService;
+
         this.categoriaRepository = categoriaRepository;
+
         this.estoqueService = estoqueService;
     }
 
-    @Operation(summary = "Lista todos os produtos")
-    @GetMapping("/list")
-    public ResponseEntity<List<ProductListaDto>> listarProdutos() {
-
-        return ResponseEntity.ok(
-                produtoService.listarTodos()
-                        .stream()
-                        .map(ProductListaDto::fromDomain)
-                        .toList()
-        );
-    }
 
     @Operation(summary = "Lista produtos por nome da categoria")
     @GetMapping("/produtos/categoria/{nome}")

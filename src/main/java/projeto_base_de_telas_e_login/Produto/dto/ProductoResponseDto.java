@@ -1,18 +1,16 @@
-package projeto_base_de_telas_e_login.dto.Product;
+package projeto_base_de_telas_e_login.Produto.dto;
 
-
-import projeto_base_de_telas_e_login.entidade.Product;
+import projeto_base_de_telas_e_login.Produto.Product;
 
 public record ProductoResponseDto (
-
-     Long id,
-     String name,
-     String variacao,
-     String imagemBase64,
-     String categoriaNome
+        Long id,
+        String name,
+        String variacao,
+        String imagemBase64,
+        String categoriaNome
 ){
 
-    public static ProductoResponseDto fromDomain(Product p) {
+    public static ProductoResponseDto fromEntity(Product p) {
 
         return new ProductoResponseDto(
                 p.getId(),
@@ -24,5 +22,4 @@ public record ProductoResponseDto (
                         : null
         );
     }
-
 }

@@ -1,6 +1,6 @@
-package projeto_base_de_telas_e_login.dto.loja.Loja;
+package projeto_base_de_telas_e_login.Loja.Loja.dto;
 
-import projeto_base_de_telas_e_login.entidade.Loja;
+import projeto_base_de_telas_e_login.Loja.Loja.Loja;
 
 import java.math.BigDecimal;
 

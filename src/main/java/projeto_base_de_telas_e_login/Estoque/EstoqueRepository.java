@@ -1,9 +1,8 @@
-package projeto_base_de_telas_e_login.Estoque.repository;
+package projeto_base_de_telas_e_login.Estoque;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import projeto_base_de_telas_e_login.Estoque.Estoque;
 
 import java.util.List;
 import java.util.Optional;

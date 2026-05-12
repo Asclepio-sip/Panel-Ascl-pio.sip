@@ -1,19 +1,17 @@
-package projeto_base_de_telas_e_login.service.Pedido;
+package projeto_base_de_telas_e_login.Pedido;
 
 import org.springframework.stereotype.Service;
 
-import projeto_base_de_telas_e_login.dto.Pedido.PedidoAddDTO;
+import projeto_base_de_telas_e_login.Pedido.dto.PedidoAddDTO;
 
-import projeto_base_de_telas_e_login.model.Pedido.Enum.StatusDoPedido;
+import projeto_base_de_telas_e_login.Pedido.Enum.StatusDoPedido;
 
-import projeto_base_de_telas_e_login.entidade.Estoque;
-import projeto_base_de_telas_e_login.repository.CategoriaRepository;
-import projeto_base_de_telas_e_login.repository.EstoqueRepository;
+import projeto_base_de_telas_e_login.Estoque.Estoque;
+import projeto_base_de_telas_e_login.Categoria.CategoriaRepository;
+import projeto_base_de_telas_e_login.Estoque.EstoqueRepository;
 
-import projeto_base_de_telas_e_login.entidade.Loja;
-import projeto_base_de_telas_e_login.repository.LojaRepository;
-
-import projeto_base_de_telas_e_login.entidade.Pedido;
+import projeto_base_de_telas_e_login.Loja.Loja.Loja;
+import projeto_base_de_telas_e_login.Loja.Loja.LojaRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,13 +20,13 @@ import java.util.List;
 @Service
 public class PedidoService {
 
-    private final CategoriaRepository.PedidoRepository repository;
+    private final PedidoRepository pedidoRepository;
     private final LojaRepository lojaRepository;
     private final EstoqueRepository estoqueRepository;
 
-    public PedidoService(CategoriaRepository.PedidoRepository repository, LojaRepository lojaRepository, EstoqueRepository estoqueRepository) {
+    public PedidoService(PedidoRepository pedidoRepository, LojaRepository lojaRepository, EstoqueRepository estoqueRepository) {
 
-        this.repository = repository;
+        this.pedidoRepository = pedidoRepository;
         this.lojaRepository = lojaRepository;
         this.estoqueRepository = estoqueRepository;
     }
@@ -41,17 +39,17 @@ public class PedidoService {
 
         Pedido pedido = dto.toEntity(loja, estoquesDaLoja);
 
-        repository.save(pedido);
+        pedidoRepository.save(pedido);
     }
 
     public List<Pedido> listarTodos() {
 
-        return repository.findAll();
+        return pedidoRepository.findAll();
     }
 
     public Pedido buscarPorId(Long id) {
 
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+        return pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
     }
 
     public List<Pedido> listarPedidosDoDia() {
@@ -62,12 +60,12 @@ public class PedidoService {
 
         LocalDateTime fim = hoje.atTime(23, 59, 59);
 
-        return repository.findByCriadoEmBetweenOrderByCriadoEmDesc(inicio, fim);
+        return pedidoRepository.findByCriadoEmBetweenOrderByCriadoEmDesc(inicio, fim);
     }
 
     public void atualizarStatusPedido(Long id, StatusDoPedido status) {
 
-        repository.atualizarStatus(id, status);
+        pedidoRepository.atualizarStatus(id, status);
     }
 
     public byte[] imprimirPDF(Long id) {

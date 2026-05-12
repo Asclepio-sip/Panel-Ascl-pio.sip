@@ -1,6 +1,7 @@
-package projeto_base_de_telas_e_login.entidade;
+package projeto_base_de_telas_e_login.ItemPedido;
 
 import jakarta.persistence.*;
+import projeto_base_de_telas_e_login.Pedido.Pedido;
 
 import java.math.BigDecimal;
 

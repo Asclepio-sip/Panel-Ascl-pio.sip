@@ -1,6 +1,6 @@
-package projeto_base_de_telas_e_login.dto.Pedido;
+package projeto_base_de_telas_e_login.Pedido.dto;
 
-import projeto_base_de_telas_e_login.model.Pedido.Enum.StatusDoPedido;
+import projeto_base_de_telas_e_login.Pedido.Enum.StatusDoPedido;
 
 public record AtualizarStatusPedidoDTO (
         StatusDoPedido status
