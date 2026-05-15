@@ -38,10 +38,10 @@ public class SecurityConfigurations {
                         // PUBLICO
                         // =====================
                         .requestMatchers(
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html"
-                        ).permitAll()
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html"
+                                ).permitAll()
 
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
@@ -65,7 +65,7 @@ public class SecurityConfigurations {
                         // =====================
                         //  tela de TelaProdutos
                         // =====================
-                        .requestMatchers(HttpMethod.GET,"/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/products/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH,"/products/**").hasRole("ADMIN")
@@ -85,10 +85,9 @@ public class SecurityConfigurations {
 
                         .requestMatchers(HttpMethod.POST,"/estoque/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/estoque/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/estoque/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/estoque/**").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/estoque/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET,"/estoque/filtro").hasRole("ADMIN")
-
 
 
 

@@ -2,6 +2,8 @@ package projeto_base_de_telas_e_login.Produto.Controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projeto_base_de_telas_e_login.Produto.Product;
@@ -15,9 +17,12 @@ import java.util.List;
 @Tag(name = "Produtos")
 public interface ProdutoApi {
 
+
+
     @GetMapping
-    @Operation(summary = "Listar todos os produtos")
-    ResponseEntity<List<ProductoResponseDto>> listar();
+    ResponseEntity<Page<ProductoResponseDto>> listar(Pageable pageable);
+
+
     @PostMapping
     @Operation(summary = "Criar produto")
     ResponseEntity<Product> criar(

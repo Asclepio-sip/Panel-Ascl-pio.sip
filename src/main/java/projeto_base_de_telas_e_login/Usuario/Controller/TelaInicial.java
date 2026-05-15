@@ -87,12 +87,5 @@ public class TelaInicial {
                 .build();
     }
 
-    @Operation(summary = "Lista estoque")
-    @GetMapping("/lista")
-    public ResponseEntity<?> listar() {
 
-        return ResponseEntity.ok(
-                estoqueService.listarTodos()
-        );
-    }
 }

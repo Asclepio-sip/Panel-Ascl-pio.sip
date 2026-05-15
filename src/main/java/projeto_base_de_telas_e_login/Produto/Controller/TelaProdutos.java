@@ -9,6 +9,8 @@ import projeto_base_de_telas_e_login.Produto.ProdutoService;
 import projeto_base_de_telas_e_login.Produto.dto.ProductoAddDto;
 import projeto_base_de_telas_e_login.Produto.dto.ProductoResponseDto;
 import projeto_base_de_telas_e_login.Produto.dto.ProdutoUpdateDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -22,9 +24,9 @@ public class TelaProdutos implements ProdutoApi {
     }
 
     @Override
-    public ResponseEntity<List<ProductoResponseDto>> listar() {
+    public ResponseEntity<Page<ProductoResponseDto>> listar(Pageable pageable) {
         return ResponseEntity.ok(
-                produtoService.listarTodos()
+                produtoService.listarTodos(pageable)
         );
     }
 
