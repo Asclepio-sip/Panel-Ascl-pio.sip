@@ -5,8 +5,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import projeto_base_de_telas_e_login.Estoque.Repository.EstoqueRepository;
+import projeto_base_de_telas_e_login.Estoque.Repository.EstoqueSpecification;
 import projeto_base_de_telas_e_login.Estoque.dto.EstoqueAddDto;
-import projeto_base_de_telas_e_login.Estoque.dto.EstoqueCardDto;
+
+import projeto_base_de_telas_e_login.Estoque.dto.EstoqueFiltro;
+import projeto_base_de_telas_e_login.Estoque.dto.ListaDeEstoqueDasLojasResponse;
 import projeto_base_de_telas_e_login.Loja.Loja.LojaRepository;
 import projeto_base_de_telas_e_login.Produto.ProductRepository;
 
@@ -105,30 +109,7 @@ public class EstoqueService {
         estoqueRepository.save(atualizado);
     }
 
-    @Transactional(readOnly = true)
-    public List<Estoque> lista() {
-        return estoqueRepository.findAll();
-    }
-
-
-    public Page<EstoqueCardDto> listarTodos(Pageable pageable) {
-        return estoqueRepository.findAll(pageable)
-                .map(EstoqueCardDto::from);
-
-    }
-
-    @Transactional(readOnly = true)
-    public List<Estoque> buscarPorNomeLoja(String nomeLoja) {
-        return estoqueRepository.findByLoja_NomeContainingIgnoreCase(nomeLoja);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Estoque> buscarPorNomeProduto(String nomeProduto) {
-        return estoqueRepository.findByProduto_NameContainingIgnoreCase(nomeProduto);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Estoque> filtrar(Long lojaId, String nomeLoja, Boolean semEstoque) {
-        return estoqueRepository.filtrar(lojaId, nomeLoja, semEstoque);
+    public Page<ListaDeEstoqueDasLojasResponse> listarTodos(EstoqueFiltro filtro, Pageable pageable) {
+        return estoqueRepository.findAll(EstoqueSpecification.filtrar(filtro), pageable).map(ListaDeEstoqueDasLojasResponse::fromDomain);
     }
 }

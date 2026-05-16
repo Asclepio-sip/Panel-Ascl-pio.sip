@@ -1,6 +1,8 @@
 package projeto_base_de_telas_e_login.Pedido.dto;
 
+import projeto_base_de_telas_e_login.ItemPedido.DTO.ItemPedidoAddDTO;
 import projeto_base_de_telas_e_login.Pedido.Enum.FormaDePagamento;
+import projeto_base_de_telas_e_login.Pedido.Enum.StatusDoPedido;
 import projeto_base_de_telas_e_login.Pedido.Enum.TipoEntrega;
 import projeto_base_de_telas_e_login.Estoque.Estoque;
 import projeto_base_de_telas_e_login.ItemPedido.ItemPedido;
@@ -8,6 +10,7 @@ import projeto_base_de_telas_e_login.Loja.Loja.Loja;
 import projeto_base_de_telas_e_login.Pedido.Pedido;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record PedidoAddDTO(
@@ -38,7 +41,8 @@ public record PedidoAddDTO(
         pedido.setNomeCliente(nomeCliente);
         pedido.setEmail(email);
         pedido.setTelefone(telefone);
-
+        pedido.setStatus(StatusDoPedido.AGUARDANDO);
+        pedido.setCriadoEm(LocalDateTime.now());
         pedido.setEndereco(endereco);
         pedido.setBairro(bairro);
         pedido.setComplemento(complemento);
@@ -66,8 +70,27 @@ public record PedidoAddDTO(
 
                     item.setPedido(pedido);
 
+                    // snapshot do produto
+                    item.setProdutoId(
+                            estoque.getProduto().getId()
+                    );
+
                     item.setNomeProduto(
                             estoque.getProduto().getName()
+                    );
+
+                    item.setVariacao(
+                            estoque.getProduto().getVariacao()
+                    );
+
+                    item.setImagemUrl(
+                            estoque.getProduto().getImagemBase64()
+                    );
+
+                    item.setCategoria(
+                            estoque.getProduto()
+                                    .getCategoria()
+                                    .getNomeCategoria()
                     );
 
                     item.setPrecoUnitario(
@@ -76,15 +99,6 @@ public record PedidoAddDTO(
 
                     item.setQuantidade(
                             itemDto.quantidade()
-                    );
-
-                    item.setSubtotal(
-                            estoque.getPrecoVenda()
-                                    .multiply(
-                                            BigDecimal.valueOf(
-                                                    itemDto.quantidade()
-                                            )
-                                    )
                     );
 
                     return item;

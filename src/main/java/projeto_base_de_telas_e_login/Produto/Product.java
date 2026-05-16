@@ -17,8 +17,7 @@ public class Product {
     @Column(nullable = false)
     private String variacao;
 
-    @Lob
-    @Column(name = "imagem_base64")
+    @Column(columnDefinition = "TEXT", name = "imagem_base64")
     private String imagemBase64;
 
     @ManyToOne(optional = false)

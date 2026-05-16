@@ -46,32 +46,8 @@ public class TelaEstoque implements EstoqueApi {
     }
 
     @Override
-    public ResponseEntity<Page<EstoqueCardDto>> relatorio(Pageable pageable) {
-        return ResponseEntity.ok(service.listarTodos(pageable));
-    }
-
-    @Override
-    public ResponseEntity<List<EstoqueListaDto>> buscarPorNomeLoja(String nome) {
-
-        List<EstoqueListaDto> response = service.buscarPorNomeLoja(nome).stream().map(EstoqueListaDto::fromDomain).toList();
-
-        return ResponseEntity.ok(response);
-    }
-
-    @Override
-    public ResponseEntity<List<EstoqueListaDto>> buscarPorNomeProduto(String nome) {
-
-        List<EstoqueListaDto> response = service.buscarPorNomeProduto(nome).stream().map(EstoqueListaDto::fromDomain).toList();
-
-        return ResponseEntity.ok(response);
-    }
-
-    @Override
-    public ResponseEntity<List<EstoqueListaDto>> filtrar(Long lojaId, String nomeLoja, Boolean semEstoque) {
-
-        List<EstoqueListaDto> response = service.filtrar(lojaId, nomeLoja, semEstoque).stream().map(EstoqueListaDto::fromDomain).toList();
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Page<ListaDeEstoqueDasLojasResponse>> lista(EstoqueFiltro filtro, Pageable pageable) {
+        return ResponseEntity.ok(service.listarTodos(filtro, pageable));
     }
 
     @Override

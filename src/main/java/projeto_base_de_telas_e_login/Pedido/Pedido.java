@@ -20,7 +20,7 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime criadoEm;
+    private LocalDateTime criadoEm = LocalDateTime.now();
 
     private String nomeCliente;
 
@@ -42,7 +42,8 @@ public class Pedido {
     private String observacao;
 
     @Enumerated(EnumType.STRING)
-    private StatusDoPedido status;
+    @Column(nullable = false)
+    private StatusDoPedido status = StatusDoPedido.AGUARDANDO;
 
     @Enumerated(EnumType.STRING)
     private TipoEntrega tipoEntrega;

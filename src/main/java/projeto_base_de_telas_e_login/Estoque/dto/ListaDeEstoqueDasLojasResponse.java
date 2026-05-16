@@ -11,12 +11,13 @@ public record ListaDeEstoqueDasLojasResponse(
         Long lojaId,
         String nomeLoja,
         Long produtoId,
-        String imagem,
+        String imagemBase64,
         String nomeProduto,
         Integer quantidade,
         BigDecimal precoVenda,
         BigDecimal percentualDesconto,
-        BigDecimal valorFinal
+        BigDecimal valorFinal,
+        String Variacao
 
 ) {
 
@@ -48,7 +49,8 @@ public record ListaDeEstoqueDasLojasResponse(
                 estoque.getQuantidade(),
                 estoque.getPrecoVenda(),
                 desconto,
-                valorFinal
+                valorFinal,
+                estoque.getProduto().getVariacao()
         );
     }
 }

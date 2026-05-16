@@ -22,51 +22,20 @@ public interface EstoqueApi {
     @Operation(summary = "Criar item estoque")
     @ApiResponse(responseCode = "201", description = "Criado com sucesso")
     @PostMapping
-    ResponseEntity<Void> criar(
-            @RequestBody @Valid EstoqueAddDto dto
-    );
+    ResponseEntity<Void> criar(@RequestBody @Valid EstoqueAddDto dto);
 
     @Operation(summary = "Atualizar estoque")
     @ApiResponse(responseCode = "200", description = "Atualizado")
     @PutMapping
-    ResponseEntity<Void> atualizar(
-            @RequestBody @Valid EstoqueAddDto dto
-    );
+    ResponseEntity<Void> atualizar(@RequestBody @Valid EstoqueAddDto dto);
 
     @Operation(summary = "Aplicar promoção")
     @ApiResponse(responseCode = "200", description = "Promoção aplicada")
     @PatchMapping("/promocao")
-    ResponseEntity<Void> aplicarPromocao(
-            @RequestBody @Valid AplicarPromocaoDto dto
-    );
+    ResponseEntity<Void> aplicarPromocao(@RequestBody @Valid AplicarPromocaoDto dto);
 
     @GetMapping("/relatorio")
-    ResponseEntity<Page<EstoqueCardDto>> relatorio(
-            Pageable pageable
-    );
-
-    @Operation(summary = "Buscar por loja")
-    @GetMapping("/loja")
-    ResponseEntity<List<EstoqueListaDto>> buscarPorNomeLoja(
-            @RequestParam String nome
-    );
-
-    @Operation(summary = "Buscar por produto")
-    @GetMapping("/produto")
-    ResponseEntity<List<EstoqueListaDto>> buscarPorNomeProduto(
-            @RequestParam String nome
-    );
-
-    @Operation(summary = "Filtrar estoque")
-    @GetMapping("/filtro")
-    ResponseEntity<List<EstoqueListaDto>> filtrar(
-
-            @RequestParam(required = false) Long lojaId,
-
-            @RequestParam(required = false) String nomeLoja,
-
-            @RequestParam(required = false) Boolean semEstoque
-    );
+    ResponseEntity<Page<ListaDeEstoqueDasLojasResponse>> lista(EstoqueFiltro filtro, Pageable pageable);
 
     @Operation(summary = "Deletar item estoque")
     @ApiResponse(responseCode = "204", description = "Deletado")

@@ -1,7 +1,9 @@
-package projeto_base_de_telas_e_login.Loja.Bairro;
+package projeto_base_de_telas_e_login.Loja.Bairro.Controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import projeto_base_de_telas_e_login.Loja.Bairro.Bairro;
+import projeto_base_de_telas_e_login.Loja.Bairro.BairroService;
 import projeto_base_de_telas_e_login.Loja.Bairro.dto.BairroRequestDTO;
 import projeto_base_de_telas_e_login.Loja.Bairro.dto.BairroResponseDTO;
 

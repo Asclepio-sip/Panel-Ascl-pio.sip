@@ -2,13 +2,13 @@ package projeto_base_de_telas_e_login.Pedido;
 
 import org.springframework.stereotype.Service;
 
+import projeto_base_de_telas_e_login.ItemPedido.ItemPedido;
 import projeto_base_de_telas_e_login.Pedido.dto.PedidoAddDTO;
 
 import projeto_base_de_telas_e_login.Pedido.Enum.StatusDoPedido;
 
 import projeto_base_de_telas_e_login.Estoque.Estoque;
-import projeto_base_de_telas_e_login.Categoria.CategoriaRepository;
-import projeto_base_de_telas_e_login.Estoque.EstoqueRepository;
+import projeto_base_de_telas_e_login.Estoque.Repository.EstoqueRepository;
 
 import projeto_base_de_telas_e_login.Loja.Loja.Loja;
 import projeto_base_de_telas_e_login.Loja.Loja.LojaRepository;
@@ -38,6 +38,28 @@ public class PedidoService {
         List<Estoque> estoquesDaLoja = estoqueRepository.findByLoja_Id(loja.getId());
 
         Pedido pedido = dto.toEntity(loja, estoquesDaLoja);
+
+        for (ItemPedido item : pedido.getItens()) {
+
+            System.out.println("==============");
+            System.out.println("nomeProduto: " +
+                    item.getNomeProduto().length());
+
+            System.out.println("variacao: " +
+                    (item.getVariacao() != null
+                            ? item.getVariacao().length()
+                            : 0));
+
+            System.out.println("imagemUrl: " +
+                    (item.getImagemUrl() != null
+                            ? item.getImagemUrl().length()
+                            : 0));
+
+            System.out.println("categoria: " +
+                    (item.getCategoria() != null
+                            ? item.getCategoria().length()
+                            : 0));
+        }
 
         pedidoRepository.save(pedido);
     }
