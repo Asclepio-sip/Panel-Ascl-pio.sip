@@ -1,5 +1,7 @@
 package projeto_base_de_telas_e_login.Estoque.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,19 +46,8 @@ public class TelaEstoque implements EstoqueApi {
     }
 
     @Override
-    public ResponseEntity<List<ListaDeEstoqueDasLojasResponse>> completo() {
-
-        List<ListaDeEstoqueDasLojasResponse> response = service.lista().stream().map(ListaDeEstoqueDasLojasResponse::fromDomain).toList();
-
-        return ResponseEntity.ok(response);
-    }
-
-    @Override
-    public ResponseEntity<List<EstoqueCardDto>> relatorio() {
-
-        return ResponseEntity.ok(
-                service.listarTodos()
-        );
+    public ResponseEntity<Page<EstoqueCardDto>> relatorio(Pageable pageable) {
+        return ResponseEntity.ok(service.listarTodos(pageable));
     }
 
     @Override

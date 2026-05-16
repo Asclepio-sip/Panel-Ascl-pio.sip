@@ -1,5 +1,7 @@
 package projeto_base_de_telas_e_login.Estoque;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -108,11 +110,11 @@ public class EstoqueService {
         return estoqueRepository.findAll();
     }
 
-    public List<EstoqueCardDto> listarTodos() {
-        return estoqueRepository.findAll()
-                .stream()
-                .map(EstoqueCardDto::from)
-                .toList();
+
+    public Page<EstoqueCardDto> listarTodos(Pageable pageable) {
+        return estoqueRepository.findAll(pageable)
+                .map(EstoqueCardDto::from);
+
     }
 
     @Transactional(readOnly = true)

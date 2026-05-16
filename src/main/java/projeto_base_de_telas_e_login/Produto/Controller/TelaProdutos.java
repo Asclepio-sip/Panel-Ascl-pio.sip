@@ -25,9 +25,7 @@ public class TelaProdutos implements ProdutoApi {
 
     @Override
     public ResponseEntity<Page<ProductoResponseDto>> listar(Pageable pageable) {
-        return ResponseEntity.ok(
-                produtoService.listarTodos(pageable)
-        );
+        return ResponseEntity.ok(produtoService.listarTodos(pageable));
     }
 
     @Override

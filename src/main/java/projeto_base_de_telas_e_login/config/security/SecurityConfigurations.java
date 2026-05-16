@@ -87,7 +87,6 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.DELETE,"/estoque/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET,"/estoque/**").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/estoque/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/estoque/filtro").hasRole("ADMIN")
 
 
 
