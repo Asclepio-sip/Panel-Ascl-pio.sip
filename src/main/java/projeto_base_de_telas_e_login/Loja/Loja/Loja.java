@@ -1,6 +1,9 @@
 package projeto_base_de_telas_e_login.Loja.Loja;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import projeto_base_de_telas_e_login.Loja.Bairro.Enum.TipoAtendimentoLoja;
 import projeto_base_de_telas_e_login.Loja.LojaBairro.LojaBairro;
 
@@ -16,7 +19,26 @@ public class Loja {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
+    @NotBlank(message = "Nome da loja é obrigatório")
+    private String nomeLoja;
+
+    @NotBlank(message = "CEP é obrigatório")
+    @Size(min = 8, max = 9, message = "CEP inválido")
+    private String cep;
+
+    private String cpnj;
+
+    @NotBlank(message = "Telefone é obrigatório")
+    @Pattern(
+            regexp = "^\\d{10,11}$",
+            message = "Telefone deve conter 10 ou 11 números"
+    )
+    private String telefone;
+
+    @Column(columnDefinition = "TEXT")
+    private String TextoDescricao;
+
+    private String imagemUrl;
 
     @Enumerated(EnumType.STRING)
     private TipoAtendimentoLoja tipoAtendimento;
@@ -29,10 +51,15 @@ public class Loja {
     public Loja() {
     }
 
-    public Loja(Long id, String nome, TipoAtendimentoLoja tipoAtendimento) {
+    public Loja(Long id, String nomeLoja, String cep, String cpnj, String telefone, String textoDescricao, TipoAtendimentoLoja tipoAtendimento,String imagemUrl) {
         this.id = id;
-        this.nome = nome;
+        this.nomeLoja = nomeLoja;
+        this.cep = cep;
+        this.cpnj = cpnj;
+        this.telefone = telefone;
+        this.TextoDescricao = textoDescricao;
         this.tipoAtendimento = tipoAtendimento;
+        this.imagemUrl = imagemUrl;
     }
 
     public boolean aceitaEntrega() {
@@ -53,12 +80,52 @@ public class Loja {
         this.valorMinimoFreteGratis = valorMinimo;
     }
 
+    public String getImagemUrl() {
+        return imagemUrl;
+    }
+
+    public void setImagemUrl(String imagemUrl) {
+        this.imagemUrl = imagemUrl;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+    public String getCpnj() {
+        return cpnj;
+    }
+
+    public void setCpnj(String cpnj) {
+        this.cpnj = cpnj;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getTextoDescricao() {
+        return TextoDescricao;
+    }
+
+    public void setTextoDescricao(String textoDescricao) {
+        TextoDescricao = textoDescricao;
+    }
+
     public Long getId() {
         return id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeLoja() {
+        return nomeLoja;
     }
 
     public TipoAtendimentoLoja getTipoAtendimento() {
@@ -77,8 +144,8 @@ public class Loja {
         this.id = id;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeLoja(String nomeLoja) {
+        this.nomeLoja = nomeLoja;
     }
 
     public void setTipoAtendimento(TipoAtendimentoLoja tipoAtendimento) {

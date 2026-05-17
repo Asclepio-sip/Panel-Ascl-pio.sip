@@ -49,6 +49,39 @@ public class Estoque {
         this.atualizadoEm = LocalDateTime.now();
     }
 
+
+
+    public void baixarEstoque(
+            Integer quantidadeVendida
+    ) {
+
+        if (quantidadeVendida == null
+                || quantidadeVendida <= 0) {
+
+            throw new RuntimeException(
+                    "Quantidade inválida"
+            );
+        }
+
+        if (this.quantidade
+                < quantidadeVendida) {
+
+            throw new RuntimeException(
+                    "Estoque insuficiente"
+            );
+        }
+
+        this.quantidade -=
+                quantidadeVendida;
+
+        this.atualizadoEm =
+                LocalDateTime.now();
+    }
+
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+
     public Long getId() {
         return id;
     }
@@ -59,10 +92,6 @@ public class Estoque {
 
     public Product getProduto() {
         return produto;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
     }
 
     public BigDecimal getPrecoVenda() {

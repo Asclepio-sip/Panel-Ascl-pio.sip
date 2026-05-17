@@ -37,8 +37,20 @@ public class LojaBairroService {
 
         Bairro bairro = bairroRepository.findById(request.bairroId()).orElseThrow(() -> new RuntimeException("Bairro não encontrado"));
 
-        LojaBairro lojaBairro = new LojaBairro(null, loja, bairro, request.valorFrete());
 
+        if (!loja.aceitaEntrega()) {
+            throw new RuntimeException(
+                    "Loja de retirada não aceita bairros"
+            );
+        }
+
+        LojaBairro lojaBairro =
+                new LojaBairro(
+                        null,
+                        loja,
+                        bairro,
+                        request.valorFrete()
+                );
         LojaBairro salvo = lojaBairroRepository.save(lojaBairro);
 
         return LojaBairroResponse.fromEntity(salvo);

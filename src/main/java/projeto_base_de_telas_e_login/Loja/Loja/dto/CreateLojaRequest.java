@@ -5,9 +5,15 @@ import projeto_base_de_telas_e_login.Loja.Bairro.Enum.TipoAtendimentoLoja;
 import java.math.BigDecimal;
 
 public record CreateLojaRequest(
-        String nome,
+        String nomeLoja,
         TipoAtendimentoLoja tipoAtendimento,
-        BigDecimal valorMinimoFreteGratis
+        BigDecimal valorMinimoFreteGratis,
+        String cep,
+        String cpnj,
+        String telefone,
+        String TextoDescricao,
+        String imagemUrl
+
 ) {
 
 }

@@ -18,7 +18,7 @@ public class LojaService {
 
     public LojaResponse criar(CreateLojaRequest request) {
 
-        Loja loja = new Loja(null, request.nome(), request.tipoAtendimento());
+        Loja loja = new Loja(null, request.nomeLoja(), request.cep(),request.cpnj(),request.telefone(),request.TextoDescricao(),request.tipoAtendimento(),request.imagemUrl());
 
         loja.configurarFreteGratis(request.valorMinimoFreteGratis());
 
@@ -36,7 +36,7 @@ public class LojaService {
 
         Loja loja = repository.findById(id).orElseThrow(() -> new RuntimeException("Loja não encontrada"));
 
-        loja.setNome(request.nome());
+        loja.setNomeLoja(request.nomeLoja());
 
         loja.setTipoAtendimento(request.tipoAtendimento());
 

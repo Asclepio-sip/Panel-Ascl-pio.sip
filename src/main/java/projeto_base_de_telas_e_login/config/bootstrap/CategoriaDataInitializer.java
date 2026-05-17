@@ -23,8 +23,7 @@ public class CategoriaDataInitializer implements CommandLineRunner {
                 "Beleza",
                 "Higiene",
                 "Infantil",
-                "Vitaminas",
-                "Promoções"
+                "Vitaminas"
         );
 
         categoriasPadrao.forEach(nome -> {

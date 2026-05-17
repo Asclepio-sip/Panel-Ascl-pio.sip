@@ -5,38 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88792f31-c9d2-42fd-9c39-246dd5948413" name="Changes" comment="feat:ajuste na arquitetura">
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/Repository/EstoqueSpecification.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/dto/EstoqueFiltro.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/EstoqueRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/Repository/EstoqueRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/Estoque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/Estoque.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/EstoqueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/EstoqueService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/controller/TelaEstoque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/controller/TelaEstoque.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/controller/api/EstoqueApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/controller/api/EstoqueApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/dto/EstoqueCardDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/dto/EstoqueListaDto.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/dto/ListaDeEstoqueDasLojasResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/dto/ListaDeEstoqueDasLojasResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/ItemPedido/ItemPedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/ItemPedido/ItemPedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Bairro/BairroController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Bairro/Controller/BairroController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/Loja.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/Loja.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/LojaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/LojaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/LojaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/LojaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/dto/CreateLojaRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/dto/CreateLojaRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/dto/LojaResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/dto/LojaResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/Pedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/Pedido.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/PedidoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/PedidoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/dto/ItemPedidoAddDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/ItemPedido/DTO/ItemPedidoAddDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/dto/ItemPedidoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/ItemPedido/DTO/ItemPedidoDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/dto/PedidoAddDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/dto/PedidoAddDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Produto/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Produto/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/EstoqueRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/bootstrap/CategoriaDataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/bootstrap/CategoriaDataInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/Estoque.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/Estoque.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/EstoqueService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/EstoqueService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/controller/TelaEstoque.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/controller/TelaEstoque.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/controller/api/EstoqueApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/controller/api/EstoqueApi.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/dto/EstoqueCardDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/dto/EstoqueListaDto.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/dto/ListaDeEstoqueDasLojasResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/dto/ListaDeEstoqueDasLojasResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ItemPedido/ItemPedido.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ItemPedido/ItemPedido.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Bairro/BairroController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/Loja.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/Loja.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/LojaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/LojaRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/LojaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/LojaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/dto/CreateLojaRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/dto/CreateLojaRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/dto/LojaResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/dto/LojaResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Pedido.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Pedido.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/PedidoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/PedidoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/ItemPedidoAddDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/ItemPedidoDTO.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/PedidoAddDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/PedidoAddDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/Product.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/bootstrap/CategoriaDataInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/bootstrap/CategoriaDataInitializer.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,26 +86,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.ProjetoBaseDeTelasELoginApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.Projeto-farmacia_back [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projeto_base_de_telas_e_login [clean...].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/novaArquitetura&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.Console Font&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.ProjetoBaseDeTelasELoginApplication.executor": "Debug",
+    "Maven.Projeto-farmacia_back [clean,install].executor": "Run",
+    "Maven.projeto_base_de_telas_e_login [clean...].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "feat/novaArquitetura",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.Console Font"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\DEV\Projeto-SAAS\java\PromoFarma\projeto_base_de_telas_e_login\src\main\java\projeto_base_de_telas_e_login\adapter\out\persistence" />

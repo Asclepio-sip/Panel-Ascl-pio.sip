@@ -40,7 +40,7 @@ public class EstoqueService {
 
         var loja = dto.lojaID() != null
                 ? lojaRepository.findById(dto.lojaID())
-                : lojaRepository.findByNome(dto.nomeLoja());
+                : lojaRepository.findByNomeLoja(dto.nomeLoja());
 
         System.out.println("Loja encontrada? " + loja.isPresent());
 

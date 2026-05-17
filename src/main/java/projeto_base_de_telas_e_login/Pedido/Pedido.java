@@ -112,11 +112,33 @@ public class Pedido {
         this.totalFinal = totalProdutos;
     }
 
+    public void calcularTotalFinal() {
+
+        BigDecimal frete =
+                valorFrete != null
+                        ? valorFrete
+                        : BigDecimal.ZERO;
+
+        this.totalFinal =
+                totalProdutos.add(frete);
+    }
+
     public void aplicarFrete(BigDecimal frete) {
 
         this.valorFrete = frete;
 
         this.totalFinal = totalProdutos.add(frete);
+    }
+
+    public void calcularSubtotalProdutos() {
+
+        this.totalProdutos =
+                itens.stream()
+                        .map(ItemPedido::getSubtotal)
+                        .reduce(
+                                BigDecimal.ZERO,
+                                BigDecimal::add
+                        );
     }
 
     public Long getId() {

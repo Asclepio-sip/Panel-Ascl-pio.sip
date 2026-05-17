@@ -38,7 +38,7 @@ public record ListaDeEstoqueDasLojasResponse(
 
                 estoque.getId(),
                 estoque.getLoja().getId(),
-                estoque.getLoja().getNome(),
+                estoque.getLoja().getNomeLoja(),
 
                 estoque.getProduto().getId(),
 

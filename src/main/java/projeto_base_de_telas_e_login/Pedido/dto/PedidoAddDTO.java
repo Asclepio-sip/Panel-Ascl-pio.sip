@@ -16,15 +16,19 @@ import java.util.List;
 public record PedidoAddDTO(
 
         Long lojaId,
+        Long bairroId,
+
         String nomeCliente,
         String email,
         String telefone,
         String endereco,
-        String bairro,
         String complemento,
         String observacao,
+
         TipoEntrega tipoEntrega,
+
         List<ItemPedidoAddDTO> itens,
+
         FormaDePagamento formaDePagamento
 
 ) {
@@ -41,10 +45,11 @@ public record PedidoAddDTO(
         pedido.setNomeCliente(nomeCliente);
         pedido.setEmail(email);
         pedido.setTelefone(telefone);
+
         pedido.setStatus(StatusDoPedido.AGUARDANDO);
         pedido.setCriadoEm(LocalDateTime.now());
+
         pedido.setEndereco(endereco);
-        pedido.setBairro(bairro);
         pedido.setComplemento(complemento);
         pedido.setObservacao(observacao);
 
@@ -70,7 +75,6 @@ public record PedidoAddDTO(
 
                     item.setPedido(pedido);
 
-                    // snapshot do produto
                     item.setProdutoId(
                             estoque.getProduto().getId()
                     );
@@ -107,8 +111,43 @@ public record PedidoAddDTO(
 
         pedido.setItens(itensEntity);
 
-        pedido.calcularTotais();
+        if (tipoEntrega == TipoEntrega.RETIRADA) {
 
+            if (!loja.aceitaRetirada()) {
+                throw new RuntimeException(
+                        "Essa loja não aceita retirada"
+                );
+            }
+
+            pedido.setEndereco(null);
+            pedido.setBairro(null);
+            pedido.setComplemento(null);
+
+            pedido.setValorFrete(BigDecimal.ZERO);
+            pedido.setFreteGratis(false);
+        }
+
+
+        if (tipoEntrega == TipoEntrega.ENTREGA) {
+
+            if (!loja.aceitaEntrega()) {
+                throw new RuntimeException(
+                        "Essa loja não faz entrega"
+                );
+            }
+
+            if (bairroId == null) {
+                throw new RuntimeException(
+                        "Bairro obrigatório"
+                );
+            }
+
+            if (endereco == null || endereco.isBlank()) {
+                throw new RuntimeException(
+                        "Endereço obrigatório"
+                );
+            }
+        }
         return pedido;
     }
 }
