@@ -2,7 +2,7 @@ package projeto_base_de_telas_e_login.config.bootstrap;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-import projeto_base_de_telas_e_login.service.Categoria.CategoriaService;
+import projeto_base_de_telas_e_login.Categoria.CategoriaService;
 
 import java.util.List;
 
@@ -23,8 +23,7 @@ public class CategoriaDataInitializer implements CommandLineRunner {
                 "Beleza",
                 "Higiene",
                 "Infantil",
-                "Vitaminas",
-                "Promoções"
+                "Vitaminas"
         );
 
         categoriasPadrao.forEach(nome -> {
