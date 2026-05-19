@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import projeto_base_de_telas_e_login.repository.CategoriaRepository;
+import projeto_base_de_telas_e_login.Usuario.UserRepository;
 
 import java.io.IOException;
 
@@ -21,7 +21,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Autowired
-    private CategoriaRepository.UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
