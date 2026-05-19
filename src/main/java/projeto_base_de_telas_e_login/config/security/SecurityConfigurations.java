@@ -25,133 +25,64 @@ public class SecurityConfigurations {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         return http
-                .cors()
-                .and()
+                .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+
                 .authorizeHttpRequests(auth -> auth
 
-                        // =====================
-                        // PUBLICO
-                        // =====================
+                        // Swagger
                         .requestMatchers(
-                                        "/v3/api-docs/**",
-                                        "/swagger-ui/**",
-                                        "/swagger-ui.html"
-                                ).permitAll()
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
 
+                        // Preflight CORS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
+                        // Login
+                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
 
-                        // =====================
-                        //  tela de TelaInicial
-                        // =====================
-
-
+                        // Público
                         .requestMatchers("/productsPublico/**").permitAll()
 
-                        // =====================
-                        //  tela de criarUsuario
-                        // =====================
+                        // Produtos
+                        .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/products/**").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.POST,"/register/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/register/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/register/**").hasRole("ADMIN")
+                        // Estoque público
+                        .requestMatchers(HttpMethod.GET, "/estoque/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/estoque/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/estoque/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/estoque/**").hasRole("ADMIN")
 
+                        // LOJAS PUBLICA KK
+                        .requestMatchers("/lojas/**").permitAll()
 
-                        // =====================
-                        //  tela de TelaProdutos
-                        // =====================
-                        .requestMatchers(HttpMethod.GET,"/products/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/products/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/products/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH,"/products/**").hasRole("ADMIN")
+                        // Loja bairros
+                        .requestMatchers(HttpMethod.GET, "/loja-bairros/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/loja-bairros/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/loja-bairros/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/loja-bairros/**").hasRole("ADMIN")
 
-                        // =====================
-                        //  tela de BairroController
-                        // =====================
-
-                        .requestMatchers(HttpMethod.POST,"/bairros/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/bairros/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/bairros/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/bairros/**").hasRole("ADMIN")
-
-                        // =====================
-                        //  tela de TelaEstoque
-                        // =====================
-
-                        .requestMatchers(HttpMethod.POST,"/estoque/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/estoque/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/estoque/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/estoque/**").hasRole("ADMIN")
-
-
-
-                        // =====================
-                        //  tela de BairroController
-                        // =====================
-
-                        .requestMatchers(HttpMethod.POST,"/loja-bairros/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/loja-bairros/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/loja-bairros/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/loja-bairros/**").hasRole("ADMIN")
-
-
-
-                        // =====================
-                        //  tela de lojas
-                        // =====================
-
-                        .requestMatchers(HttpMethod.POST,"/lojas/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/lojas/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/lojas/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/lojas/**").hasRole("ADMIN")
-
-
-
-                        // =====================
-                        //  tela de TelaPedido
-                        // =====================
-                        .requestMatchers(HttpMethod.GET,"/pedidos/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/pedidos/**").hasRole("ADMIN")
-
-
-
-                        // =====================
-                        //  tela de TelaLogin
-                        // =====================
-                        .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
-
-                        // =====================
-                        //  tela de TelaLoja
-                        // =====================
-                        .requestMatchers(HttpMethod.GET,"/lojas/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/lojas/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/lojas/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/lojas/**").hasRole("ADMIN")
-
-
-
-
-                        // =====================
-                        //  tela de TelaCategoria
-                        // =====================
-                        .requestMatchers(HttpMethod.POST,"/categorias/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/categorias/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/categorias/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/categorias/**").hasRole("ADMIN")
-
-                        // PADRÃO
-                        // =====================
+                        // resto autenticado
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+
+                .addFilterBefore(
+                        securityFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                )
+
                 .build();
     }
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
@@ -164,20 +95,34 @@ public class SecurityConfigurations {
 
 
     @Bean
-    public org.springframework.web.servlet.config.annotation.WebMvcConfigurer corsConfigurer() {
-        return new org.springframework.web.servlet.config.annotation.WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(org.springframework.web.servlet.config.annotation.CorsRegistry registry) {
+    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
 
-                registry.addMapping("/**")
-                        .allowedOrigins(
-                                "http://localhost:4200",
-                                "https://front-site-farmacia-nvali72mq-mateusss-projects.vercel.app"
-                        )
-                        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
-            }
-        };
+        org.springframework.web.cors.CorsConfiguration configuration =
+                new org.springframework.web.cors.CorsConfiguration();
+
+        configuration.setAllowedOrigins(java.util.List.of(
+                "http://localhost:4200",
+                "https://front-site-farmacia-nvali72mq-mateusss-projects.vercel.app"
+        ));
+
+        configuration.setAllowedMethods(java.util.List.of(
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH",
+                "OPTIONS"
+        ));
+
+        configuration.setAllowedHeaders(java.util.List.of("*"));
+
+        configuration.setAllowCredentials(true);
+
+        org.springframework.web.cors.UrlBasedCorsConfigurationSource source =
+                new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
     }
 }
