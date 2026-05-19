@@ -6,34 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="88792f31-c9d2-42fd-9c39-246dd5948413" name="Changes" comment="feat:ajuste na arquitetura">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/Estoque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/Estoque.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/EstoqueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/EstoqueService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/dto/ListaDeEstoqueDasLojasResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/dto/ListaDeEstoqueDasLojasResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/Loja.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/Loja.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/LojaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/LojaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/LojaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/LojaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/dto/CreateLojaRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/dto/CreateLojaRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/dto/LojaResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/Loja/dto/LojaResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/Pedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/Pedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/PedidoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/PedidoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/dto/PedidoAddDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/dto/PedidoAddDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/bootstrap/CategoriaDataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/bootstrap/CategoriaDataInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/Estoque.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/Estoque.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/EstoqueService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/EstoqueService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/dto/ListaDeEstoqueDasLojasResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/dto/ListaDeEstoqueDasLojasResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/Loja.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/Loja.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/LojaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/LojaRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/LojaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/LojaService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/dto/CreateLojaRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/dto/CreateLojaRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/dto/LojaResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/dto/LojaResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Pedido.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Pedido.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/PedidoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/PedidoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/PedidoAddDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/PedidoAddDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/bootstrap/CategoriaDataInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/bootstrap/CategoriaDataInitializer.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +61,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.ProjetoBaseDeTelasELoginApplication.executor": "Debug",
+    "Application.ProjetoBaseDeTelasELoginApplication.executor": "Run",
     "Maven.Projeto-farmacia_back [clean,install].executor": "Run",
     "Maven.projeto_base_de_telas_e_login [clean...].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
@@ -103,7 +76,7 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.Console Font"
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
   <component name="RecentsManager">

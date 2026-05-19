@@ -1,6 +1,7 @@
 package projeto_base_de_telas_e_login.Estoque.dto;
 
 import projeto_base_de_telas_e_login.Estoque.Estoque;
+import projeto_base_de_telas_e_login.Loja.Bairro.Enum.TipoAtendimentoLoja;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -17,11 +18,14 @@ public record ListaDeEstoqueDasLojasResponse(
         BigDecimal precoVenda,
         BigDecimal percentualDesconto,
         BigDecimal valorFinal,
-        String Variacao
+        String Variacao,
+        String Entregar
 
 ) {
 
     public static ListaDeEstoqueDasLojasResponse fromDomain(Estoque estoque) {
+
+        String Entregar;
 
         BigDecimal desconto = estoque.getPercentualDesconto() != null
                 ? estoque.getPercentualDesconto()
@@ -33,6 +37,16 @@ public record ListaDeEstoqueDasLojasResponse(
 
         BigDecimal valorFinal = estoque.getPrecoVenda()
                 .subtract(valorDesconto);
+
+        if (estoque.getLoja().getTipoAtendimento() == TipoAtendimentoLoja.ENTREGA ||estoque.getLoja().getTipoAtendimento() == TipoAtendimentoLoja.AMBOS  ){
+            Entregar = "ENTREGA";
+        }else {
+            Entregar = "RETIRADA";
+        }
+
+
+
+
 
         return new ListaDeEstoqueDasLojasResponse(
 
@@ -50,7 +64,9 @@ public record ListaDeEstoqueDasLojasResponse(
                 estoque.getPrecoVenda(),
                 desconto,
                 valorFinal,
-                estoque.getProduto().getVariacao()
+                estoque.getProduto().getVariacao(),
+                Entregar
+
         );
     }
 }
