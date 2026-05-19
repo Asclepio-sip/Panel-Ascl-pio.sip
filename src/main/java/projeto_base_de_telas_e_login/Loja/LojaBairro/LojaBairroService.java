@@ -3,6 +3,7 @@ package projeto_base_de_telas_e_login.Loja.LojaBairro;
 import org.springframework.stereotype.Service;
 
 import projeto_base_de_telas_e_login.Loja.LojaBairro.dto.CreateLojaBairroRequest;
+import projeto_base_de_telas_e_login.Loja.LojaBairro.dto.LojaBairroItemResponse;
 import projeto_base_de_telas_e_login.Loja.LojaBairro.dto.LojaBairroResponse;
 
 import projeto_base_de_telas_e_login.Loja.Bairro.Bairro;
@@ -10,6 +11,7 @@ import projeto_base_de_telas_e_login.Loja.Bairro.BairroRepository;
 
 import projeto_base_de_telas_e_login.Loja.Loja.Loja;
 import projeto_base_de_telas_e_login.Loja.Loja.LojaRepository;
+import projeto_base_de_telas_e_login.Loja.LojaBairro.dto.LojaComBairrosResponse;
 
 import java.util.List;
 
@@ -39,18 +41,10 @@ public class LojaBairroService {
 
 
         if (!loja.aceitaEntrega()) {
-            throw new RuntimeException(
-                    "Loja de retirada não aceita bairros"
-            );
+            throw new RuntimeException("Loja de retirada não aceita bairros");
         }
 
-        LojaBairro lojaBairro =
-                new LojaBairro(
-                        null,
-                        loja,
-                        bairro,
-                        request.valorFrete()
-                );
+        LojaBairro lojaBairro = new LojaBairro(null, loja, bairro, request.valorFrete());
         LojaBairro salvo = lojaBairroRepository.save(lojaBairro);
 
         return LojaBairroResponse.fromEntity(salvo);
@@ -68,5 +62,17 @@ public class LojaBairroService {
 
     public void deletar(Long id) {
         lojaBairroRepository.deleteById(id);
+    }
+
+    public List<LojaComBairrosResponse> listarLojasComBairros() {
+
+        List<Loja> lojas = lojaRepository.findAll();
+
+        return lojas.stream().map(loja -> {
+
+            List<LojaBairroItemResponse> bairros = loja.getBairros().stream().map(lb -> new LojaBairroItemResponse(lb.getBairro().getId(), lb.getBairro().getNome(), lb.getValorFrete())).toList();
+
+            return new LojaComBairrosResponse(loja.getId(), loja.getNomeLoja(), bairros);
+        }).toList();
     }
 }

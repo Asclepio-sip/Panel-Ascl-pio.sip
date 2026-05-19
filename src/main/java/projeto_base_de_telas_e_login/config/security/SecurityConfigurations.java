@@ -96,7 +96,7 @@ public class SecurityConfigurations {
 
                         .requestMatchers(HttpMethod.POST,"/loja-bairros/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/loja-bairros/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/loja-bairros/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/loja-bairros/**").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/loja-bairros/**").hasRole("ADMIN")
 
 
@@ -107,7 +107,7 @@ public class SecurityConfigurations {
 
                         .requestMatchers(HttpMethod.POST,"/lojas/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/lojas/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/lojas/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/lojas/**").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/lojas/**").hasRole("ADMIN")
 
 
