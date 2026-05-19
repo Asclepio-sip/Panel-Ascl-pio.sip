@@ -168,9 +168,13 @@ public class SecurityConfigurations {
         return new org.springframework.web.servlet.config.annotation.WebMvcConfigurer() {
             @Override
             public void addCorsMappings(org.springframework.web.servlet.config.annotation.CorsRegistry registry) {
+
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4200")
-                        .allowedMethods("*")
+                        .allowedOrigins(
+                                "http://localhost:4200",
+                                "https://front-site-farmacia-nvali72mq-mateusss-projects.vercel.app"
+                        )
+                        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }
