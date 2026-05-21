@@ -35,7 +35,8 @@ public record DetalhePedidoDTO(
                         item.getNomeProduto(),
                         item.getQuantidade(),
                         item.getPrecoUnitario(),
-                        item.getSubtotal()
+                        item.getSubtotal(),
+                        item.getImagemUrl()
                 ))
                 .toList();
 
@@ -65,17 +66,24 @@ public record DetalhePedidoDTO(
         private Integer quantidade;
         private BigDecimal precoUnitario;
         private BigDecimal subtotal;
+        private String imagemBase64;
 
         public ItemDTO(
                 String nomeProduto,
                 Integer quantidade,
                 BigDecimal precoUnitario,
-                BigDecimal subtotal
+                BigDecimal subtotal,
+                String imagemBase64
         ) {
             this.nomeProduto = nomeProduto;
             this.quantidade = quantidade;
             this.precoUnitario = precoUnitario;
             this.subtotal = subtotal;
+            this.imagemBase64 = imagemBase64;
+        }
+
+        public String getimagemBase64() {
+            return imagemBase64;
         }
 
         public String getNomeProduto() {
