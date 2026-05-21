@@ -102,7 +102,8 @@ public class SecurityConfigurations {
 
         configuration.setAllowedOrigins(java.util.List.of(
                 "http://localhost:4200",
-                "https://front-site-farmacia-nvali72mq-mateusss-projects.vercel.app"
+                "https://front-site-farmacia.vercel.app/"
+
         ));
 
         configuration.setAllowedMethods(java.util.List.of(
