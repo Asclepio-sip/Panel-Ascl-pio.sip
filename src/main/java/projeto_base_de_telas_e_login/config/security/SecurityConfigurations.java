@@ -103,7 +103,7 @@ public class SecurityConfigurations {
 
         configuration.setAllowedOrigins(java.util.List.of(
                 "http://localhost:4200",
-                "https://front-site-farmacia.vercel.app/"
+                "https://customer-ascl-pio-sip.vercel.app/"
 
         ));
 

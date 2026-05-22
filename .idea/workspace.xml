@@ -5,25 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88792f31-c9d2-42fd-9c39-246dd5948413" name="Changes" comment="feat:ajuste na arquitetura">
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/dto/AtulizarResquet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/Estoque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/Estoque.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/EstoqueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/EstoqueService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/controller/TelaEstoque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/controller/TelaEstoque.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/controller/api/EstoqueApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/controller/api/EstoqueApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/ItemPedido/ItemPedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/ItemPedido/ItemPedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/dto/DetalhePedidoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/dto/DetalhePedidoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/dto/ListaDePedidoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Pedido/dto/ListaDePedidoDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/Estoque.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/Estoque.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/EstoqueService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/EstoqueService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/controller/TelaEstoque.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/controller/TelaEstoque.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/controller/api/EstoqueApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/controller/api/EstoqueApi.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ItemPedido/ItemPedido.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ItemPedido/ItemPedido.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/DetalhePedidoDTO$ItemDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/DetalhePedidoDTO$ItemDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/DetalhePedidoDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/DetalhePedidoDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/ListaDePedidoDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/ListaDePedidoDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
