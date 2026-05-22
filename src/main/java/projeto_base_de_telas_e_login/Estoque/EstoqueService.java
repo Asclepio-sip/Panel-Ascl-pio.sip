@@ -15,6 +15,7 @@ import projeto_base_de_telas_e_login.Loja.Loja.LojaRepository;
 import projeto_base_de_telas_e_login.Produto.ProductRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -38,29 +39,19 @@ public class EstoqueService {
             throw new RuntimeException("Informe lojaID ou nomeLoja");
         }
 
-        var loja = dto.lojaID() != null
-                ? lojaRepository.findById(dto.lojaID())
-                : lojaRepository.findByNomeLoja(dto.nomeLoja());
+        var loja = dto.lojaID() != null ? lojaRepository.findById(dto.lojaID()) : lojaRepository.findByNomeLoja(dto.nomeLoja());
 
         System.out.println("Loja encontrada? " + loja.isPresent());
 
-        var lojaFinal = loja.orElseThrow(() ->
-                new RuntimeException("Loja não encontrada"));
+        var lojaFinal = loja.orElseThrow(() -> new RuntimeException("Loja não encontrada"));
 
-        var produto = dto.produtoId() != null
-                ? productRepository.findById(dto.produtoId())
-                : productRepository.findByName(dto.nomeProduto());
+        var produto = dto.produtoId() != null ? productRepository.findById(dto.produtoId()) : productRepository.findByName(dto.nomeProduto());
 
         System.out.println("Produto encontrado? " + produto.isPresent());
 
-        var produtoFinal = produto.orElseThrow(() ->
-                new RuntimeException("Produto não encontrado"));
+        var produtoFinal = produto.orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
-        var existente = estoqueRepository
-                .findByLoja_IdAndProduto_Id(
-                        lojaFinal.getId(),
-                        produtoFinal.getId()
-                );
+        var existente = estoqueRepository.findByLoja_IdAndProduto_Id(lojaFinal.getId(), produtoFinal.getId());
 
         System.out.println("Produto já existe no estoque? " + existente.isPresent());
 
@@ -68,14 +59,7 @@ public class EstoqueService {
             throw new RuntimeException("Produto já existe no estoque");
         }
 
-        Estoque estoque = new Estoque(
-                null,
-                lojaFinal,
-                produtoFinal,
-                dto.quantidade(),
-                dto.precoVenda(),
-                BigDecimal.ZERO
-        );
+        Estoque estoque = new Estoque(null, lojaFinal, produtoFinal, dto.quantidade(), dto.precoVenda(), BigDecimal.ZERO);
 
         estoqueRepository.save(estoque);
 
@@ -87,10 +71,32 @@ public class EstoqueService {
 
         Estoque estoque = estoqueRepository.findByLoja_IdAndProduto_Id(lojaId, produtoId).orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
 
-        Estoque atualizado = new Estoque(estoque.getId(), estoque.getLoja(), estoque.getProduto(), quantidade, precoVenda, estoque.getPercentualDesconto());
+        // só atualiza se vier quantidade
+        if (quantidade != null) {
 
-        estoqueRepository.save(atualizado);
+            if (quantidade < 0) {
+                throw new RuntimeException("Quantidade inválida");
+            }
+
+            estoque.setQuantidade(quantidade);
+        }
+
+        // só atualiza se vier preço
+        if (precoVenda != null) {
+
+            if (precoVenda.compareTo(BigDecimal.ZERO) < 0) {
+
+                throw new RuntimeException("Preço inválido");
+            }
+
+            estoque.setPrecoVenda(precoVenda);
+        }
+
+        estoque.setAtualizadoEm(LocalDateTime.now());
+
+        estoqueRepository.save(estoque);
     }
+
 
     public void deletar(Long id) {
         estoqueRepository.deleteById(id);
@@ -102,11 +108,22 @@ public class EstoqueService {
 
     public void aplicarPromocao(Long lojaId, Long produtoId, BigDecimal percentual) {
 
+        if (percentual == null) {
+            throw new RuntimeException("Percentual obrigatório");
+        }
+
+        if (percentual.compareTo(BigDecimal.ZERO) < 0 || percentual.compareTo(BigDecimal.valueOf(100)) > 0) {
+
+            throw new RuntimeException("Percentual deve ser entre 0 e 100");
+        }
+
         Estoque estoque = estoqueRepository.findByLoja_IdAndProduto_Id(lojaId, produtoId).orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
 
-        Estoque atualizado = new Estoque(estoque.getId(), estoque.getLoja(), estoque.getProduto(), estoque.getQuantidade(), estoque.getPrecoVenda(), percentual);
+        estoque.setPercentualDesconto(percentual);
 
-        estoqueRepository.save(atualizado);
+        estoque.setAtualizadoEm(LocalDateTime.now());
+
+        estoqueRepository.save(estoque);
     }
 
     public Page<ListaDeEstoqueDasLojasResponse> listarTodos(EstoqueFiltro filtro, Pageable pageable) {

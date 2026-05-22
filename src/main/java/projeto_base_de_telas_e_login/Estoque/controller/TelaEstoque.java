@@ -30,7 +30,7 @@ public class TelaEstoque implements EstoqueApi {
     }
 
     @Override
-    public ResponseEntity<Void> atualizar(EstoqueAddDto dto) {
+    public ResponseEntity<Void> atualizar(AtulizarResquet dto) {
 
         service.atualizar(dto.lojaID(), dto.produtoId(), dto.quantidade(), dto.precoVenda());
 

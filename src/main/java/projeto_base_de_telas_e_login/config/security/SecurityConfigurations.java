@@ -61,6 +61,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/estoque/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/estoque/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/estoque/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/estoque/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/estoque/**").hasRole("ADMIN")
 
                         // LOJAS PUBLICA KK
@@ -102,7 +103,8 @@ public class SecurityConfigurations {
 
         configuration.setAllowedOrigins(java.util.List.of(
                 "http://localhost:4200",
-                "https://front-site-farmacia-nvali72mq-mateusss-projects.vercel.app"
+                "https://front-site-farmacia.vercel.app/"
+
         ));
 
         configuration.setAllowedMethods(java.util.List.of(

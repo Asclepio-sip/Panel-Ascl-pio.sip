@@ -26,8 +26,8 @@ public interface EstoqueApi {
 
     @Operation(summary = "Atualizar estoque")
     @ApiResponse(responseCode = "200", description = "Atualizado")
-    @PutMapping
-    ResponseEntity<Void> atualizar(@RequestBody @Valid EstoqueAddDto dto);
+    @PatchMapping
+    ResponseEntity<Void> atualizar(@RequestBody @Valid AtulizarResquet dto);
 
     @Operation(summary = "Aplicar promoção")
     @ApiResponse(responseCode = "200", description = "Promoção aplicada")
