@@ -61,6 +61,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/estoque/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/estoque/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/estoque/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/estoque/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/estoque/**").hasRole("ADMIN")
 
                         // LOJAS PUBLICA KK

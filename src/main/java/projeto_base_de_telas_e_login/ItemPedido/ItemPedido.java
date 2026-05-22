@@ -33,6 +33,10 @@ public class ItemPedido {
     @Column(precision = 10, scale = 2)
     private BigDecimal subtotal;
 
+    @Column(precision = 10, scale = 2)
+    private BigDecimal percentualDesconto;
+
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
@@ -49,10 +53,11 @@ public class ItemPedido {
             String categoria,
             BigDecimal precoUnitario,
             Integer quantidade,
-            Pedido pedido
+            Pedido pedido,
+            BigDecimal percentualDesconto
     ) {
 
-        if (quantidade <= 0) {
+        if (quantidade == null || quantidade <= 0) {
             throw new RuntimeException("Quantidade inválida");
         }
 
@@ -66,21 +71,36 @@ public class ItemPedido {
         this.quantidade = quantidade;
         this.pedido = pedido;
 
+        this.percentualDesconto =
+                percentualDesconto != null
+                        ? percentualDesconto
+                        : BigDecimal.ZERO;
+
         recalcularSubtotal();
     }
 
     private void recalcularSubtotal() {
 
-        if (this.precoUnitario != null &&
-                this.quantidade != null) {
+        if (this.precoUnitario != null
+                && this.quantidade != null) {
+
+            BigDecimal desconto =
+                    percentualDesconto != null
+                            ? percentualDesconto
+                            : BigDecimal.ZERO;
+
+            BigDecimal precoComDesconto =
+                    precoUnitario.subtract(
+                            precoUnitario.multiply(desconto)
+                                    .divide(BigDecimal.valueOf(100))
+                    );
 
             this.subtotal =
-                    this.precoUnitario.multiply(
-                            BigDecimal.valueOf(this.quantidade)
+                    precoComDesconto.multiply(
+                            BigDecimal.valueOf(quantidade)
                     );
         }
     }
-
     // GETTERS
 
     public Long getId() {
@@ -121,6 +141,18 @@ public class ItemPedido {
 
     public Pedido getPedido() {
         return pedido;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public BigDecimal getPercentualDesconto() {
+        return percentualDesconto;
+    }
+
+    public void setPercentualDesconto(BigDecimal percentualDesconto) {
+        this.percentualDesconto = percentualDesconto;
     }
 
     // SETTERS
