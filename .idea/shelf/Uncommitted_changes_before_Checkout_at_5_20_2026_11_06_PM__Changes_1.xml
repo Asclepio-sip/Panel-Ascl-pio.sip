@@ -1,9 +1,0 @@
-<changelist name="Uncommitted_changes_before_Checkout_at_5_20_2026_11_06_PM_[Changes]1" date="1779329241026" recycled="true" deleted="true">
-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_20_2026_11_06_PM_[Changes]1/shelved.patch" />
-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 5/20/2026 11:06 PM [Changes]" />
-  <binary>
-    <option name="BEFORE_PATH" value="target/classes/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.class" />
-    <option name="AFTER_PATH" value="target/classes/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.class" />
-    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_20_2026_11_06_PM_[Changes]1/SecurityConfigurations.class" />
-  </binary>
-</changelist>
