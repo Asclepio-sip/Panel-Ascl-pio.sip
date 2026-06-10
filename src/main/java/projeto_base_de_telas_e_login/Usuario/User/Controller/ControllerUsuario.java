@@ -1,6 +1,7 @@
 package projeto_base_de_telas_e_login.Usuario.User.Controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,9 +29,7 @@ public class ControllerUsuario implements UserAPI {
         this.tokenService = tokenService;
     }
 
-    public ResponseEntity<LoginResponseDTO> login(
-
-            @RequestBody @Valid AuthenticationDTO data) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
 
         var authToken = new UsernamePasswordAuthenticationToken(data.login(), data.password());
 
@@ -44,26 +43,17 @@ public class ControllerUsuario implements UserAPI {
     }
 
     public ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid RegisterDTO dto) {
-
-        var user = userService.createUser(dto.login(), dto.password(), dto.roleId());
-
+        var user = userService.createUser(dto);
         var token = tokenService.generateToken(user);
-
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
-    public ResponseEntity<List<ResponseListaDeUserDTO>> listarUsuarios() {
-        return ResponseEntity.ok(userService.lista());
+    public ResponseEntity<List<ResponseListaDeUserDTO>> listarUsuarios(Pageable pageable) {
+        return ResponseEntity.ok(userService.lista(pageable));
     }
 
-    public ResponseEntity<Void> atualizarUsuario(
-
-            @PathVariable UUID id,
-
-            @RequestBody @Valid UpdateUserDTO dto) {
-
-        userService.updateUser(id, dto.login(), dto.password(), dto.roleId());
-
+    public ResponseEntity<Void> atualizarUsuario(@PathVariable UUID id, @RequestBody @Valid UpdateUserDTO dto) {
+        userService.updateUser(id, dto);
         return ResponseEntity.ok().build();
     }
 }

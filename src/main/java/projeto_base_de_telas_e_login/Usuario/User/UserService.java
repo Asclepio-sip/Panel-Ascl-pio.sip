@@ -1,10 +1,15 @@
 package projeto_base_de_telas_e_login.Usuario.User;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import projeto_base_de_telas_e_login.Usuario.Permission.Permission;
+import projeto_base_de_telas_e_login.Usuario.Permission.PermissionRepository;
 import projeto_base_de_telas_e_login.Usuario.Role.Role;
 import projeto_base_de_telas_e_login.Usuario.Role.RoleRepository;
+import projeto_base_de_telas_e_login.Usuario.User.dto.RegisterDTO;
 import projeto_base_de_telas_e_login.Usuario.User.dto.ResponseListaDeUserDTO;
+import projeto_base_de_telas_e_login.Usuario.User.dto.UpdateUserDTO;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,27 +20,29 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PermissionRepository permissionRepository;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,PermissionRepository permissionRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.permissionRepository = permissionRepository;
     }
 
-    public User createUser(String login, String password, UUID roleId) {
+    public User createUser( RegisterDTO dto) {
 
-        if (userRepository.findByUsername(login).isPresent()) {
+        if (userRepository.findByUsername(dto.login()).isPresent()) {
 
             throw new RuntimeException("Usuário já existe");
         }
 
-        Role role = roleRepository.findById(roleId).orElseThrow(() -> new RuntimeException("Cargo não encontrado"));
+        Role role = roleRepository.findById(dto.roleId()).orElseThrow(() -> new RuntimeException("Cargo não encontrado"));
 
         User user = new User();
 
-        user.setUsername(login);
+        user.setUsername(dto.login());
 
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(passwordEncoder.encode(dto.password()));
 
         user.setRole(role);
 
@@ -44,8 +51,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<ResponseListaDeUserDTO> lista() {
-        return userRepository.findAll().stream().map(ResponseListaDeUserDTO::fromEntity).toList();
+    public List<ResponseListaDeUserDTO> lista(Pageable pageable) {
+        return userRepository.findAll(pageable).stream().map(ResponseListaDeUserDTO::fromEntity).toList();
     }
 
     public User findById(UUID id) {
@@ -53,22 +60,27 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
-    public void updateUser(UUID id, String login, String password, UUID roleId) {
-
+    public void updateUser(UUID id, UpdateUserDTO dto ) {
         User user = findById(id);
 
-        user.setUsername(login);
+        user.setUsername(dto.login());
 
-        if (password != null && !password.isBlank()) {
+        if (dto.password() != null && !dto.password().isBlank()) {
 
-            user.setPassword(passwordEncoder.encode(password));
+            user.setPassword(passwordEncoder.encode(dto.password()));
         }
 
-        if (roleId != null) {
+        if (dto.roleId() != null) {
 
-            Role role = roleRepository.findById(roleId).orElseThrow(() -> new RuntimeException("Cargo não encontrado"));
+            Role role = roleRepository.findById(dto.roleId()).orElseThrow(() -> new RuntimeException("Cargo não encontrado"));
 
             user.setRole(role);
+        }
+
+        if(dto.permissionIds() != null){
+            List<Permission> permissionsExtras = permissionRepository.findAllById(dto.permissionIds());
+
+            user.setPermissionsExtras(permissionsExtras);
         }
 
         userRepository.save(user);

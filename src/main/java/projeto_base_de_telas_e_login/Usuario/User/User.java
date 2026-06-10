@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import projeto_base_de_telas_e_login.Usuario.Permission.Permission;
 import projeto_base_de_telas_e_login.Usuario.Role.Role;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,22 +33,39 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_permissions",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private List<Permission> permissionsExtras = new ArrayList<>();
+
     public User() {}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        return role.getPermissions()
-                .stream()
-                .map(permission ->
-                        new SimpleGrantedAuthority(
-                                permission.getNome()
-                        )
-                )
-                .toList();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        role.getPermissions().forEach(permission ->
+                authorities.add(new SimpleGrantedAuthority(permission.getNome()))
+        );
+
+        permissionsExtras.forEach(permission ->
+                authorities.add(new SimpleGrantedAuthority(permission.getNome()))
+        );
+
+        return authorities;
     }
 
+    public List<Permission> getPermissionsExtras() {
+        return permissionsExtras;
+    }
 
+    public void setPermissionsExtras(List<Permission> permissionsExtras) {
+        this.permissionsExtras = permissionsExtras;
+    }
 
     @Override
     public boolean isAccountNonExpired() {

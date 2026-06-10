@@ -5,96 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88792f31-c9d2-42fd-9c39-246dd5948413" name="Changes" comment="feat:ajuste na arquitetura">
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/Permission/Controller/API/PermissionAPI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/Permission/Controller/ControllerPermission.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/Permission/Permission.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/Permission/PermissionRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/Permission/ServicePermisson.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/Role/Controller/ControllerRota.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/Role/Controller/api/RoleApi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/Role/Role.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/Role/RoleRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/Role/ServiceRole.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/Controller/API/UserAPI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/Controller/ControllerUsuario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/dto/LoginResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/dto/RegisterDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/dto/ResponseListaDeUserDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/dto/UpdateUserDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Permission/Controller/API/PermissionAPI.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Permission/Controller/ControllerPermission.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Permission/Permission.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Permission/PermissionRepository.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Permission/ServicePermisson.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Role/Controller/ControllerRota.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Role/Controller/api/RoleApi.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Role/Role.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Role/RoleRepository.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Role/ServiceRole.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/Controller/API/UserAPI.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/Controller/ControllerUsuario.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/UserRepository.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/UserService.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/dto/RegisterDTO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/dto/ResponseListaDeUserDTO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/dto/UpdateUserDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_19_2026_1_27_AM_[Changes]1/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_19_2026_1_27_AM__Changes_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_20_2026_11_06_PM_[Changes]1/SecurityConfigurations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_20_2026_11_06_PM_[Changes]1/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_20_2026_11_06_PM__Changes_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_20_2026_11_08_PM_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_20_2026_11_08_PM_[Changes]1/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_20_2026_11_08_PM__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_20_2026_11_08_PM__Changes_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_20_2026_11_09_PM_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_5_20_2026_11_09_PM__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/controller/api/EstoqueApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Estoque/controller/api/EstoqueApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Produto/Controller/api/ProdutoApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Produto/Controller/api/ProdutoApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/Controller/CriarUsuario.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/Controller/TelaInicial.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/Controller/TelaInicial.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/Controller/TelaLogin.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/UserAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/UserEntity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/UserRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/UserUseCase.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/dto/AuthenticationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/dto/AuthenticationDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/dto/LoginResponseDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/dto/RegisterDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/dto/UpdateUserDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/dto/UserResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/dto/UserResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/user/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/user/UserRole.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/bootstrap/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/bootstrap/DataInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/security/SecurityFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/security/SecurityFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/security/TokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/security/TokenService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/services/AuthorizationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/config/security/AuthorizationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/Controller/api/ProdutoApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/Controller/api/ProdutoApi.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Controller/CriarUsuario.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Controller/TelaInicial.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/Controller/TelaInicial.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Controller/TelaLogin.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/UserAdapter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/UserEntity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/UserRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/UserUseCase$UserPorta.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/UserUseCase.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/dto/AuthenticationDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/dto/AuthenticationDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/dto/LoginResponseDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/dto/LoginResponseDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/dto/RegisterDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/dto/UpdateUserDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/dto/UserResponseDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/dto/UserResponseDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/UserRole.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/bootstrap/DataInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/bootstrap/DataInitializer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/SecurityFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/SecurityFilter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/TokenService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/TokenService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/services/AuthorizationService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/AuthorizationService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/Controller/API/UserAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/Controller/API/UserAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/Controller/ControllerUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/Controller/ControllerUsuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/dto/UpdateUserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/projeto_base_de_telas_e_login/Usuario/User/dto/UpdateUserDTO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,9 +22,9 @@
       <list>
         <option value="package-info" />
         <option value="Enum" />
-        <option value="Record" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="Record" />
       </list>
     </option>
   </component>
@@ -150,26 +66,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.ProjetoBaseDeTelasELoginApplication.executor": "Run",
-    "Maven.Projeto-farmacia_back [clean,install].executor": "Run",
-    "Maven.projeto_base_de_telas_e_login [clean...].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "feat/ajuste-tela-login",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.ProjetoBaseDeTelasELoginApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Projeto-farmacia_back [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.projeto_base_de_telas_e_login [clean...].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/ajuste-tela-login&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\DEV\Projeto-SAAS\java\PromoFarma\projeto_base_de_telas_e_login\src\main\java\projeto_base_de_telas_e_login\adapter\out\persistence" />

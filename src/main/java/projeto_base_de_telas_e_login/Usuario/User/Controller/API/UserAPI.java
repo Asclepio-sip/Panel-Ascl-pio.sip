@@ -3,6 +3,7 @@ package projeto_base_de_telas_e_login.Usuario.User.Controller.API;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,8 @@ public interface UserAPI {
     public ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid RegisterDTO dto) ;
 
     @GetMapping
-    public ResponseEntity<List<ResponseListaDeUserDTO>>  listarUsuarios();
+    public ResponseEntity<List<ResponseListaDeUserDTO>>  listarUsuarios(Pageable pageable);
 
-    @PutMapping("/users/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Void> atualizarUsuario( @PathVariable UUID id,@RequestBody @Valid UpdateUserDTO dto);
 }
