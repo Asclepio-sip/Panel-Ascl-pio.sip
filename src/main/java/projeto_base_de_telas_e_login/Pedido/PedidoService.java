@@ -1,5 +1,7 @@
 package projeto_base_de_telas_e_login.Pedido;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
@@ -156,9 +158,9 @@ public class PedidoService {
     }
 
 
-    public List<Pedido> listarTodos() {
+    public Page<Pedido> listarTodos(Pageable pageable) {
 
-        return pedidoRepository.findAll();
+        return pedidoRepository.findAll(pageable);
     }
 
     public Pedido buscarPorId(Long id) {

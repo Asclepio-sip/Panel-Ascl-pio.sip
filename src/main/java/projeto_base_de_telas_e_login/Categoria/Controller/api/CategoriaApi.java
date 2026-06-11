@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import projeto_base_de_telas_e_login.Categoria.dto.CriarCategoria;
 import projeto_base_de_telas_e_login.Categoria.Categoria;
@@ -16,18 +17,22 @@ public interface CategoriaApi {
 
     @GetMapping
     @Operation(summary = "Listar categorias")
+   // @PreAuthorize("hasAuthority('CATEGORIA_READ')")
     ResponseEntity<List<Categoria>> listar();
 
     @PostMapping
     @Operation(summary = "Criar categoria")
+    @PreAuthorize("hasAuthority('CATEGORIA_CREATE')")
     ResponseEntity<Categoria> criar( @RequestBody @Valid CriarCategoria dto);
 
     @PutMapping("/{id}")
     @Operation(summary = "Editar categoria")
+    @PreAuthorize("hasAuthority('CATEGORIA_UPDATE')")
     ResponseEntity<Categoria> editar( @PathVariable Long id, @RequestBody @Valid CriarCategoria dto);
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar categoria")
+    @PreAuthorize("hasAuthority('CATEGORIA_DELETE')")
     ResponseEntity<Void> deletar(
             @PathVariable Long id
     );

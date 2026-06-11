@@ -32,9 +32,7 @@ public class TelaProdutos implements ProdutoApi {
     public ResponseEntity<Product> criar(ProductoAddDto dto) {
         Product novo = produtoService.criar(dto);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(novo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novo);
     }
 
     @Override
@@ -42,9 +40,7 @@ public class TelaProdutos implements ProdutoApi {
 
         Product atualizado = produtoService.editar(id, product);
 
-        return ResponseEntity.ok(
-                ProductoResponseDto.fromEntity(atualizado)
-        );
+        return ResponseEntity.ok(ProductoResponseDto.fromEntity(atualizado));
     }
 
     @Override
