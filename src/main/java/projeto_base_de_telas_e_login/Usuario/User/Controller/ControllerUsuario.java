@@ -1,6 +1,7 @@
 package projeto_base_de_telas_e_login.Usuario.User.Controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,7 +49,7 @@ public class ControllerUsuario implements UserAPI {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
-    public ResponseEntity<List<ResponseListaDeUserDTO>> listarUsuarios(Pageable pageable) {
+    public ResponseEntity<Page<ResponseListaDeUserDTO>> listarUsuarios(Pageable pageable) {
         return ResponseEntity.ok(userService.lista(pageable));
     }
 

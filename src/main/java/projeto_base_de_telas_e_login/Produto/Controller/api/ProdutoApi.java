@@ -21,25 +21,21 @@ public interface ProdutoApi {
 
 
     @GetMapping
+   // @PreAuthorize("hasAuthority('PRODUTO_READ')")
     ResponseEntity<Page<ProductoResponseDto>> listar(Pageable pageable);
-
 
     @PostMapping
     @Operation(summary = "Criar produto")
-    @PreAuthorize("hasAuthority('PRODUCT_CREATE')")
-    ResponseEntity<Product> criar(
-            @RequestBody ProductoAddDto dto
-    );
+    @PreAuthorize("hasAuthority('PRODUTO_CREATE')")
+    ResponseEntity<Product> criar(@RequestBody ProductoAddDto dto);
 
     @PatchMapping("/{id}")
     @Operation(summary = "Editar produto")
-    @PreAuthorize("hasAuthority('PRODUCT_UPDATE')")
+    @PreAuthorize("hasAuthority('PRODUTO_UPDATE')")
     ResponseEntity<ProductoResponseDto> editar(@PathVariable  Long id,@RequestBody ProdutoUpdateDto product);
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar produto")
-    @PreAuthorize("hasAuthority('PRODUCT_DELETE')")
-    ResponseEntity<Void> deletar(
-            @PathVariable Long id
-    );
+    @PreAuthorize("hasAuthority('PRODUTO_DELETE')")
+    ResponseEntity<Void> deletar(@PathVariable Long id);
 }

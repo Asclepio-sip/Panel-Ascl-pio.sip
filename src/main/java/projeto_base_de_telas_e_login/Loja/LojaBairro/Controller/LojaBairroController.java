@@ -1,7 +1,9 @@
-package projeto_base_de_telas_e_login.Loja.LojaBairro;
+package projeto_base_de_telas_e_login.Loja.LojaBairro.Controller;
 
 import org.springframework.web.bind.annotation.*;
 
+import projeto_base_de_telas_e_login.Loja.LojaBairro.Controller.api.LojaBairroApi;
+import projeto_base_de_telas_e_login.Loja.LojaBairro.LojaBairroService;
 import projeto_base_de_telas_e_login.Loja.LojaBairro.dto.CreateLojaBairroRequest;
 import projeto_base_de_telas_e_login.Loja.LojaBairro.dto.LojaBairroResponse;
 import projeto_base_de_telas_e_login.Loja.LojaBairro.dto.LojaComBairrosResponse;
@@ -9,8 +11,7 @@ import projeto_base_de_telas_e_login.Loja.LojaBairro.dto.LojaComBairrosResponse;
 import java.util.List;
 
 @RestController
-@RequestMapping("/loja-bairros")
-public class LojaBairroController {
+public class LojaBairroController implements LojaBairroApi {
 
     private final LojaBairroService service;
 

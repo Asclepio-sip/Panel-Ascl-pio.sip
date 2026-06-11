@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import projeto_base_de_telas_e_login.Estoque.dto.*;
 
@@ -19,25 +20,28 @@ public interface EstoqueApi {
     @Operation(summary = "Criar item estoque")
     @ApiResponse(responseCode = "201", description = "Criado com sucesso")
     @PostMapping
+    @PreAuthorize("hasAuthority('ESTOQUE_CREATE')")
     ResponseEntity<Void> criar(@RequestBody @Valid EstoqueAddDto dto);
 
     @Operation(summary = "Atualizar estoque")
     @ApiResponse(responseCode = "200", description = "Atualizado")
     @PatchMapping
+    @PreAuthorize("hasAuthority('ESTOQUE_UPDATE')")
     ResponseEntity<Void> atualizar(@RequestBody @Valid AtulizarResquet dto);
 
     @Operation(summary = "Aplicar promoção")
     @ApiResponse(responseCode = "200", description = "Promoção aplicada")
     @PatchMapping("/promocao")
+    @PreAuthorize("hasAuthority('ESTOQUE_UPDATE')")
     ResponseEntity<Void> aplicarPromocao(@RequestBody @Valid AplicarPromocaoDto dto);
 
     @GetMapping("/relatorio")
+//    @PreAuthorize("hasAuthority('ESTOQUE_READ')")
     ResponseEntity<Page<ListaDeEstoqueDasLojasResponse>> lista(EstoqueFiltro filtro, Pageable pageable);
 
     @Operation(summary = "Deletar item estoque")
     @ApiResponse(responseCode = "204", description = "Deletado")
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> deletar(
-            @PathVariable Long id
-    );
+    @PreAuthorize("hasAuthority('ESTOQUE_DELETE')")
+    ResponseEntity<Void> deletar(@PathVariable Long id);
 }

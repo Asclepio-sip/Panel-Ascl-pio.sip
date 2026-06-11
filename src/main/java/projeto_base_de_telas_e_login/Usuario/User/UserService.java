@@ -1,5 +1,6 @@
 package projeto_base_de_telas_e_login.Usuario.User;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,14 +23,14 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final PermissionRepository permissionRepository;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,PermissionRepository permissionRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PermissionRepository permissionRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.permissionRepository = permissionRepository;
     }
 
-    public User createUser( RegisterDTO dto) {
+    public User createUser(RegisterDTO dto) {
 
         if (userRepository.findByUsername(dto.login()).isPresent()) {
 
@@ -51,8 +52,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<ResponseListaDeUserDTO> lista(Pageable pageable) {
-        return userRepository.findAll(pageable).stream().map(ResponseListaDeUserDTO::fromEntity).toList();
+    public Page<ResponseListaDeUserDTO> lista(Pageable pageable) {
+        return userRepository.findAll(pageable).map(ResponseListaDeUserDTO::fromEntity);
     }
 
     public User findById(UUID id) {
@@ -60,7 +61,7 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
-    public void updateUser(UUID id, UpdateUserDTO dto ) {
+    public void updateUser(UUID id, UpdateUserDTO dto) {
         User user = findById(id);
 
         user.setUsername(dto.login());
@@ -77,7 +78,7 @@ public class UserService {
             user.setRole(role);
         }
 
-        if(dto.permissionIds() != null){
+        if (dto.permissionIds() != null) {
             List<Permission> permissionsExtras = permissionRepository.findAllById(dto.permissionIds());
 
             user.setPermissionsExtras(permissionsExtras);

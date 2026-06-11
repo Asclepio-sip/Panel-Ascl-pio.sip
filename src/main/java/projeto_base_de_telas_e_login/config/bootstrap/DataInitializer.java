@@ -37,17 +37,19 @@ public class DataInitializer implements CommandLineRunner {
 
     private void criarPermissions() {
 
-        //Produto permissions
-        criarPermission("PRODUCT_READ", "Ver produtos");
-        criarPermission("PRODUCT_CREATE", "Criar produtos");
-        criarPermission("PRODUCT_UPDATE", "Editar produtos");
-        criarPermission("PRODUCT_DELETE", "Excluir produtos");
+        //Produto permissions     @PreAuthorize("hasAuthority('CATEGORIA_CREATE')")
+        criarPermission("PRODUTO_READ", "Ver produtos");
+        criarPermission("PRODUTO_CREATE", "Criar produtos");
+        criarPermission("PRODUTO_UPDATE", "Editar produtos");
+        criarPermission("PRODUTO_DELETE", "Excluir produtos");
 
         //Estoque permissions
         criarPermission("ESTOQUE_READ", "Ver estoque");
         criarPermission("ESTOQUE_CREATE", "Criar estoque");
         criarPermission("ESTOQUE_UPDATE", "Editar estoque");
         criarPermission("ESTOQUE_DELETE", "Excluir estoque");
+        criarPermission("ESTOQUE_PROMO", "Promocao do produto que estive em estoque");
+
 
         //LOJA permissions
         criarPermission("LOJA_READ", "Ver loja");
@@ -62,7 +64,7 @@ public class DataInitializer implements CommandLineRunner {
         criarPermission("BAIRRO_DELETE", "ExcluirBairro");
 
         //LOJA_BAIRRO permissons
-        criarPermission("LOJA_BAIR_READ", "Ver bairro_loja");
+        criarPermission("LOJA_BAIRRO_READ", "Ver bairro_loja");
         criarPermission("LOJA_BAIRRO_CREATE", "Criar bairro_loja");
         criarPermission("LOJA_BAIRRO_UPDATE", "Editar Bairro_loja");
         criarPermission("LOJA_BAIRRO_DELETE", "Excluir Bairro_loja");
@@ -72,12 +74,6 @@ public class DataInitializer implements CommandLineRunner {
         criarPermission("PEDIDO_CREATE", "Criar PEDIDO");
         criarPermission("PEDIDO_UPDATE", "Editar PEDIDO");
         criarPermission("PEDIDO_DELETE", "Excluir PEDIDO");
-
-        //Produto permissons
-        criarPermission("PRODUTO_READ", "Ver PRODUTO");
-        criarPermission("PRODUTO_CREATE", "Criar PRODUTO");
-        criarPermission("PRODUTO_UPDATE", "Editar PRODUTO");
-        criarPermission("PRODUTO_DELETE", "Excluir PRODUTO");
 
         //Usuario permissons
         criarPermission("USUARIO_READ", "Ver USUARIO");
@@ -136,7 +132,7 @@ public class DataInitializer implements CommandLineRunner {
 
                 "BAIRRO_READ", "BAIRRO_CREATE", "BAIRRO_UPDATE", "BAIRRO_DELETE",
 
-                "LOJA_BAIR_READ", "LOJA_BAIRRO_CREATE", "LOJA_BAIRRO_UPDATE", "LOJA_BAIRRO_DELETE",
+                "LOJA_BAIRRO_READ", "LOJA_BAIRRO_CREATE", "LOJA_BAIRRO_UPDATE", "LOJA_BAIRRO_DELETE",
 
                 "PERMISSIONS_READ",
 

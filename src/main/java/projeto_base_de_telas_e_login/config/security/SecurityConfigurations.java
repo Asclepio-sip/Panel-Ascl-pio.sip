@@ -37,7 +37,8 @@ public class SecurityConfigurations {
     ) throws Exception {
 
         return http
-                .cors(cors -> {})
+                .cors(cors -> {
+                })
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
@@ -45,20 +46,14 @@ public class SecurityConfigurations {
                         )
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html"
-                        ).permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "//loja-bairros/lojas-com-bairros").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/categorias").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/estoque/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/bairro").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products").permitAll()
 
-                        .requestMatchers(
-                                HttpMethod.POST,
-                                "/user/login"
-                        ).permitAll()
-
-                        .requestMatchers(
-                                "/productsPublico/**"
-                        ).permitAll()
 
                         .anyRequest()
                         .authenticated()
