@@ -16,18 +16,18 @@ public interface LojaApi {
 
 
     @PostMapping
-    @PreAuthorize("hasAuthority('LOJA_CREATE')")
+    @PreAuthorize("hasAuthority('CriarLoja')")
     public ResponseEntity<LojaResponse> criar(@RequestBody CreateLojaRequest request);
 
     @GetMapping
-    @PreAuthorize("hasAuthority('LOJA_READ')")
+    @PreAuthorize("hasAuthority('VerLoja')")
     public ResponseEntity<List<LojaResponse>> listar();
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('LOJA_UPDATE')")
+    @PreAuthorize("hasAuthority('EditarLoja')")
     public ResponseEntity<LojaResponse> atualizar(@PathVariable Long id, @RequestBody CreateLojaRequest request);
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('LOJA_DELETE')")
+    @PreAuthorize("hasAuthority('ExcluirLoja')")
     public ResponseEntity<Void> deletar(@PathVariable Long id);
 }

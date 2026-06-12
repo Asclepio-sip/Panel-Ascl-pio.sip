@@ -26,16 +26,16 @@ public interface ProdutoApi {
 
     @PostMapping
     @Operation(summary = "Criar produto")
-    @PreAuthorize("hasAuthority('PRODUTO_CREATE')")
+    @PreAuthorize("hasAuthority('CriarEstoque')")
     ResponseEntity<Product> criar(@RequestBody ProductoAddDto dto);
 
     @PatchMapping("/{id}")
     @Operation(summary = "Editar produto")
-    @PreAuthorize("hasAuthority('PRODUTO_UPDATE')")
+    @PreAuthorize("hasAuthority('EditarEstoque')")
     ResponseEntity<ProductoResponseDto> editar(@PathVariable  Long id,@RequestBody ProdutoUpdateDto product);
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar produto")
-    @PreAuthorize("hasAuthority('PRODUTO_DELETE')")
+    @PreAuthorize("hasAuthority('ExcluirEstoque')")
     ResponseEntity<Void> deletar(@PathVariable Long id);
 }

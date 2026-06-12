@@ -4,10 +4,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import projeto_base_de_telas_e_login.Usuario.Permission.Permission;
-import projeto_base_de_telas_e_login.Usuario.Role.Role;
-import projeto_base_de_telas_e_login.Usuario.User.User;
 import projeto_base_de_telas_e_login.Usuario.Permission.PermissionRepository;
+import projeto_base_de_telas_e_login.Usuario.Role.Role;
 import projeto_base_de_telas_e_login.Usuario.Role.RoleRepository;
+import projeto_base_de_telas_e_login.Usuario.User.User;
 import projeto_base_de_telas_e_login.Usuario.User.UserRepository;
 
 import java.util.List;
@@ -20,7 +20,12 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(PermissionRepository permissionRepository, RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(
+            PermissionRepository permissionRepository,
+            RoleRepository roleRepository,
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
+    ) {
         this.permissionRepository = permissionRepository;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
@@ -29,177 +34,199 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-
-        criarPermissions();
+        criarPermissoes();
         criarRoles();
         criarAdmin();
     }
 
-    private void criarPermissions() {
+    private void criarPermissoes() {
 
-        //Produto permissions     @PreAuthorize("hasAuthority('CATEGORIA_CREATE')")
-        criarPermission("PRODUTO_READ", "Ver produtos");
-        criarPermission("PRODUTO_CREATE", "Criar produtos");
-        criarPermission("PRODUTO_UPDATE", "Editar produtos");
-        criarPermission("PRODUTO_DELETE", "Excluir produtos");
+        criarPermission("VerProduto", "Ver produtos");
+        criarPermission("CriarProduto", "Criar produtos");
+        criarPermission("EditarProduto", "Editar produtos");
+        criarPermission("ExcluirProduto", "Excluir produtos");
 
-        //Estoque permissions
-        criarPermission("ESTOQUE_READ", "Ver estoque");
-        criarPermission("ESTOQUE_CREATE", "Criar estoque");
-        criarPermission("ESTOQUE_UPDATE", "Editar estoque");
-        criarPermission("ESTOQUE_DELETE", "Excluir estoque");
-        criarPermission("ESTOQUE_PROMO", "Promocao do produto que estive em estoque");
+        criarPermission("VerEstoque", "Ver estoque");
+        criarPermission("CriarEstoque", "Criar estoque");
+        criarPermission("EditarEstoque", "Editar estoque");
+        criarPermission("ExcluirEstoque", "Excluir estoque");
+        criarPermission("PromocaoEstoque", "Criar promoção no estoque");
+
+        criarPermission("VerLoja", "Ver loja");
+        criarPermission("CriarLoja", "Criar loja");
+        criarPermission("EditarLoja", "Editar loja");
+        criarPermission("ExcluirLoja", "Excluir loja");
+
+        criarPermission("VerBairro", "Ver bairro");
+        criarPermission("CriarBairro", "Criar bairro");
+        criarPermission("EditarBairro", "Editar bairro");
+        criarPermission("ExcluirBairro", "Excluir bairro");
+
+        criarPermission("VerLojaBairro", "Ver loja bairro");
+        criarPermission("CriarLojaBairro", "Criar loja bairro");
+        criarPermission("EditarLojaBairro", "Editar loja bairro");
+        criarPermission("ExcluirLojaBairro", "Excluir loja bairro");
+
+        criarPermission("VerPedido", "Ver pedido");
+        criarPermission("CriarPedido", "Criar pedido");
+        criarPermission("EditarPedido", "Editar pedido");
+        criarPermission("ExcluirPedido", "Excluir pedido");
+
+        criarPermission("VerUsuario", "Ver usuário");
+        criarPermission("CriarUsuario", "Criar usuário");
+        criarPermission("EditarUsuario", "Editar usuário");
+        criarPermission("ExcluirUsuario", "Excluir usuário");
+
+        criarPermission("VerCategoria", "Ver categoria");
+        criarPermission("CriarCategoria", "Criar categoria");
+        criarPermission("EditarCategoria", "Editar categoria");
+        criarPermission("ExcluirCategoria", "Excluir categoria");
 
 
-        //LOJA permissions
-        criarPermission("LOJA_READ", "Ver loja");
-        criarPermission("LOJA_CREATE", "Criar Loja");
-        criarPermission("LOJA_UPDATE", "Editar Loja");
-        criarPermission("LOJA_DELETE", "Excluir Bairro");
+        criarPermission("VerUser", "Ver User");
+        criarPermission("CriarUser", "Criar User");
+        criarPermission("EditarUser", "Editar User");
+        criarPermission("ExcluirUser", "Excluir User");
 
-        //BAIRRO permissons
-        criarPermission("BAIRRO_READ", "Ver bairro");
-        criarPermission("BAIRRO_CREATE", "Criar bairro");
-        criarPermission("BAIRRO_UPDATE", "Editar Bairro");
-        criarPermission("BAIRRO_DELETE", "ExcluirBairro");
+        criarPermission("VerPermissoes", "Ver permissões");
 
-        //LOJA_BAIRRO permissons
-        criarPermission("LOJA_BAIRRO_READ", "Ver bairro_loja");
-        criarPermission("LOJA_BAIRRO_CREATE", "Criar bairro_loja");
-        criarPermission("LOJA_BAIRRO_UPDATE", "Editar Bairro_loja");
-        criarPermission("LOJA_BAIRRO_DELETE", "Excluir Bairro_loja");
-
-        //PEDIDO permissons
-        criarPermission("PEDIDO_READ", "Ver PEDIDO");
-        criarPermission("PEDIDO_CREATE", "Criar PEDIDO");
-        criarPermission("PEDIDO_UPDATE", "Editar PEDIDO");
-        criarPermission("PEDIDO_DELETE", "Excluir PEDIDO");
-
-        //Usuario permissons
-        criarPermission("USUARIO_READ", "Ver USUARIO");
-        criarPermission("USUARIO_CREATE", "Criar USUARIO");
-        criarPermission("USUARIO_UPDATE", "Editar USUARIO");
-        criarPermission("USUARIO_DELETE", "Excluir USUARIO");
-
-        //CATEGORIA permissons
-        criarPermission("CATEGORIA_READ", "Ver CATEGORIA");
-        criarPermission("CATEGORIA_CREATE", "Criar CATEGORIA");
-        criarPermission("CATEGORIA_UPDATE", "Editar CATEGORIA");
-        criarPermission("CATEGORIA_DELETE", "Excluir CATEGORIA");
-
-        //permissons permissons
-        criarPermission("PERMISSIONS_READ", "ver Permissions");
-
+        criarPermission("VerRole", "Ver Role");
 
     }
 
     private void criarPermission(String nome, String descricao) {
-
         if (permissionRepository.findByNome(nome).isEmpty()) {
-
             permissionRepository.save(new Permission(null, nome, descricao));
         }
     }
 
     private void criarRoles() {
 
-        // SUPER ADMIN
-        Role superAdmin = roleRepository.findByNome("SUPER_ADMIN").orElse(new Role());
+        Role superAdmin = roleRepository.findByNome("SuperAdministrador").orElse(new Role());
 
-        superAdmin.setNome("SUPER_ADMIN");
+        superAdmin.setNome("SuperAdministrador");
         superAdmin.setDescricao("Administrador total");
         superAdmin.setPermissions(permissionRepository.findAll());
+
         roleRepository.save(superAdmin);
 
+        Role gerente = roleRepository.findByNome("Gerente").orElse(new Role());
 
-        // GERENTE - faz quase tudo, menos criar/editar/deletar loja
-        Role gerente = roleRepository.findByNome("GERENTE").orElse(new Role());
-
-        gerente.setNome("GERENTE");
+        gerente.setNome("Gerente");
         gerente.setDescricao("Gerente da farmácia");
 
-        gerente.setPermissions(permissionRepository.findByNomeIn(List.of("PRODUCT_READ", "PRODUCT_CREATE", "PRODUCT_UPDATE", "PRODUCT_DELETE",
+        gerente.setPermissions(permissionRepository.findByNomeIn(List.of(
+                "VerProduto", "CriarProduto", "EditarProduto", "ExcluirProduto",
 
-                "ESTOQUE_READ", "ESTOQUE_CREATE", "ESTOQUE_UPDATE", "ESTOQUE_DELETE",
+                "VerEstoque", "CriarEstoque", "EditarEstoque", "ExcluirEstoque", "PromocaoEstoque",
 
-                "PEDIDO_READ", "PEDIDO_CREATE", "PEDIDO_UPDATE", "PEDIDO_DELETE",
+                "VerPedido", "CriarPedido", "EditarPedido", "ExcluirPedido",
 
-                "PRODUTO_READ", "PRODUTO_CREATE", "PRODUTO_UPDATE", "PRODUTO_DELETE",
+                "VerUsuario", "CriarUsuario", "EditarUsuario", "ExcluirUsuario",
 
-                "USUARIO_READ", "USUARIO_CREATE", "USUARIO_UPDATE", "USUARIO_DELETE",
+                "VerCategoria", "CriarCategoria", "EditarCategoria", "ExcluirCategoria",
 
-                "CATEGORIA_READ", "CATEGORIA_CREATE", "CATEGORIA_UPDATE", "CATEGORIA_DELETE",
+                "VerBairro", "CriarBairro", "EditarBairro", "ExcluirBairro",
 
-                "BAIRRO_READ", "BAIRRO_CREATE", "BAIRRO_UPDATE", "BAIRRO_DELETE",
+                "VerLojaBairro", "CriarLojaBairro", "EditarLojaBairro", "ExcluirLojaBairro",
 
-                "LOJA_BAIRRO_READ", "LOJA_BAIRRO_CREATE", "LOJA_BAIRRO_UPDATE", "LOJA_BAIRRO_DELETE",
+                "VerPermissoes",
 
-                "PERMISSIONS_READ",
-
-                // pode ver loja, mas não criar/editar/deletar
-                "LOJA_READ")));
+                "VerLoja"
+        )));
 
         roleRepository.save(gerente);
 
+        Role atendente = roleRepository.findByNome("Atendente").orElse(new Role());
 
-        // ATENDENTE - balcão / pedidos
-        Role atendente = roleRepository.findByNome("ATENDENTE").orElse(new Role());
-
-        atendente.setNome("ATENDENTE");
+        atendente.setNome("Atendente");
         atendente.setDescricao("Atendente da farmácia");
 
-        atendente.setPermissions(permissionRepository.findByNomeIn(List.of("PRODUCT_READ", "PRODUTO_READ", "ESTOQUE_READ", "PEDIDO_READ", "PEDIDO_CREATE", "PEDIDO_UPDATE", "CATEGORIA_READ")));
+        atendente.setPermissions(permissionRepository.findByNomeIn(List.of(
+                "VerProduto",
+                "VerEstoque",
+                "VerPedido",
+                "CriarPedido",
+                "EditarPedido",
+                "VerCategoria"
+        )));
 
         roleRepository.save(atendente);
 
+        Role repositor = roleRepository.findByNome("Repositor").orElse(new Role());
 
-        // REPOSITOR - mexe mais com estoque
-        Role repositor = roleRepository.findByNome("REPOSITOR").orElse(new Role());
-
-        repositor.setNome("REPOSITOR");
+        repositor.setNome("Repositor");
         repositor.setDescricao("Repositor / controle de estoque");
 
-        repositor.setPermissions(permissionRepository.findByNomeIn(List.of("PRODUCT_READ", "PRODUTO_READ", "ESTOQUE_READ", "ESTOQUE_CREATE", "ESTOQUE_UPDATE", "CATEGORIA_READ")));
+        repositor.setPermissions(permissionRepository.findByNomeIn(List.of(
+                "VerProduto",
+                "VerEstoque",
+                "CriarEstoque",
+                "EditarEstoque",
+                "VerCategoria"
+        )));
 
         roleRepository.save(repositor);
 
+        Role caixa = roleRepository.findByNome("Caixa").orElse(new Role());
 
-        // CAIXA - finalização de pedidos
-        Role caixa = roleRepository.findByNome("CAIXA").orElse(new Role());
-
-        caixa.setNome("CAIXA");
+        caixa.setNome("Caixa");
         caixa.setDescricao("Operador de caixa");
 
-        caixa.setPermissions(permissionRepository.findByNomeIn(List.of("PRODUCT_READ", "PRODUTO_READ", "ESTOQUE_READ", "PEDIDO_READ", "PEDIDO_CREATE", "PEDIDO_UPDATE")));
+        caixa.setPermissions(permissionRepository.findByNomeIn(List.of(
+                "VerProduto",
+                "VerEstoque",
+                "VerPedido",
+                "CriarPedido",
+                "EditarPedido"
+        )));
 
         roleRepository.save(caixa);
 
+        Role farmaceutico = roleRepository.findByNome("Farmaceutico").orElse(new Role());
 
-        // FARMACEUTICO - valida e acompanha pedidos/estoque
-        Role farmaceutico = roleRepository.findByNome("FARMACEUTICO").orElse(new Role());
-
-        farmaceutico.setNome("FARMACEUTICO");
+        farmaceutico.setNome("Farmaceutico");
         farmaceutico.setDescricao("Farmacêutico responsável");
 
-        farmaceutico.setPermissions(permissionRepository.findByNomeIn(List.of("PRODUCT_READ", "PRODUTO_READ", "ESTOQUE_READ", "ESTOQUE_UPDATE", "PEDIDO_READ", "PEDIDO_UPDATE", "CATEGORIA_READ")));
+        farmaceutico.setPermissions(permissionRepository.findByNomeIn(List.of(
+                "VerProduto",
+                "VerEstoque",
+                "EditarEstoque",
+                "VerPedido",
+                "EditarPedido",
+                "VerCategoria"
+        )));
 
         roleRepository.save(farmaceutico);
-    }
 
+
+        Role generico = roleRepository.findByNome("Generico")
+                .orElse(new Role());
+
+        generico.setNome("Generico");
+        generico.setDescricao("Usuário sem permissões");
+
+        generico.setPermissions(List.of());
+
+        roleRepository.save(generico);
+    }
 
     private void criarAdmin() {
 
         if (userRepository.findByUsername("suporte1").isEmpty()) {
 
-            Role role = roleRepository.findByNome("SUPER_ADMIN").orElseThrow();
+            Role role = roleRepository.findByNome("SuperAdministrador")
+                    .orElseThrow();
 
             User user = new User();
 
             user.setUsername("suporte1");
 
-            user.setPassword(passwordEncoder.encode("123"));
+            user.setPassword(
+                    passwordEncoder.encode("123")
+            );
 
-            user.setEmail("admin@email.com");
+            user.setEmail("suporte@email.com");
 
             user.setAtivo(true);
 
@@ -207,7 +234,7 @@ public class DataInitializer implements CommandLineRunner {
 
             userRepository.save(user);
 
-            System.out.println("Admin criado!");
+            System.out.println("Usuário administrador criado!");
         }
     }
 }

@@ -15,23 +15,23 @@ public interface LojaBairroApi {
 
 
     @PostMapping
-    @PreAuthorize("hasAuthority('LOJA_BAIRRO_CREATE')")
+    @PreAuthorize("hasAuthority('CriarLojaBairro')")
     public LojaBairroResponse criar(@RequestBody CreateLojaBairroRequest request);
 
     @GetMapping("/loja/{lojaId}")
-    @PreAuthorize("hasAuthority('LOJA_BAIRRO_READ')")
+    @PreAuthorize("hasAuthority('VerLojaBairro')")
     public List<LojaBairroResponse> listarPorLoja(@PathVariable Long lojaId);
 
     @GetMapping
-    @PreAuthorize("hasAuthority('LOJA_BAIRRO_READ')")
+    @PreAuthorize("hasAuthority('VerLojaBairro')")
     public List<LojaBairroResponse> listarTodos();
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('LOJA_BAIRRO_DELETE')")
+    @PreAuthorize("hasAuthority('ExcluirLojaBairro')")
     public void deletar(@PathVariable Long id);
 
     @GetMapping("/lojas-com-bairros")
-    @PreAuthorize("hasAuthority('LOJA_BAIRRO_READ')")
+    @PreAuthorize("hasAuthority('VerLojaBairro')")
     public List<LojaComBairrosResponse> listarLojasComBairros();
 
 }

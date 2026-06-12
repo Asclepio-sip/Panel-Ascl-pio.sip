@@ -20,28 +20,28 @@ public interface EstoqueApi {
     @Operation(summary = "Criar item estoque")
     @ApiResponse(responseCode = "201", description = "Criado com sucesso")
     @PostMapping
-    @PreAuthorize("hasAuthority('ESTOQUE_CREATE')")
+    @PreAuthorize("hasAuthority('CriarEstoque')")
     ResponseEntity<Void> criar(@RequestBody @Valid EstoqueAddDto dto);
 
     @Operation(summary = "Atualizar estoque")
     @ApiResponse(responseCode = "200", description = "Atualizado")
     @PatchMapping
-    @PreAuthorize("hasAuthority('ESTOQUE_UPDATE')")
+    @PreAuthorize("hasAuthority('EditarEstoque')")
     ResponseEntity<Void> atualizar(@RequestBody @Valid AtulizarResquet dto);
 
     @Operation(summary = "Aplicar promoção")
     @ApiResponse(responseCode = "200", description = "Promoção aplicada")
     @PatchMapping("/promocao")
-    @PreAuthorize("hasAuthority('ESTOQUE_UPDATE')")
+    @PreAuthorize("hasAuthority('PromocaoEstoque')")
     ResponseEntity<Void> aplicarPromocao(@RequestBody @Valid AplicarPromocaoDto dto);
 
     @GetMapping("/relatorio")
-//    @PreAuthorize("hasAuthority('ESTOQUE_READ')")
+//    @PreAuthorize("hasAuthority('VerEstoque')")
     ResponseEntity<Page<ListaDeEstoqueDasLojasResponse>> lista(EstoqueFiltro filtro, Pageable pageable);
 
     @Operation(summary = "Deletar item estoque")
     @ApiResponse(responseCode = "204", description = "Deletado")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ESTOQUE_DELETE')")
+    @PreAuthorize("hasAuthority('ExcluirEstoque')")
     ResponseEntity<Void> deletar(@PathVariable Long id);
 }

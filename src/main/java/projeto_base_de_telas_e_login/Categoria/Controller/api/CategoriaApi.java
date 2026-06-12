@@ -17,22 +17,22 @@ public interface CategoriaApi {
 
     @GetMapping
     @Operation(summary = "Listar categorias")
-   // @PreAuthorize("hasAuthority('CATEGORIA_READ')")
+   // @PreAuthorize("hasAuthority('VerUsuario')")
     ResponseEntity<List<Categoria>> listar();
 
     @PostMapping
     @Operation(summary = "Criar categoria")
-    @PreAuthorize("hasAuthority('CATEGORIA_CREATE')")
+    @PreAuthorize("hasAuthority('CriarUsuario')")
     ResponseEntity<Categoria> criar( @RequestBody @Valid CriarCategoria dto);
 
     @PutMapping("/{id}")
     @Operation(summary = "Editar categoria")
-    @PreAuthorize("hasAuthority('CATEGORIA_UPDATE')")
+    @PreAuthorize("hasAuthority('EditarUsuario')")
     ResponseEntity<Categoria> editar( @PathVariable Long id, @RequestBody @Valid CriarCategoria dto);
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar categoria")
-    @PreAuthorize("hasAuthority('CATEGORIA_DELETE')")
+    @PreAuthorize("hasAuthority('ExcluirUsuario')")
     ResponseEntity<Void> deletar(
             @PathVariable Long id
     );

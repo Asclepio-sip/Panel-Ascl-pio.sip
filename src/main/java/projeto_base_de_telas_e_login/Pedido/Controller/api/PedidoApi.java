@@ -20,23 +20,23 @@ public interface PedidoApi {
 
 
     @GetMapping
-    @PreAuthorize("hasAuthority('PEDIDO_READ')")
+    @PreAuthorize("hasAuthority('VerPedido')")
     public ResponseEntity<List<ListaDePedidoDTO>> listaDePedidoDoDia();
 
     @GetMapping("/todosPedido")
-    @PreAuthorize("hasAuthority('PEDIDO_READ')")
+    @PreAuthorize("hasAuthority('VerPedido')")
     public ResponseEntity<List<ListaDePedidoDTO>> todosOsPedidos(Pageable pageable);
 
     @GetMapping("/{id}/pdf")
-    @PreAuthorize("hasAuthority('PEDIDO_READ')")
+    @PreAuthorize("hasAuthority('VerPedido')")
     public ResponseEntity<byte[]> imprimirPDF(@PathVariable Long id);
 
     @PatchMapping("/{id}/status")
-    @PreAuthorize("hasAuthority('PEDIDO_UPDATE')")
+    @PreAuthorize("hasAuthority('EditarPedido')")
     public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusPedidoDTO dto);
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('PEDIDO_READ')")
+    @PreAuthorize("hasAuthority('VerPedido')")
     public ResponseEntity<DetalhePedidoDTO> buscarPorId(@PathVariable Long id);
 
 
