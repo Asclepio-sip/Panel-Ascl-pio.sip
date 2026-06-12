@@ -16,16 +16,16 @@ public interface BairroApi {
 
 
     @PostMapping
-    @PreAuthorize("hasAuthority('CATEGORIA_CREATE')")
+    @PreAuthorize("hasAuthority('CriarBairro')")
     public ResponseEntity<BairroResponseDTO> criar(@RequestBody BairroRequestDTO dto);
 
     @GetMapping
-    @PreAuthorize("hasAuthority('CATEGORIA_CREATE')")
+    @PreAuthorize("hasAuthority('VerBairro')")
     public ResponseEntity<List<BairroResponseDTO>> listar();
 
 
     @DeleteMapping
-    @PreAuthorize("hasAuthority('CATEGORIA_CREATE')")
+    @PreAuthorize("hasAuthority('ExcluirBairro')")
     public ResponseEntity  deletarBairro(@PathVariable Long id);
 
 
