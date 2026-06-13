@@ -61,49 +61,45 @@ public record PedidoAddDTO(
 
                     Estoque estoque = estoquesDaLoja.stream()
                             .filter(e ->
-                                    e.getProduto().getId()
-                                            .equals(itemDto.produtoId())
+                                    e.getProdutoVariacao()
+                                            .getId()
+                                            .equals(itemDto.variacaoId())
                             )
                             .findFirst()
                             .orElseThrow(() ->
                                     new RuntimeException(
-                                            "Produto não encontrado no estoque"
+                                            "Variação não encontrada no estoque"
                                     )
                             );
+
+                    var variacao = estoque.getProdutoVariacao();
+                    var produto = variacao.getProduto();
 
                     ItemPedido item = new ItemPedido();
 
                     item.setPedido(pedido);
 
-                    item.setProdutoId(
-                            estoque.getProduto().getId()
-                    );
+                    item.setProdutoId(produto.getId());
 
-                    item.setNomeProduto(
-                            estoque.getProduto().getName()
-                    );
+                    item.setVariacaoId(variacao.getId());
 
-                    item.setVariacao(
-                            estoque.getProduto().getVariacao()
-                    );
+                    item.setNomeProduto(produto.getName());
 
-                    item.setImagemUrl(
-                            estoque.getProduto().getImagemBase64()
-                    );
+                    item.setVariacao(variacao.getNomeVariacao());
+
+                    item.setImagemUrl(produto.getImagemBase64());
 
                     item.setCategoria(
-                            estoque.getProduto()
-                                    .getCategoria()
-                                    .getNomeCategoria()
+                            produto.getCategoria().getNomeCategoria()
                     );
 
-                    item.setPrecoUnitario(
-                            estoque.getPrecoVenda()
+                    item.setPrecoUnitario(estoque.getPrecoVenda());
+
+                    item.setPercentualDesconto(
+                            estoque.getPercentualDesconto()
                     );
 
-                    item.setQuantidade(
-                            itemDto.quantidade()
-                    );
+                    item.setQuantidade(itemDto.quantidade());
 
                     return item;
                 })
@@ -127,7 +123,6 @@ public record PedidoAddDTO(
             pedido.setFreteGratis(false);
         }
 
-
         if (tipoEntrega == TipoEntrega.ENTREGA) {
 
             if (!loja.aceitaEntrega()) {
@@ -148,6 +143,8 @@ public record PedidoAddDTO(
                 );
             }
         }
+
         return pedido;
     }
+
 }

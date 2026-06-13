@@ -6,7 +6,6 @@ import projeto_base_de_telas_e_login.Categoria.Categoria;
 
 public record ProductoAddDto(
         @NotBlank String name,
-        String variacao,
         String imagemBase64,
         @NotBlank String categoriaNome
 ) {
@@ -17,7 +16,6 @@ public record ProductoAddDto(
 
         return new Product(
                 this.name,
-                this.variacao,
                 this.imagemBase64,
                 categoria
         );

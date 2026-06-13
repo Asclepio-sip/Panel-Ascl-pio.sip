@@ -8,6 +8,7 @@ import projeto_base_de_telas_e_login.Produto.Product;
 import projeto_base_de_telas_e_login.Produto.ProdutoService;
 import projeto_base_de_telas_e_login.Produto.dto.ProductoAddDto;
 import projeto_base_de_telas_e_login.Produto.dto.ProductoResponseDto;
+import projeto_base_de_telas_e_login.Produto.dto.ProdutoFiltro;
 import projeto_base_de_telas_e_login.Produto.dto.ProdutoUpdateDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,17 +25,15 @@ public class TelaProdutos implements ProdutoApi {
     }
 
     @Override
-    public ResponseEntity<Page<ProductoResponseDto>> listar(Pageable pageable) {
-        return ResponseEntity.ok(produtoService.listarTodos(pageable));
+    public ResponseEntity<Page<ProductoResponseDto>> listar(ProdutoFiltro filtro, Pageable pageable) {
+        return ResponseEntity.ok(produtoService.listarTodos(filtro, pageable));
     }
 
     @Override
     public ResponseEntity<Product> criar(ProductoAddDto dto) {
         Product novo = produtoService.criar(dto);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(novo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novo);
     }
 
     @Override
@@ -42,9 +41,7 @@ public class TelaProdutos implements ProdutoApi {
 
         Product atualizado = produtoService.editar(id, product);
 
-        return ResponseEntity.ok(
-                ProductoResponseDto.fromEntity(atualizado)
-        );
+        return ResponseEntity.ok(ProductoResponseDto.fromEntity(atualizado));
     }
 
     @Override

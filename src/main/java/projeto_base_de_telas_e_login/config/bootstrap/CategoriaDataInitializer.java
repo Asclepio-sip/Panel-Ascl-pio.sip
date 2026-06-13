@@ -3,6 +3,7 @@ package projeto_base_de_telas_e_login.config.bootstrap;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import projeto_base_de_telas_e_login.Categoria.CategoriaService;
+import projeto_base_de_telas_e_login.Categoria.dto.CriarCategoria;
 
 import java.util.List;
 
@@ -18,21 +19,31 @@ public class CategoriaDataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        List<String> categoriasPadrao = List.of(
-                "Medicamentos",
-                "Beleza",
-                "Higiene",
-                "Infantil",
-                "Vitaminas"
-        );
+        List<CriarCategoria> categoriasPadrao = List.of(
 
-        categoriasPadrao.forEach(nome -> {
+                new CriarCategoria("Medicamentos", "Produtos farmacêuticos", "pill", null),
+
+                new CriarCategoria("Beleza", "Produtos de beleza e cosméticos", "sparkles", null),
+
+                new CriarCategoria("Higiene", "Produtos de higiene pessoal", "soap", null),
+
+                new CriarCategoria("Infantil", "Produtos para bebês e crianças", "baby", null),
+
+                new CriarCategoria("Vitaminas", "Vitaminas e suplementos", "heart", null));
+
+        categoriasPadrao.forEach(dto -> {
+
             try {
-                categoriaService.criar(nome);
-                System.out.println("Categoria criada: " + nome);
+
+                categoriaService.criar(dto);
+
+                System.out.println("Categoria criada: " + dto.nomeCategoria());
+
             } catch (Exception e) {
-                System.out.println("Categoria já existe: " + nome);
+
+                System.out.println("Categoria já existe: " + dto.nomeCategoria());
             }
+
         });
     }
 }

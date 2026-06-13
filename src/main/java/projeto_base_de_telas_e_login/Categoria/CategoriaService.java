@@ -2,6 +2,7 @@ package projeto_base_de_telas_e_login.Categoria;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import projeto_base_de_telas_e_login.Categoria.dto.CriarCategoria;
 
 import java.util.List;
 import java.util.Set;
@@ -28,30 +29,63 @@ public class CategoriaService {
         return repository.findAll();
     }
 
-    public Categoria criar(String nome) {
+    public List<Categoria> listarCategoriasPrincipais() {
+        return repository.findByCategoriaPaiIsNull();
+    }
 
-        validarNome(nome);
+    public List<Categoria> listarSubcategorias(Long categoriaPaiId) {
+        return repository.findByCategoriaPaiId(categoriaPaiId);
+    }
 
-        repository.findByNomeCategoria(nome)
+    public Categoria criar(CriarCategoria dto) {
+
+        validarNome(dto.nomeCategoria());
+
+        repository.findByNomeCategoria(dto.nomeCategoria().trim())
                 .ifPresent(c -> {
                     throw new IllegalArgumentException("Categoria já existe");
                 });
 
+        Categoria categoriaPai = null;
+
+        if (dto.categoriaPaiId() != null) {
+            categoriaPai = buscarPorId(dto.categoriaPaiId());
+        }
+
         Categoria categoria = new Categoria();
-        categoria.setNomeCategoria(nome.trim());
+        categoria.setNomeCategoria(dto.nomeCategoria().trim());
+        categoria.setDescricao(dto.descricao());
+        categoria.setIcone(dto.icone());
+        categoria.setCategoriaPai(categoriaPai);
+        categoria.setAtiva(true);
 
         return repository.save(categoria);
     }
 
-    public Categoria editar(Long id, String novoNome) {
+    public Categoria editar(Long id, CriarCategoria dto) {
 
-        validarNome(novoNome);
+        validarNome(dto.nomeCategoria());
 
         Categoria categoria = buscarPorId(id);
 
         validarCategoriaProtegida(categoria);
 
-        categoria.setNomeCategoria(novoNome.trim());
+        Categoria categoriaPai = null;
+
+        if (dto.categoriaPaiId() != null) {
+            categoriaPai = buscarPorId(dto.categoriaPaiId());
+
+            if (categoriaPai.getId().equals(categoria.getId())) {
+                throw new IllegalArgumentException(
+                        "A categoria não pode ser pai dela mesma"
+                );
+            }
+        }
+
+        categoria.setNomeCategoria(dto.nomeCategoria().trim());
+        categoria.setDescricao(dto.descricao());
+        categoria.setIcone(dto.icone());
+        categoria.setCategoriaPai(categoriaPai);
 
         return repository.save(categoria);
     }
@@ -62,12 +96,15 @@ public class CategoriaService {
 
         validarCategoriaProtegida(categoria);
 
+        if (!categoria.getSubcategorias().isEmpty()) {
+            throw new IllegalStateException(
+                    "Categoria possui subcategorias vinculadas."
+            );
+        }
+
         try {
-
             repository.delete(categoria);
-
         } catch (DataIntegrityViolationException e) {
-
             throw new IllegalStateException(
                     "Categoria possui produtos vinculados."
             );
@@ -75,16 +112,13 @@ public class CategoriaService {
     }
 
     private Categoria buscarPorId(Long id) {
-
         return repository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Categoria não encontrada"));
     }
 
     private void validarNome(String nome) {
-
         if (nome == null || nome.isBlank()) {
-
             throw new IllegalArgumentException(
                     "Nome da categoria é obrigatório"
             );
@@ -92,9 +126,7 @@ public class CategoriaService {
     }
 
     private void validarCategoriaProtegida(Categoria categoria) {
-
         if (CATEGORIAS_PROTEGIDAS.contains(categoria.getNomeCategoria())) {
-
             throw new IllegalStateException(
                     "Essa categoria é fundamental e não pode ser alterada"
             );

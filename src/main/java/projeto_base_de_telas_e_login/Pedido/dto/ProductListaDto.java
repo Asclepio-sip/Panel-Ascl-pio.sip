@@ -6,7 +6,6 @@ import projeto_base_de_telas_e_login.Produto.Product;
 public record ProductListaDto(
         Long id,
         String nome,
-        String variacao,
         String imagemUrl
 ) {
 
@@ -14,7 +13,6 @@ public record ProductListaDto(
         return new ProductListaDto(
                 product.getId(),
                 product.getName(),
-                product.getVariacao(),
                 product.getImagemBase64()
         );
     }

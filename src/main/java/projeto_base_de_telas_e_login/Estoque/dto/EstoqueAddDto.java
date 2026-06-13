@@ -20,7 +20,9 @@ public record EstoqueAddDto(
         Integer quantidade,
 
         @NotNull
-        BigDecimal precoVenda
+        BigDecimal precoVenda,
+
+        Long variacaoId
 
 ) {
 }
