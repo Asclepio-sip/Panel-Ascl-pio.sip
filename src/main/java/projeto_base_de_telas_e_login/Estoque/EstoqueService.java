@@ -2,17 +2,21 @@ package projeto_base_de_telas_e_login.Estoque;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import projeto_base_de_telas_e_login.Estoque.Repository.EstoqueRepository;
 import projeto_base_de_telas_e_login.Estoque.Repository.EstoqueSpecification;
 import projeto_base_de_telas_e_login.Estoque.dto.EstoqueAddDto;
-
 import projeto_base_de_telas_e_login.Estoque.dto.EstoqueFiltro;
 import projeto_base_de_telas_e_login.Estoque.dto.ListaDeEstoqueDasLojasResponse;
 import projeto_base_de_telas_e_login.Loja.Loja.LojaRepository;
+import projeto_base_de_telas_e_login.MovimentacaoEstoque.Enum.TipoMovimentacaoEstoque;
+import projeto_base_de_telas_e_login.MovimentacaoEstoque.MovimentacaoEstoque;
+import projeto_base_de_telas_e_login.MovimentacaoEstoque.Repository.MovimentacaoEstoqueRepository;
 import projeto_base_de_telas_e_login.Produto.ProductRepository;
+import projeto_base_de_telas_e_login.Usuario.User.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,16 +28,17 @@ public class EstoqueService {
     private final EstoqueRepository estoqueRepository;
     private final LojaRepository lojaRepository;
     private final ProductRepository productRepository;
+    private final MovimentacaoEstoqueRepository movimentacaoEstoqueRepository;
 
-    public EstoqueService(EstoqueRepository estoqueRepository, LojaRepository lojaRepository, ProductRepository productRepository) {
+    public EstoqueService(EstoqueRepository estoqueRepository, LojaRepository lojaRepository, ProductRepository productRepository, MovimentacaoEstoqueRepository movimentacaoEstoqueRepository) {
         this.estoqueRepository = estoqueRepository;
         this.lojaRepository = lojaRepository;
         this.productRepository = productRepository;
+        this.movimentacaoEstoqueRepository = movimentacaoEstoqueRepository;
     }
 
     @Transactional
     public void criar(EstoqueAddDto dto) {
-
 
         if (dto.lojaID() == null && dto.nomeLoja() == null) {
             throw new RuntimeException("Informe lojaID ou nomeLoja");
@@ -41,19 +46,13 @@ public class EstoqueService {
 
         var loja = dto.lojaID() != null ? lojaRepository.findById(dto.lojaID()) : lojaRepository.findByNomeLoja(dto.nomeLoja());
 
-        System.out.println("Loja encontrada? " + loja.isPresent());
-
         var lojaFinal = loja.orElseThrow(() -> new RuntimeException("Loja não encontrada"));
 
         var produto = dto.produtoId() != null ? productRepository.findById(dto.produtoId()) : productRepository.findByName(dto.nomeProduto());
 
-        System.out.println("Produto encontrado? " + produto.isPresent());
-
         var produtoFinal = produto.orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         var existente = estoqueRepository.findByLoja_IdAndProduto_Id(lojaFinal.getId(), produtoFinal.getId());
-
-        System.out.println("Produto já existe no estoque? " + existente.isPresent());
 
         if (existente.isPresent()) {
             throw new RuntimeException("Produto já existe no estoque");
@@ -63,15 +62,19 @@ public class EstoqueService {
 
         estoqueRepository.save(estoque);
 
-        System.out.println("ESTOQUE SALVO COM SUCESSO");
+        movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProduto(), usuarioLogado(), TipoMovimentacaoEstoque.CRIACAO, 0, estoque.getQuantidade(), BigDecimal.ZERO, estoque.getPrecoVenda(), BigDecimal.ZERO, estoque.getPercentualDesconto(), "Produto adicionado ao estoque"));
     }
 
-
+    @Transactional
     public void atualizar(Long lojaId, Long produtoId, Integer quantidade, BigDecimal precoVenda) {
-
         Estoque estoque = estoqueRepository.findByLoja_IdAndProduto_Id(lojaId, produtoId).orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
 
-        // só atualiza se vier quantidade
+        User usuario = usuarioLogado();
+
+        Integer quantidadeAntes = estoque.getQuantidade();
+        BigDecimal precoAntes = estoque.getPrecoVenda();
+        BigDecimal descontoAntes = estoque.getPercentualDesconto();
+
         if (quantidade != null) {
 
             if (quantidade < 0) {
@@ -81,11 +84,9 @@ public class EstoqueService {
             estoque.setQuantidade(quantidade);
         }
 
-        // só atualiza se vier preço
         if (precoVenda != null) {
 
             if (precoVenda.compareTo(BigDecimal.ZERO) < 0) {
-
                 throw new RuntimeException("Preço inválido");
             }
 
@@ -95,17 +96,25 @@ public class EstoqueService {
         estoque.setAtualizadoEm(LocalDateTime.now());
 
         estoqueRepository.save(estoque);
+
+        movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProduto(), usuario, TipoMovimentacaoEstoque.ATUALIZACAO, quantidadeAntes, estoque.getQuantidade(), precoAntes, estoque.getPrecoVenda(), descontoAntes, estoque.getPercentualDesconto(), "Estoque atualizado manualmente"));
     }
 
-
+    @Transactional
     public void deletar(Long id) {
-        estoqueRepository.deleteById(id);
+
+        Estoque estoque = estoqueRepository.findById(id).orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
+
+        movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProduto(), usuarioLogado(), TipoMovimentacaoEstoque.DELECAO, estoque.getQuantidade(), 0, estoque.getPrecoVenda(), BigDecimal.ZERO, estoque.getPercentualDesconto(), BigDecimal.ZERO, "Estoque removido pelo usuário"));
+
+        estoqueRepository.delete(estoque);
     }
 
     public List<Estoque> buscarPorLoja(Long lojaId) {
         return estoqueRepository.findByLoja_Id(lojaId);
     }
 
+    @Transactional
     public void aplicarPromocao(Long lojaId, Long produtoId, BigDecimal percentual) {
 
         if (percentual == null) {
@@ -119,14 +128,23 @@ public class EstoqueService {
 
         Estoque estoque = estoqueRepository.findByLoja_IdAndProduto_Id(lojaId, produtoId).orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
 
-        estoque.setPercentualDesconto(percentual);
+        BigDecimal descontoAntes = estoque.getPercentualDesconto();
 
+        estoque.setPercentualDesconto(percentual);
         estoque.setAtualizadoEm(LocalDateTime.now());
 
         estoqueRepository.save(estoque);
+
+        String observacao = percentual.compareTo(BigDecimal.ZERO) == 0 ? "Promoção removida" : "Promoção aplicada de " + percentual + "%";
+
+        movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProduto(), usuarioLogado(), TipoMovimentacaoEstoque.PROMOCAO, estoque.getQuantidade(), estoque.getQuantidade(), estoque.getPrecoVenda(), estoque.getPrecoVenda(), descontoAntes, estoque.getPercentualDesconto(), observacao));
     }
 
     public Page<ListaDeEstoqueDasLojasResponse> listarTodos(EstoqueFiltro filtro, Pageable pageable) {
         return estoqueRepository.findAll(EstoqueSpecification.filtrar(filtro), pageable).map(ListaDeEstoqueDasLojasResponse::fromDomain);
+    }
+
+    private User usuarioLogado() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

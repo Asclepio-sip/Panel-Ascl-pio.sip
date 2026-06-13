@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import projeto_base_de_telas_e_login.Categoria.Controller.api.CategoriaApi;
-import projeto_base_de_telas_e_login.Categoria.dto.CriarCategoria;
-import projeto_base_de_telas_e_login.Categoria.Categoria;
 import projeto_base_de_telas_e_login.Categoria.CategoriaService;
+import projeto_base_de_telas_e_login.Categoria.dto.CategoriaResponse;
+import projeto_base_de_telas_e_login.Categoria.dto.CriarCategoria;
 
 import java.util.List;
 
@@ -20,21 +20,51 @@ public class TelaCategoria implements CategoriaApi {
     }
 
     @Override
-    public ResponseEntity<List<Categoria>> listar() {
-        List<Categoria> categorias = categoriaService.listarTodas();
-        return ResponseEntity.ok(categorias);
+    public ResponseEntity<List<CategoriaResponse>> listar() {
+        return ResponseEntity.ok(
+                categoriaService.listarTodas()
+                        .stream()
+                        .map(CategoriaResponse::fromEntity)
+                        .toList()
+        );
     }
 
     @Override
-    public ResponseEntity<Categoria> criar(CriarCategoria dto) {
-        Categoria categoria = categoriaService.criar(dto.nomeCategoria());
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoria);
+    public ResponseEntity<List<CategoriaResponse>> listarPrincipais() {
+        return ResponseEntity.ok(
+                categoriaService.listarCategoriasPrincipais()
+                        .stream()
+                        .map(CategoriaResponse::fromEntity)
+                        .toList()
+        );
     }
 
     @Override
-    public ResponseEntity<Categoria> editar(Long id, CriarCategoria dto) {
-        Categoria categoria = categoriaService.editar(id, dto.nomeCategoria());
-        return ResponseEntity.ok(categoria);
+    public ResponseEntity<List<CategoriaResponse>> listarSubcategorias(Long categoriaPaiId) {
+        return ResponseEntity.ok(
+                categoriaService.listarSubcategorias(categoriaPaiId)
+                        .stream()
+                        .map(CategoriaResponse::fromEntity)
+                        .toList()
+        );
+    }
+
+    @Override
+    public ResponseEntity<CategoriaResponse> criar(CriarCategoria dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                CategoriaResponse.fromEntity(
+                        categoriaService.criar(dto)
+                )
+        );
+    }
+
+    @Override
+    public ResponseEntity<CategoriaResponse> editar(Long id, CriarCategoria dto) {
+        return ResponseEntity.ok(
+                CategoriaResponse.fromEntity(
+                        categoriaService.editar(id, dto)
+                )
+        );
     }
 
     @Override

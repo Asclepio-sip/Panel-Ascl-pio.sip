@@ -50,9 +50,6 @@ public class ProdutoService {
                 .map(ProductoResponseDto::fromEntity);
     }
 
-    public List<Product> listarPorCategoria(String nomeCategoria) {
-        return repository.findByCategoria_NomeCategoria(nomeCategoria);
-    }
 
 
 
