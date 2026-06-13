@@ -88,6 +88,11 @@ public class DataInitializer implements CommandLineRunner {
         criarPermission("EditarUser", "Editar User");
         criarPermission("ExcluirUser", "Excluir User");
 
+        criarPermission("VerProdutoVariacao", "Ver variações de produto");
+        criarPermission("CriarProdutoVariacao", "Criar variação de produto");
+        criarPermission("EditarProdutoVariacao", "Editar variação de produto");
+        criarPermission("ExcluirProdutoVariacao", "Excluir variação de produto");
+
         criarPermission("VerPermissoes", "Ver permissões");
 
         criarPermission("VerRole", "Ver Role");
@@ -131,7 +136,10 @@ public class DataInitializer implements CommandLineRunner {
                 "VerLojaBairro", "CriarLojaBairro", "EditarLojaBairro", "ExcluirLojaBairro",
 
                 "VerPermissoes",
-
+                "VerProdutoVariacao",
+                "CriarProdutoVariacao",
+                "EditarProdutoVariacao",
+                "ExcluirProdutoVariacao",
                 "VerLoja"
         )));
 
@@ -148,6 +156,7 @@ public class DataInitializer implements CommandLineRunner {
                 "VerPedido",
                 "CriarPedido",
                 "EditarPedido",
+                "VerProdutoVariacao",
                 "VerCategoria"
         )));
 
@@ -163,7 +172,8 @@ public class DataInitializer implements CommandLineRunner {
                 "VerEstoque",
                 "CriarEstoque",
                 "EditarEstoque",
-                "VerCategoria"
+                "VerCategoria",
+                "VerProdutoVariacao"
         )));
 
         roleRepository.save(repositor);
@@ -178,6 +188,7 @@ public class DataInitializer implements CommandLineRunner {
                 "VerEstoque",
                 "VerPedido",
                 "CriarPedido",
+                "VerProdutoVariacao",
                 "EditarPedido"
         )));
 
@@ -194,6 +205,7 @@ public class DataInitializer implements CommandLineRunner {
                 "EditarEstoque",
                 "VerPedido",
                 "EditarPedido",
+                "VerProdutoVariacao",
                 "VerCategoria"
         )));
 

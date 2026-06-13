@@ -5,6 +5,7 @@ import projeto_base_de_telas_e_login.Estoque.Estoque;
 import projeto_base_de_telas_e_login.Loja.Loja.Loja;
 import projeto_base_de_telas_e_login.MovimentacaoEstoque.Enum.TipoMovimentacaoEstoque;
 import projeto_base_de_telas_e_login.Produto.Product;
+import projeto_base_de_telas_e_login.ProdutoVariacao.ProdutoVariacao;
 import projeto_base_de_telas_e_login.Usuario.User.User;
 
 import java.math.BigDecimal;
@@ -50,12 +51,17 @@ public class MovimentacaoEstoque {
     @Column(length = 500)
     private String observacao;
 
+    @ManyToOne
+    @JoinColumn(name = "produto_variacao_id")
+    private ProdutoVariacao produtoVariacao;
+
     protected MovimentacaoEstoque() {}
 
     public MovimentacaoEstoque(
             Estoque estoque,
             Loja loja,
             Product produto,
+            ProdutoVariacao produtoVariacao,
             User usuario,
             TipoMovimentacaoEstoque tipo,
             Integer quantidadeAntes,
@@ -69,6 +75,7 @@ public class MovimentacaoEstoque {
         this.estoque = estoque;
         this.loja = loja;
         this.produto = produto;
+        this.produtoVariacao = produtoVariacao;
         this.usuario = usuario;
         this.tipo = tipo;
         this.quantidadeAntes = quantidadeAntes;
@@ -139,5 +146,13 @@ public class MovimentacaoEstoque {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    }
+
+    public ProdutoVariacao getProdutoVariacao() {
+        return produtoVariacao;
+    }
+
+    public void setProdutoVariacao(ProdutoVariacao produtoVariacao) {
+        this.produtoVariacao = produtoVariacao;
     }
 }

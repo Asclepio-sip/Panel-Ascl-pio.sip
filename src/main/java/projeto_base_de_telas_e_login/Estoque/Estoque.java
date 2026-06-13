@@ -3,12 +3,13 @@ package projeto_base_de_telas_e_login.Estoque;
 import jakarta.persistence.*;
 import projeto_base_de_telas_e_login.Loja.Loja.Loja;
 import projeto_base_de_telas_e_login.Produto.Product;
+import projeto_base_de_telas_e_login.ProdutoVariacao.ProdutoVariacao;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "estoque", uniqueConstraints = {@UniqueConstraint(columnNames = {"loja_id", "produto_id"})})
+@Table(name = "estoque", uniqueConstraints = {@UniqueConstraint(columnNames = {"loja_id", "produto_variacao_id"})})
 public class Estoque {
 
     @Id
@@ -20,8 +21,8 @@ public class Estoque {
     private Loja loja;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "produto_id")
-    private Product produto;
+    @JoinColumn(name = "produto_variacao_id")
+    private ProdutoVariacao produtoVariacao;
 
     @Column(nullable = false)
     private Integer quantidade;
@@ -38,44 +39,31 @@ public class Estoque {
     protected Estoque() {
     }
 
-    public Estoque(Long id, Loja loja, Product produto, Integer quantidade, BigDecimal precoVenda, BigDecimal percentualDesconto) {
+    public Estoque(Long id, Loja loja, ProdutoVariacao produtoVariacao, Integer quantidade, BigDecimal precoVenda, BigDecimal percentualDesconto) {
         this.id = id;
         this.loja = loja;
-        this.produto = produto;
+        this.produtoVariacao = produtoVariacao;
         this.quantidade = quantidade;
         this.precoVenda = precoVenda;
         this.percentualDesconto = percentualDesconto != null ? percentualDesconto : BigDecimal.ZERO;
-
         this.atualizadoEm = LocalDateTime.now();
     }
 
+    public void baixarEstoque(Integer quantidadeVendida) {
 
+        if (quantidadeVendida == null || quantidadeVendida <= 0) {
 
-    public void baixarEstoque(
-            Integer quantidadeVendida
-    ) {
-
-        if (quantidadeVendida == null
-                || quantidadeVendida <= 0) {
-
-            throw new RuntimeException(
-                    "Quantidade inválida"
-            );
+            throw new RuntimeException("Quantidade inválida");
         }
 
-        if (this.quantidade
-                < quantidadeVendida) {
+        if (this.quantidade < quantidadeVendida) {
 
-            throw new RuntimeException(
-                    "Estoque insuficiente"
-            );
+            throw new RuntimeException("Estoque insuficiente");
         }
 
-        this.quantidade -=
-                quantidadeVendida;
+        this.quantidade -= quantidadeVendida;
 
-        this.atualizadoEm =
-                LocalDateTime.now();
+        this.atualizadoEm = LocalDateTime.now();
     }
 
     public Integer getQuantidade() {
@@ -90,10 +78,9 @@ public class Estoque {
         return loja;
     }
 
-    public Product getProduto() {
-        return produto;
+    public ProdutoVariacao getProdutoVariacao() {
+        return produtoVariacao;
     }
-
     public BigDecimal getPrecoVenda() {
         return precoVenda;
     }
@@ -115,8 +102,8 @@ public class Estoque {
         this.loja = loja;
     }
 
-    public void setProduto(Product produto) {
-        this.produto = produto;
+    public void setProdutoVariacao(ProdutoVariacao produtoVariacao) {
+        this.produtoVariacao = produtoVariacao;
     }
 
     public void setQuantidade(Integer quantidade) {

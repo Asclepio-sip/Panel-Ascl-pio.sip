@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface EstoqueRepository extends JpaRepository<Estoque, Long>, JpaSpecificationExecutor<Estoque> {
 
-    Optional<Estoque> findByLoja_IdAndProduto_Id(Long lojaId, Long produtoId);
-
     List<Estoque> findByLoja_Id(Long lojaId);
+
+    Optional<Estoque> findByLoja_IdAndProdutoVariacao_Id(Long lojaId, Long produtoVariacaoId);
 
 }
