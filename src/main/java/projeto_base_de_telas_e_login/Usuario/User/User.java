@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import projeto_base_de_telas_e_login.Usuario.Permission.Permission;
 import projeto_base_de_telas_e_login.Usuario.Role.Role;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,13 +49,17 @@ public class User implements UserDetails {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        role.getPermissions().forEach(permission ->
-                authorities.add(new SimpleGrantedAuthority(permission.getNome()))
-        );
+        if (role != null && role.getPermissions() != null) {
+            role.getPermissions().forEach(permission ->
+                    authorities.add(new SimpleGrantedAuthority(permission.getNome()))
+            );
+        }
 
-        permissionsExtras.forEach(permission ->
-                authorities.add(new SimpleGrantedAuthority(permission.getNome()))
-        );
+        if (permissionsExtras != null) {
+            permissionsExtras.forEach(permission ->
+                    authorities.add(new SimpleGrantedAuthority(permission.getNome()))
+            );
+        }
 
         return authorities;
     }

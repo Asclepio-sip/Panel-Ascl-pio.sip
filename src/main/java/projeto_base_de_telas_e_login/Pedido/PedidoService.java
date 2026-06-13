@@ -7,16 +7,21 @@ import org.springframework.stereotype.Service;
 
 import projeto_base_de_telas_e_login.Loja.LojaBairro.LojaBairro;
 import projeto_base_de_telas_e_login.Loja.LojaBairro.LojaBairroRepository;
-import projeto_base_de_telas_e_login.Pedido.Enum.TipoEntrega;
+import projeto_base_de_telas_e_login.MovimentacaoEstoque.Repository.MovimentacaoEstoqueRepository;
+import projeto_base_de_telas_e_login.Pedido.Repository.PedidoRepository;
 import projeto_base_de_telas_e_login.Pedido.dto.PedidoAddDTO;
 import org.springframework.transaction.annotation.Transactional;
 import projeto_base_de_telas_e_login.Pedido.Enum.StatusDoPedido;
-
+import projeto_base_de_telas_e_login.Pedido.Repository.PedidoSpecification;
+import projeto_base_de_telas_e_login.Pedido.dto.PedidoFiltro;
+import projeto_base_de_telas_e_login.Pedido.dto.ListaDePedidoDTO;
 import projeto_base_de_telas_e_login.Estoque.Estoque;
 import projeto_base_de_telas_e_login.Estoque.Repository.EstoqueRepository;
 
 import projeto_base_de_telas_e_login.Loja.Loja.Loja;
 import projeto_base_de_telas_e_login.Loja.Loja.LojaRepository;
+import projeto_base_de_telas_e_login.MovimentacaoEstoque.MovimentacaoEstoque;
+import projeto_base_de_telas_e_login.MovimentacaoEstoque.Enum.TipoMovimentacaoEstoque;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,13 +35,15 @@ public class PedidoService {
     private final LojaRepository lojaRepository;
     private final EstoqueRepository estoqueRepository;
     private final LojaBairroRepository lojaBairroRepository;
+    private final MovimentacaoEstoqueRepository movimentacaoEstoqueRepository;
 
-    public PedidoService(PedidoRepository pedidoRepository, LojaRepository lojaRepository, EstoqueRepository estoqueRepository, LojaBairroRepository lojaBairroRepository) {
+    public PedidoService(PedidoRepository pedidoRepository, LojaRepository lojaRepository, EstoqueRepository estoqueRepository, LojaBairroRepository lojaBairroRepository, MovimentacaoEstoqueRepository movimentacaoEstoqueRepository) {
 
         this.pedidoRepository = pedidoRepository;
         this.lojaRepository = lojaRepository;
         this.estoqueRepository = estoqueRepository;
         this.lojaBairroRepository = lojaBairroRepository;
+        this.movimentacaoEstoqueRepository = movimentacaoEstoqueRepository;
     }
 
     @Transactional
@@ -116,15 +123,9 @@ public class PedidoService {
 
                 BigDecimal minimoFreteGratis = loja.getValorMinimoFreteGratis();
 
-                System.out.println(
-                        "Min frete gratis: "
-                                + loja.getValorMinimoFreteGratis()
-                );
+                System.out.println("Min frete gratis: " + loja.getValorMinimoFreteGratis());
 
-                System.out.println(
-                        "Subtotal: "
-                                + subtotalProdutos
-                );
+                System.out.println("Subtotal: " + subtotalProdutos);
 
                 boolean freteGratis = minimoFreteGratis != null && subtotalProdutos.compareTo(minimoFreteGratis) >= 0;
 
@@ -149,23 +150,23 @@ public class PedidoService {
 
             Estoque estoque = estoquesDaLoja.stream().filter(e -> e.getProduto().getId().equals(item.getProdutoId())).findFirst().orElseThrow();
 
+            Integer quantidadeAntes = estoque.getQuantidade();
+            BigDecimal precoAntes = estoque.getPrecoVenda();
+            BigDecimal descontoAntes = estoque.getPercentualDesconto();
+
             estoque.baixarEstoque(item.getQuantidade());
 
             estoqueRepository.save(estoque);
+
+            movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProduto(), null, TipoMovimentacaoEstoque.SAIDA_PEDIDO, quantidadeAntes, estoque.getQuantidade(), precoAntes, estoque.getPrecoVenda(), descontoAntes, estoque.getPercentualDesconto(), "Baixa automática por pedido"));
         }
 
         pedidoRepository.save(pedido);
     }
 
 
-    public Page<Pedido> listarTodos(Pageable pageable) {
-
-        return pedidoRepository.findAll(pageable);
-    }
-
-    public Pedido buscarPorId(Long id) {
-
-        return pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+    public Page<ListaDePedidoDTO> listarComFiltro(PedidoFiltro filtro, Pageable pageable) {
+        return pedidoRepository.findAll(PedidoSpecification.filtrar(filtro), pageable).map(ListaDePedidoDTO::fromEntity);
     }
 
     public List<Pedido> listarPedidosDoDia() {
@@ -179,14 +180,15 @@ public class PedidoService {
         return pedidoRepository.findByCriadoEmBetweenOrderByCriadoEmDesc(inicio, fim);
     }
 
+    @Transactional
     public void atualizarStatusPedido(Long id, StatusDoPedido status) {
-
         pedidoRepository.atualizarStatus(id, status);
     }
 
+
     public byte[] imprimirPDF(Long id) {
 
-        Pedido pedido = buscarPorId(id);
+     //   Pedido pedido = buscarPorId(id);
 
         return new byte[0];
     }

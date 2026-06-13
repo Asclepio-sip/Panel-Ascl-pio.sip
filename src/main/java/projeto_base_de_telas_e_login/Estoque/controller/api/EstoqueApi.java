@@ -36,7 +36,6 @@ public interface EstoqueApi {
     ResponseEntity<Void> aplicarPromocao(@RequestBody @Valid AplicarPromocaoDto dto);
 
     @GetMapping("/relatorio")
-//    @PreAuthorize("hasAuthority('VerEstoque')")
     ResponseEntity<Page<ListaDeEstoqueDasLojasResponse>> lista(EstoqueFiltro filtro, Pageable pageable);
 
     @Operation(summary = "Deletar item estoque")

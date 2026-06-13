@@ -67,19 +67,26 @@ public class UserService {
         user.setUsername(dto.login());
 
         if (dto.password() != null && !dto.password().isBlank()) {
-
             user.setPassword(passwordEncoder.encode(dto.password()));
         }
 
         if (dto.roleId() != null) {
-
-            Role role = roleRepository.findById(dto.roleId()).orElseThrow(() -> new RuntimeException("Cargo não encontrado"));
+            Role role = roleRepository.findById(dto.roleId())
+                    .orElseThrow(() -> new RuntimeException("Cargo não encontrado"));
 
             user.setRole(role);
         }
 
         if (dto.permissionIds() != null) {
-            List<Permission> permissionsExtras = permissionRepository.findAllById(dto.permissionIds());
+            List<Permission> permissionsExtras =
+                    permissionRepository.findAllById(dto.permissionIds());
+
+            user.setPermissionsExtras(permissionsExtras);
+        }
+
+        if (dto.permissionIds() != null) {
+            List<Permission> permissionsExtras =
+                    permissionRepository.findAllById(dto.permissionIds());
 
             user.setPermissionsExtras(permissionsExtras);
         }
