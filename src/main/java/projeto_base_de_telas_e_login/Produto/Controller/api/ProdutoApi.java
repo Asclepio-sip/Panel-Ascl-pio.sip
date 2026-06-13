@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import projeto_base_de_telas_e_login.Produto.Product;
 import projeto_base_de_telas_e_login.Produto.dto.ProductoAddDto;
 import projeto_base_de_telas_e_login.Produto.dto.ProductoResponseDto;
+import projeto_base_de_telas_e_login.Produto.dto.ProdutoFiltro;
 import projeto_base_de_telas_e_login.Produto.dto.ProdutoUpdateDto;
 
 import java.util.List;
@@ -19,10 +20,9 @@ import java.util.List;
 public interface ProdutoApi {
 
 
-
     @GetMapping
-   // @PreAuthorize("hasAuthority('PRODUTO_READ')")
-    ResponseEntity<Page<ProductoResponseDto>> listar(Pageable pageable);
+    @PreAuthorize("hasAuthority('VerProduto')")
+    ResponseEntity<Page<ProductoResponseDto>> listar(ProdutoFiltro filtro, Pageable pageable);
 
     @PostMapping
     @Operation(summary = "Criar produto")
@@ -32,7 +32,7 @@ public interface ProdutoApi {
     @PatchMapping("/{id}")
     @Operation(summary = "Editar produto")
     @PreAuthorize("hasAuthority('EditarEstoque')")
-    ResponseEntity<ProductoResponseDto> editar(@PathVariable  Long id,@RequestBody ProdutoUpdateDto product);
+    ResponseEntity<ProductoResponseDto> editar(@PathVariable Long id, @RequestBody ProdutoUpdateDto product);
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar produto")

@@ -49,37 +49,47 @@ public class PedidoService {
     @Transactional
     public void criarPedido(PedidoAddDTO dto) {
 
-        Loja loja = lojaRepository.findById(dto.lojaId()).orElseThrow(() -> new RuntimeException("Loja não encontrada"));
+        Loja loja = lojaRepository.findById(dto.lojaId())
+                .orElseThrow(() -> new RuntimeException("Loja não encontrada"));
 
-        List<Estoque> estoquesDaLoja = estoqueRepository.findByLoja_Id(loja.getId());
+        List<Estoque> estoquesDaLoja =
+                estoqueRepository.findByLoja_Id(loja.getId());
 
         if (dto.itens() == null || dto.itens().isEmpty()) {
-
             throw new RuntimeException("Pedido precisa ter itens");
         }
 
         if (dto.tipoEntrega() == null) {
-
             throw new RuntimeException("Tipo de entrega obrigatório");
+        }
+
+        if (dto.formaDePagamento() == null) {
+            throw new RuntimeException("Forma de pagamento obrigatória");
         }
 
         for (var itemDto : dto.itens()) {
 
-            if (itemDto.quantidade() <= 0) {
-
+            if (itemDto.quantidade() == null || itemDto.quantidade() <= 0) {
                 throw new RuntimeException("Quantidade inválida");
             }
 
-            Estoque estoque = estoquesDaLoja.stream().filter(e -> e.getProduto().getId().equals(itemDto.produtoId())).findFirst().orElseThrow(() -> new RuntimeException("Produto não encontrado no estoque"));
+            Estoque estoque = estoquesDaLoja.stream()
+                    .filter(e -> e.getProdutoVariacao()
+                            .getId()
+                            .equals(itemDto.variacaoId()))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Variação não encontrada no estoque"));
 
             if (estoque.getQuantidade() < itemDto.quantidade()) {
-
-                throw new RuntimeException("Estoque insuficiente para: " + estoque.getProduto().getName());
+                throw new RuntimeException(
+                        "Estoque insuficiente para: "
+                                + estoque.getProdutoVariacao().getProduto().getName()
+                                + " - "
+                                + estoque.getProdutoVariacao().getNomeVariacao()
+                );
             }
         }
-        if (dto.formaDePagamento() == null) {
-            throw new RuntimeException("Forma de pagamento obrigatória");
-        }
+
         Pedido pedido = dto.toEntity(loja, estoquesDaLoja);
 
         pedido.calcularSubtotalProdutos();
@@ -89,56 +99,50 @@ public class PedidoService {
             case RETIRADA -> {
 
                 if (!loja.aceitaRetirada()) {
-
                     throw new RuntimeException("Esta loja não aceita retirada");
                 }
 
                 pedido.setEndereco(null);
                 pedido.setBairro(null);
                 pedido.setComplemento(null);
-
                 pedido.setValorFrete(BigDecimal.ZERO);
-
                 pedido.setFreteGratis(false);
             }
 
             case ENTREGA -> {
 
                 if (!loja.aceitaEntrega()) {
-
                     throw new RuntimeException("Esta loja não realiza entrega");
                 }
+
                 if (dto.endereco() == null || dto.endereco().isBlank()) {
                     throw new RuntimeException("Endereço obrigatório");
                 }
 
-                LojaBairro lojaBairro = lojaBairroRepository.findByLoja_IdAndBairro_Id(loja.getId(), dto.bairroId()).orElseThrow(() -> new RuntimeException("Bairro não atendido"));
+                LojaBairro lojaBairro =
+                        lojaBairroRepository
+                                .findByLoja_IdAndBairro_Id(
+                                        loja.getId(),
+                                        dto.bairroId()
+                                )
+                                .orElseThrow(() -> new RuntimeException("Bairro não atendido"));
+
                 pedido.setEndereco(dto.endereco());
-
                 pedido.setComplemento(dto.complemento());
-
                 pedido.setBairro(lojaBairro.getBairro().getNome());
 
                 BigDecimal subtotalProdutos = pedido.getTotalProdutos();
-
                 BigDecimal minimoFreteGratis = loja.getValorMinimoFreteGratis();
 
-                System.out.println("Min frete gratis: " + loja.getValorMinimoFreteGratis());
-
-                System.out.println("Subtotal: " + subtotalProdutos);
-
-                boolean freteGratis = minimoFreteGratis != null && subtotalProdutos.compareTo(minimoFreteGratis) >= 0;
+                boolean freteGratis =
+                        minimoFreteGratis != null
+                                && subtotalProdutos.compareTo(minimoFreteGratis) >= 0;
 
                 if (freteGratis) {
-
                     pedido.setValorFrete(BigDecimal.ZERO);
-
                     pedido.setFreteGratis(true);
-
                 } else {
-
                     pedido.setValorFrete(lojaBairro.getValorFrete());
-
                     pedido.setFreteGratis(false);
                 }
             }
@@ -148,7 +152,12 @@ public class PedidoService {
 
         for (var item : pedido.getItens()) {
 
-            Estoque estoque = estoquesDaLoja.stream().filter(e -> e.getProduto().getId().equals(item.getProdutoId())).findFirst().orElseThrow();
+            Estoque estoque = estoquesDaLoja.stream()
+                    .filter(e -> e.getProdutoVariacao()
+                            .getId()
+                            .equals(item.getVariacaoId()))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Estoque não encontrado para baixa"));
 
             Integer quantidadeAntes = estoque.getQuantidade();
             BigDecimal precoAntes = estoque.getPrecoVenda();
@@ -158,7 +167,23 @@ public class PedidoService {
 
             estoqueRepository.save(estoque);
 
-            movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProduto(), null, TipoMovimentacaoEstoque.SAIDA_PEDIDO, quantidadeAntes, estoque.getQuantidade(), precoAntes, estoque.getPrecoVenda(), descontoAntes, estoque.getPercentualDesconto(), "Baixa automática por pedido"));
+            movimentacaoEstoqueRepository.save(
+                    new MovimentacaoEstoque(
+                            estoque,
+                            estoque.getLoja(),
+                            estoque.getProdutoVariacao().getProduto(),
+                            estoque.getProdutoVariacao(),
+                            null,
+                            TipoMovimentacaoEstoque.SAIDA_PEDIDO,
+                            quantidadeAntes,
+                            estoque.getQuantidade(),
+                            precoAntes,
+                            estoque.getPrecoVenda(),
+                            descontoAntes,
+                            estoque.getPercentualDesconto(),
+                            "Baixa automática por pedido"
+                    )
+            );
         }
 
         pedidoRepository.save(pedido);

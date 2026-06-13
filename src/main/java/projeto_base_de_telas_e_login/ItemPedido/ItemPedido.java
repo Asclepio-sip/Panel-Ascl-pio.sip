@@ -36,6 +36,8 @@ public class ItemPedido {
     @Column(precision = 10, scale = 2)
     private BigDecimal percentualDesconto;
 
+    private Long variacaoId;
+
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "pedido_id")
@@ -46,6 +48,7 @@ public class ItemPedido {
 
     public ItemPedido(
             Long id,
+            Long variacaoId,
             Long produtoId,
             String nomeProduto,
             String variacao,
@@ -62,6 +65,7 @@ public class ItemPedido {
         }
 
         this.id = id;
+        this.variacaoId = variacaoId;
         this.produtoId = produtoId;
         this.nomeProduto = nomeProduto;
         this.variacao = variacao;
@@ -105,6 +109,10 @@ public class ItemPedido {
 
     public Long getId() {
         return id;
+    }
+
+    public Long getVariacaoId() {
+        return variacaoId;
     }
 
     public Long getProdutoId() {
@@ -156,6 +164,10 @@ public class ItemPedido {
     }
 
     // SETTERS
+
+    public void setVariacaoId(Long variacaoId) {
+        this.variacaoId = variacaoId;
+    }
 
     public void setId(Long id) {
         this.id = id;

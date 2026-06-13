@@ -45,26 +45,35 @@ public record ListaDeEstoqueDasLojasResponse(
         }
 
 
+        var variacao = estoque.getProdutoVariacao();
 
+        var produto = variacao.getProduto();
 
 
         return new ListaDeEstoqueDasLojasResponse(
 
                 estoque.getId(),
+
                 estoque.getLoja().getId(),
+
                 estoque.getLoja().getNomeLoja(),
 
-                estoque.getProduto().getId(),
+                produto.getId(),
 
-                estoque.getProduto().getImagemBase64(),
+                produto.getImagemBase64(),
 
-                estoque.getProduto().getName(),
+                produto.getName(),
 
                 estoque.getQuantidade(),
+
                 estoque.getPrecoVenda(),
+
                 desconto,
+
                 valorFinal,
-                estoque.getProduto().getVariacao(),
+
+                variacao.getNomeVariacao(),
+
                 Entregar
 
         );

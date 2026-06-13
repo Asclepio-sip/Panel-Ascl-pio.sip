@@ -15,8 +15,9 @@ import projeto_base_de_telas_e_login.Loja.Loja.LojaRepository;
 import projeto_base_de_telas_e_login.MovimentacaoEstoque.Enum.TipoMovimentacaoEstoque;
 import projeto_base_de_telas_e_login.MovimentacaoEstoque.MovimentacaoEstoque;
 import projeto_base_de_telas_e_login.MovimentacaoEstoque.Repository.MovimentacaoEstoqueRepository;
-import projeto_base_de_telas_e_login.Produto.ProductRepository;
+import projeto_base_de_telas_e_login.ProdutoVariacao.ProdutoVariacaoRepository;
 import projeto_base_de_telas_e_login.Usuario.User.User;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -27,13 +28,13 @@ public class EstoqueService {
 
     private final EstoqueRepository estoqueRepository;
     private final LojaRepository lojaRepository;
-    private final ProductRepository productRepository;
+    private final ProdutoVariacaoRepository produtoVariacaoRepository;
     private final MovimentacaoEstoqueRepository movimentacaoEstoqueRepository;
 
-    public EstoqueService(EstoqueRepository estoqueRepository, LojaRepository lojaRepository, ProductRepository productRepository, MovimentacaoEstoqueRepository movimentacaoEstoqueRepository) {
+    public EstoqueService(EstoqueRepository estoqueRepository, LojaRepository lojaRepository, ProdutoVariacaoRepository produtoVariacaoRepository, MovimentacaoEstoqueRepository movimentacaoEstoqueRepository) {
         this.estoqueRepository = estoqueRepository;
         this.lojaRepository = lojaRepository;
-        this.productRepository = productRepository;
+        this.produtoVariacaoRepository = produtoVariacaoRepository;
         this.movimentacaoEstoqueRepository = movimentacaoEstoqueRepository;
     }
 
@@ -48,26 +49,28 @@ public class EstoqueService {
 
         var lojaFinal = loja.orElseThrow(() -> new RuntimeException("Loja não encontrada"));
 
-        var produto = dto.produtoId() != null ? productRepository.findById(dto.produtoId()) : productRepository.findByName(dto.nomeProduto());
+        var variacao = produtoVariacaoRepository.findById(dto.variacaoId());
 
-        var produtoFinal = produto.orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+        var variacaoFinal = variacao.orElseThrow(() -> new RuntimeException("Variação não encontrada"));
 
-        var existente = estoqueRepository.findByLoja_IdAndProduto_Id(lojaFinal.getId(), produtoFinal.getId());
+        var produtoFinal = variacaoFinal.getProduto();
+
+        var existente = estoqueRepository.findByLoja_IdAndProdutoVariacao_Id(lojaFinal.getId(), variacaoFinal.getId());
 
         if (existente.isPresent()) {
-            throw new RuntimeException("Produto já existe no estoque");
+            throw new RuntimeException("Essa variação já existe no estoque");
         }
 
-        Estoque estoque = new Estoque(null, lojaFinal, produtoFinal, dto.quantidade(), dto.precoVenda(), BigDecimal.ZERO);
+        Estoque estoque = new Estoque(null, lojaFinal, variacaoFinal, dto.quantidade(), dto.precoVenda(), BigDecimal.ZERO);
 
         estoqueRepository.save(estoque);
 
-        movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProduto(), usuarioLogado(), TipoMovimentacaoEstoque.CRIACAO, 0, estoque.getQuantidade(), BigDecimal.ZERO, estoque.getPrecoVenda(), BigDecimal.ZERO, estoque.getPercentualDesconto(), "Produto adicionado ao estoque"));
+        movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), produtoFinal, variacaoFinal, usuarioLogado(), TipoMovimentacaoEstoque.CRIACAO, 0, estoque.getQuantidade(), BigDecimal.ZERO, estoque.getPrecoVenda(), BigDecimal.ZERO, estoque.getPercentualDesconto(), "Produto adicionado ao estoque"));
     }
 
     @Transactional
-    public void atualizar(Long lojaId, Long produtoId, Integer quantidade, BigDecimal precoVenda) {
-        Estoque estoque = estoqueRepository.findByLoja_IdAndProduto_Id(lojaId, produtoId).orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
+    public void atualizar(Long lojaId, Long variacaoId, Integer quantidade, BigDecimal precoVenda) {
+        Estoque estoque = estoqueRepository.findByLoja_IdAndProdutoVariacao_Id(lojaId, variacaoId).orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
 
         User usuario = usuarioLogado();
 
@@ -97,7 +100,7 @@ public class EstoqueService {
 
         estoqueRepository.save(estoque);
 
-        movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProduto(), usuario, TipoMovimentacaoEstoque.ATUALIZACAO, quantidadeAntes, estoque.getQuantidade(), precoAntes, estoque.getPrecoVenda(), descontoAntes, estoque.getPercentualDesconto(), "Estoque atualizado manualmente"));
+        movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProdutoVariacao().getProduto(), estoque.getProdutoVariacao(), usuario, TipoMovimentacaoEstoque.ATUALIZACAO, quantidadeAntes, estoque.getQuantidade(), precoAntes, estoque.getPrecoVenda(), descontoAntes, estoque.getPercentualDesconto(), "Estoque atualizado manualmente"));
     }
 
     @Transactional
@@ -105,7 +108,7 @@ public class EstoqueService {
 
         Estoque estoque = estoqueRepository.findById(id).orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
 
-        movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProduto(), usuarioLogado(), TipoMovimentacaoEstoque.DELECAO, estoque.getQuantidade(), 0, estoque.getPrecoVenda(), BigDecimal.ZERO, estoque.getPercentualDesconto(), BigDecimal.ZERO, "Estoque removido pelo usuário"));
+        movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProdutoVariacao().getProduto(), estoque.getProdutoVariacao(), usuarioLogado(), TipoMovimentacaoEstoque.DELECAO, estoque.getQuantidade(), 0, estoque.getPrecoVenda(), BigDecimal.ZERO, estoque.getPercentualDesconto(), BigDecimal.ZERO, "Estoque removido pelo usuário"));
 
         estoqueRepository.delete(estoque);
     }
@@ -115,18 +118,17 @@ public class EstoqueService {
     }
 
     @Transactional
-    public void aplicarPromocao(Long lojaId, Long produtoId, BigDecimal percentual) {
+    public void aplicarPromocao(Long lojaId, Long variacaoId, BigDecimal percentual) {
 
         if (percentual == null) {
             throw new RuntimeException("Percentual obrigatório");
         }
 
         if (percentual.compareTo(BigDecimal.ZERO) < 0 || percentual.compareTo(BigDecimal.valueOf(100)) > 0) {
-
             throw new RuntimeException("Percentual deve ser entre 0 e 100");
         }
 
-        Estoque estoque = estoqueRepository.findByLoja_IdAndProduto_Id(lojaId, produtoId).orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
+        Estoque estoque = estoqueRepository.findByLoja_IdAndProdutoVariacao_Id(lojaId, variacaoId).orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
 
         BigDecimal descontoAntes = estoque.getPercentualDesconto();
 
@@ -137,7 +139,7 @@ public class EstoqueService {
 
         String observacao = percentual.compareTo(BigDecimal.ZERO) == 0 ? "Promoção removida" : "Promoção aplicada de " + percentual + "%";
 
-        movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProduto(), usuarioLogado(), TipoMovimentacaoEstoque.PROMOCAO, estoque.getQuantidade(), estoque.getQuantidade(), estoque.getPrecoVenda(), estoque.getPrecoVenda(), descontoAntes, estoque.getPercentualDesconto(), observacao));
+        movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProdutoVariacao().getProduto(), estoque.getProdutoVariacao(), usuarioLogado(), TipoMovimentacaoEstoque.PROMOCAO, estoque.getQuantidade(), estoque.getQuantidade(), estoque.getPrecoVenda(), estoque.getPrecoVenda(), descontoAntes, estoque.getPercentualDesconto(), observacao));
     }
 
     public Page<ListaDeEstoqueDasLojasResponse> listarTodos(EstoqueFiltro filtro, Pageable pageable) {
