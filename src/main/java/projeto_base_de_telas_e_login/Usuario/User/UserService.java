@@ -2,15 +2,19 @@ package projeto_base_de_telas_e_login.Usuario.User;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import projeto_base_de_telas_e_login.Usuario.Permission.Permission;
 import projeto_base_de_telas_e_login.Usuario.Permission.PermissionRepository;
 import projeto_base_de_telas_e_login.Usuario.Role.Role;
 import projeto_base_de_telas_e_login.Usuario.Role.RoleRepository;
+import projeto_base_de_telas_e_login.Usuario.User.Repository.UserRepository;
+import projeto_base_de_telas_e_login.Usuario.User.Repository.UserSpecification;
 import projeto_base_de_telas_e_login.Usuario.User.dto.RegisterDTO;
 import projeto_base_de_telas_e_login.Usuario.User.dto.ResponseListaDeUserDTO;
 import projeto_base_de_telas_e_login.Usuario.User.dto.UpdateUserDTO;
+import projeto_base_de_telas_e_login.Usuario.User.dto.UserFiltroDTO;
 
 import java.util.List;
 import java.util.UUID;
@@ -52,8 +56,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Page<ResponseListaDeUserDTO> lista(Pageable pageable) {
-        return userRepository.findAll(pageable).map(ResponseListaDeUserDTO::fromEntity);
+    public Page<ResponseListaDeUserDTO> lista(UserFiltroDTO filtro, Pageable pageable) {
+
+        Specification<User> specification = UserSpecification.filtrar(filtro);
+
+        return userRepository
+                .findAll(specification, pageable)
+                .map(ResponseListaDeUserDTO::fromEntity);
     }
 
     public User findById(UUID id) {
@@ -84,12 +93,6 @@ public class UserService {
             user.setPermissionsExtras(permissionsExtras);
         }
 
-        if (dto.permissionIds() != null) {
-            List<Permission> permissionsExtras =
-                    permissionRepository.findAllById(dto.permissionIds());
-
-            user.setPermissionsExtras(permissionsExtras);
-        }
 
         userRepository.save(user);
     }

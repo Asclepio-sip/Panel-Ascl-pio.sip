@@ -49,10 +49,9 @@ public class ControllerUsuario implements UserAPI {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
-    public ResponseEntity<Page<ResponseListaDeUserDTO>> listarUsuarios(Pageable pageable) {
-        return ResponseEntity.ok(userService.lista(pageable));
+    public ResponseEntity<Page<ResponseListaDeUserDTO>> listarUsuarios(UserFiltroDTO filtro, Pageable pageable) {
+        return ResponseEntity.ok(userService.lista(filtro, pageable));
     }
-
     public ResponseEntity<Void> atualizarUsuario(@PathVariable UUID id, @RequestBody @Valid UpdateUserDTO dto) {
         userService.updateUser(id, dto);
         return ResponseEntity.ok().build();
