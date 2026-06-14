@@ -65,10 +65,15 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itens;
 
+    @Column(nullable = false, unique = true, length = 40)
+    private String codigoRastreio;
+
+    private LocalDateTime concluidoEm;
+
     public Pedido() {
     }
 
-    public Pedido(Long id, Long lojaId, String nomeCliente, String email, String telefone, String endereco, String bairro, String complemento, String observacao, TipoEntrega tipoEntrega, List<ItemPedido> itens, FormaDePagamento formaDePagamento) {
+    public Pedido(Long id, Long lojaId, String nomeCliente, String email, String telefone, String endereco, String bairro, String complemento, String observacao, TipoEntrega tipoEntrega, List<ItemPedido> itens, FormaDePagamento formaDePagamento, String codigoRastreio, LocalDateTime concluidoEm) {
 
         if (itens == null || itens.isEmpty()) {
             throw new RuntimeException("Pedido precisa ter itens");
@@ -100,6 +105,10 @@ public class Pedido {
 
         this.status = StatusDoPedido.AGUARDANDO;
 
+        this.codigoRastreio = codigoRastreio;
+
+        this.concluidoEm = concluidoEm;
+
         calcularTotais();
     }
 
@@ -114,13 +123,9 @@ public class Pedido {
 
     public void calcularTotalFinal() {
 
-        BigDecimal frete =
-                valorFrete != null
-                        ? valorFrete
-                        : BigDecimal.ZERO;
+        BigDecimal frete = valorFrete != null ? valorFrete : BigDecimal.ZERO;
 
-        this.totalFinal =
-                totalProdutos.add(frete);
+        this.totalFinal = totalProdutos.add(frete);
     }
 
     public void aplicarFrete(BigDecimal frete) {
@@ -132,13 +137,7 @@ public class Pedido {
 
     public void calcularSubtotalProdutos() {
 
-        this.totalProdutos =
-                itens.stream()
-                        .map(ItemPedido::getSubtotal)
-                        .reduce(
-                                BigDecimal.ZERO,
-                                BigDecimal::add
-                        );
+        this.totalProdutos = itens.stream().map(ItemPedido::getSubtotal).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public Long getId() {
@@ -285,5 +284,21 @@ public class Pedido {
 
     public void setItens(List<ItemPedido> itens) {
         this.itens = itens;
+    }
+
+    public String getCodigoRastreio() {
+        return codigoRastreio;
+    }
+
+    public void setCodigoRastreio(String codigoRastreio) {
+        this.codigoRastreio = codigoRastreio;
+    }
+
+    public LocalDateTime getConcluidoEm() {
+        return concluidoEm;
+    }
+
+    public void setConcluidoEm(LocalDateTime concluidoEm) {
+        this.concluidoEm = concluidoEm;
     }
 }

@@ -11,6 +11,7 @@ import projeto_base_de_telas_e_login.Pedido.Pedido;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public record PedidoAddDTO(
@@ -56,54 +57,43 @@ public record PedidoAddDTO(
         pedido.setTipoEntrega(tipoEntrega);
         pedido.setFormaDePagamento(formaDePagamento);
 
-        List<ItemPedido> itensEntity = itens.stream()
-                .map(itemDto -> {
+        List<ItemPedido> itensEntity = new ArrayList<>(
+                itens.stream()
+                        .map(itemDto -> {
 
-                    Estoque estoque = estoquesDaLoja.stream()
-                            .filter(e ->
-                                    e.getProdutoVariacao()
-                                            .getId()
-                                            .equals(itemDto.variacaoId())
-                            )
-                            .findFirst()
-                            .orElseThrow(() ->
-                                    new RuntimeException(
-                                            "Variação não encontrada no estoque"
+                            Estoque estoque = estoquesDaLoja.stream()
+                                    .filter(e ->
+                                            e.getProdutoVariacao()
+                                                    .getId()
+                                                    .equals(itemDto.variacaoId())
                                     )
-                            );
+                                    .findFirst()
+                                    .orElseThrow(() ->
+                                            new RuntimeException(
+                                                    "Variação não encontrada no estoque"
+                                            )
+                                    );
 
-                    var variacao = estoque.getProdutoVariacao();
-                    var produto = variacao.getProduto();
+                            var variacao = estoque.getProdutoVariacao();
+                            var produto = variacao.getProduto();
 
-                    ItemPedido item = new ItemPedido();
+                            ItemPedido item = new ItemPedido();
 
-                    item.setPedido(pedido);
+                            item.setPedido(pedido);
+                            item.setProdutoId(produto.getId());
+                            item.setVariacaoId(variacao.getId());
+                            item.setNomeProduto(produto.getName());
+                            item.setVariacao(variacao.getNomeVariacao());
+                            item.setImagemUrl(produto.getImagemBase64());
+                            item.setCategoria(produto.getCategoria().getNomeCategoria());
+                            item.setPrecoUnitario(estoque.getPrecoVenda());
+                            item.setPercentualDesconto(estoque.getPercentualDesconto());
+                            item.setQuantidade(itemDto.quantidade());
 
-                    item.setProdutoId(produto.getId());
-
-                    item.setVariacaoId(variacao.getId());
-
-                    item.setNomeProduto(produto.getName());
-
-                    item.setVariacao(variacao.getNomeVariacao());
-
-                    item.setImagemUrl(produto.getImagemBase64());
-
-                    item.setCategoria(
-                            produto.getCategoria().getNomeCategoria()
-                    );
-
-                    item.setPrecoUnitario(estoque.getPrecoVenda());
-
-                    item.setPercentualDesconto(
-                            estoque.getPercentualDesconto()
-                    );
-
-                    item.setQuantidade(itemDto.quantidade());
-
-                    return item;
-                })
-                .toList();
+                            return item;
+                        })
+                        .toList()
+        );
 
         pedido.setItens(itensEntity);
 
