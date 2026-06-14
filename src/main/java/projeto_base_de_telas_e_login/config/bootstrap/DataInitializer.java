@@ -8,7 +8,7 @@ import projeto_base_de_telas_e_login.Usuario.Permission.PermissionRepository;
 import projeto_base_de_telas_e_login.Usuario.Role.Role;
 import projeto_base_de_telas_e_login.Usuario.Role.RoleRepository;
 import projeto_base_de_telas_e_login.Usuario.User.User;
-import projeto_base_de_telas_e_login.Usuario.User.UserRepository;
+import projeto_base_de_telas_e_login.Usuario.User.Repository.UserRepository;
 
 import java.util.List;
 

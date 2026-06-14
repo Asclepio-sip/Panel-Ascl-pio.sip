@@ -4,7 +4,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import projeto_base_de_telas_e_login.Usuario.User.UserRepository;
+import projeto_base_de_telas_e_login.Usuario.User.Repository.UserRepository;
 
 @Service
 public class AuthorizationService implements UserDetailsService {
