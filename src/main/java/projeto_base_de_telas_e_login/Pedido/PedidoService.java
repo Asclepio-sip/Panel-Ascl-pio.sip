@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import projeto_base_de_telas_e_login.Loja.LojaBairro.LojaBairro;
 import projeto_base_de_telas_e_login.Loja.LojaBairro.LojaBairroRepository;
 import projeto_base_de_telas_e_login.MovimentacaoEstoque.Repository.MovimentacaoEstoqueRepository;
+import projeto_base_de_telas_e_login.Pedido.Pdf.PedidoPdfService;
 import projeto_base_de_telas_e_login.Pedido.Repository.PedidoRepository;
 import projeto_base_de_telas_e_login.Pedido.dto.*;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,24 +36,23 @@ public class PedidoService {
     private final EstoqueRepository estoqueRepository;
     private final LojaBairroRepository lojaBairroRepository;
     private final MovimentacaoEstoqueRepository movimentacaoEstoqueRepository;
+    private final PedidoPdfService pedidoPdfService;
 
-    public PedidoService(PedidoRepository pedidoRepository, LojaRepository lojaRepository, EstoqueRepository estoqueRepository, LojaBairroRepository lojaBairroRepository, MovimentacaoEstoqueRepository movimentacaoEstoqueRepository) {
-
+    public PedidoService(PedidoRepository pedidoRepository, LojaRepository lojaRepository, EstoqueRepository estoqueRepository, LojaBairroRepository lojaBairroRepository, MovimentacaoEstoqueRepository movimentacaoEstoqueRepository, PedidoPdfService pedidoPdfService) {
         this.pedidoRepository = pedidoRepository;
         this.lojaRepository = lojaRepository;
         this.estoqueRepository = estoqueRepository;
         this.lojaBairroRepository = lojaBairroRepository;
         this.movimentacaoEstoqueRepository = movimentacaoEstoqueRepository;
+        this.pedidoPdfService = pedidoPdfService;
     }
 
     @Transactional
     public PedidoCriadoResponseDTO criarPedido(PedidoAddDTO dto) {
 
-        Loja loja = lojaRepository.findById(dto.lojaId())
-                .orElseThrow(() -> new RuntimeException("Loja não encontrada"));
+        Loja loja = lojaRepository.findById(dto.lojaId()).orElseThrow(() -> new RuntimeException("Loja não encontrada"));
 
-        List<Estoque> estoquesDaLoja =
-                estoqueRepository.findByLoja_Id(loja.getId());
+        List<Estoque> estoquesDaLoja = estoqueRepository.findByLoja_Id(loja.getId());
 
         if (dto.itens() == null || dto.itens().isEmpty()) {
             throw new RuntimeException("Pedido precisa ter itens");
@@ -72,20 +72,10 @@ public class PedidoService {
                 throw new RuntimeException("Quantidade inválida");
             }
 
-            Estoque estoque = estoquesDaLoja.stream()
-                    .filter(e -> e.getProdutoVariacao()
-                            .getId()
-                            .equals(itemDto.variacaoId()))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Variação não encontrada no estoque"));
+            Estoque estoque = estoquesDaLoja.stream().filter(e -> e.getProdutoVariacao().getId().equals(itemDto.variacaoId())).findFirst().orElseThrow(() -> new RuntimeException("Variação não encontrada no estoque"));
 
             if (estoque.getQuantidade() < itemDto.quantidade()) {
-                throw new RuntimeException(
-                        "Estoque insuficiente para: "
-                                + estoque.getProdutoVariacao().getProduto().getName()
-                                + " - "
-                                + estoque.getProdutoVariacao().getNomeVariacao()
-                );
+                throw new RuntimeException("Estoque insuficiente para: " + estoque.getProdutoVariacao().getProduto().getName() + " - " + estoque.getProdutoVariacao().getNomeVariacao());
             }
         }
 
@@ -118,13 +108,7 @@ public class PedidoService {
                     throw new RuntimeException("Endereço obrigatório");
                 }
 
-                LojaBairro lojaBairro =
-                        lojaBairroRepository
-                                .findByLoja_IdAndBairro_Id(
-                                        loja.getId(),
-                                        dto.bairroId()
-                                )
-                                .orElseThrow(() -> new RuntimeException("Bairro não atendido"));
+                LojaBairro lojaBairro = lojaBairroRepository.findByLoja_IdAndBairro_Id(loja.getId(), dto.bairroId()).orElseThrow(() -> new RuntimeException("Bairro não atendido"));
 
                 pedido.setEndereco(dto.endereco());
                 pedido.setComplemento(dto.complemento());
@@ -133,9 +117,7 @@ public class PedidoService {
                 BigDecimal subtotalProdutos = pedido.getTotalProdutos();
                 BigDecimal minimoFreteGratis = loja.getValorMinimoFreteGratis();
 
-                boolean freteGratis =
-                        minimoFreteGratis != null
-                                && subtotalProdutos.compareTo(minimoFreteGratis) >= 0;
+                boolean freteGratis = minimoFreteGratis != null && subtotalProdutos.compareTo(minimoFreteGratis) >= 0;
 
                 if (freteGratis) {
                     pedido.setValorFrete(BigDecimal.ZERO);
@@ -151,12 +133,7 @@ public class PedidoService {
 
         for (var item : pedido.getItens()) {
 
-            Estoque estoque = estoquesDaLoja.stream()
-                    .filter(e -> e.getProdutoVariacao()
-                            .getId()
-                            .equals(item.getVariacaoId()))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Estoque não encontrado para baixa"));
+            Estoque estoque = estoquesDaLoja.stream().filter(e -> e.getProdutoVariacao().getId().equals(item.getVariacaoId())).findFirst().orElseThrow(() -> new RuntimeException("Estoque não encontrado para baixa"));
 
             Integer quantidadeAntes = estoque.getQuantidade();
             BigDecimal precoAntes = estoque.getPrecoVenda();
@@ -166,35 +143,21 @@ public class PedidoService {
 
             estoqueRepository.save(estoque);
 
-            movimentacaoEstoqueRepository.save(
-                    new MovimentacaoEstoque(
-                            estoque,
-                            estoque.getLoja(),
-                            estoque.getProdutoVariacao().getProduto(),
-                            estoque.getProdutoVariacao(),
-                            null,
-                            TipoMovimentacaoEstoque.SAIDA_PEDIDO,
-                            quantidadeAntes,
-                            estoque.getQuantidade(),
-                            precoAntes,
-                            estoque.getPrecoVenda(),
-                            descontoAntes,
-                            estoque.getPercentualDesconto(),
-                            "Baixa automática por pedido"
-                    )
-            );
+            movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(estoque, estoque.getLoja(), estoque.getProdutoVariacao().getProduto(), estoque.getProdutoVariacao(), null, TipoMovimentacaoEstoque.SAIDA_PEDIDO, quantidadeAntes, estoque.getQuantidade(), precoAntes, estoque.getPrecoVenda(), descontoAntes, estoque.getPercentualDesconto(), "Baixa automática por pedido"));
         }
-        pedido.setCodigoRastreio(gerarCodigoRastreioUnico());
-        pedidoRepository.save(pedido);
-
         pedido.setCodigoRastreio(gerarCodigoRastreioUnico());
 
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
 
         return new PedidoCriadoResponseDTO(
+
                 pedidoSalvo.getId(),
+
                 pedidoSalvo.getCodigoRastreio(),
-                pedidoSalvo.getStatus()
+
+                pedidoSalvo.getStatus(),
+
+                "/pedidos/" + pedidoSalvo.getId() + "/pdf"
         );
     }
 
@@ -217,8 +180,7 @@ public class PedidoService {
     @Transactional
     public void atualizarStatusPedido(Long id, StatusDoPedido status) {
 
-        Pedido pedido = pedidoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
         pedido.setStatus(status);
 
@@ -232,10 +194,12 @@ public class PedidoService {
 
     public byte[] imprimirPDF(Long id) {
 
-     //   Pedido pedido = buscarPorId(id);
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
-        return new byte[0];
+        return pedidoPdfService.gerarPdf(pedido);
     }
+
 
     private String gerarCodigoRastreioUnico() {
         String codigo;
@@ -249,8 +213,7 @@ public class PedidoService {
 
     public PedidoStatusResponseDTO consultarStatusPorCodigo(String codigoRastreio) {
 
-        Pedido pedido = pedidoRepository.findByCodigoRastreio(codigoRastreio)
-                .orElseThrow(() -> new RuntimeException("Código de rastreio inválido"));
+        Pedido pedido = pedidoRepository.findByCodigoRastreio(codigoRastreio).orElseThrow(() -> new RuntimeException("Código de rastreio inválido"));
 
         if (pedido.getStatus() == StatusDoPedido.CONCLUIDO) {
 
@@ -265,9 +228,6 @@ public class PedidoService {
             }
         }
 
-        return new PedidoStatusResponseDTO(
-                pedido.getCodigoRastreio(),
-                pedido.getStatus()
-        );
+        return new PedidoStatusResponseDTO(pedido.getCodigoRastreio(), pedido.getStatus());
     }
 }

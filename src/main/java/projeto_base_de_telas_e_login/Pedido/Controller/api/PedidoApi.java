@@ -6,6 +6,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,12 @@ import java.util.List;
 public interface PedidoApi {
 
 
-    @GetMapping("/{id}/pdf")
+    @GetMapping(
+            value = "/{id}/pdf",
+            produces = MediaType.APPLICATION_PDF_VALUE
+    )
     @PreAuthorize("hasAuthority('VerPedido')")
-    public ResponseEntity<byte[]> imprimirPDF(@PathVariable Long id);
+    ResponseEntity<byte[]> imprimirPDF(@PathVariable Long id);
 
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasAuthority('EditarPedido')")
@@ -31,43 +35,36 @@ public interface PedidoApi {
     public ResponseEntity<PedidoCriadoResponseDTO> criarPedido(@RequestBody PedidoAddDTO dto);
 
 
-
     @GetMapping
     @PreAuthorize("hasAuthority('VerPedido')")
-    @Operation(
-            summary = "Listar pedidos com filtros",
-            description = """
-                Lista pedidos de forma paginada com filtros opcionais.
-
-                Exemplos:
-
-                /pedidos?page=0&size=10&sort=criadoEm,desc
-
-                /pedidos?lojaId=1
-
-                /pedidos?nomeCliente=mateus
-
-                /pedidos?telefone=81999999999
-
-                /pedidos?status=AGUARDANDO
-
-                /pedidos?tipoEntrega=ENTREGA
-
-                /pedidos?formaDePagamento=PIX
-
-                /pedidos?dataInicio=2026-06-01&dataFim=2026-06-13
-
-                /pedidos?bairro=Centro&freteGratis=true
-                """
-    )
-    ResponseEntity<Page<ListaDePedidoDTO>> listar(
-            @ParameterObject PedidoFiltro filtro,
-            @ParameterObject Pageable pageable
-    );
-
+    @Operation(summary = "Listar pedidos com filtros", description = """
+            Lista pedidos de forma paginada com filtros opcionais.
+            
+            Exemplos:
+            
+            /pedidos?page=0&size=10&sort=criadoEm,desc
+            
+            /pedidos?lojaId=1
+            
+            /pedidos?nomeCliente=mateus
+            
+            /pedidos?telefone=81999999999
+            
+            /pedidos?status=AGUARDANDO
+            
+            /pedidos?tipoEntrega=ENTREGA
+            
+            /pedidos?formaDePagamento=PIX
+            
+            /pedidos?dataInicio=2026-06-01&dataFim=2026-06-13
+            
+            /pedidos?bairro=Centro&freteGratis=true
+            """)
+    ResponseEntity<Page<ListaDePedidoDTO>> listar(@ParameterObject PedidoFiltro filtro, @ParameterObject Pageable pageable);
 
 
     @GetMapping("/status/{codigoRastreio}")
     public ResponseEntity<PedidoStatusResponseDTO> consultarStatus(@PathVariable String codigoRastreio);
+
 
 }

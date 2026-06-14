@@ -1,6 +1,7 @@
 package projeto_base_de_telas_e_login.Pedido.Controller;
 
-import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,6 @@ import projeto_base_de_telas_e_login.Pedido.Controller.api.PedidoApi;
 import projeto_base_de_telas_e_login.Pedido.PedidoService;
 import projeto_base_de_telas_e_login.Pedido.dto.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -29,11 +29,6 @@ public class TelaPedido implements PedidoApi {
         return ResponseEntity.ok(service.listarComFiltro(filtro, pageable));
     }
 
-    public ResponseEntity<byte[]> imprimirPDF(@PathVariable Long id) {
-        byte[] pdf = service.imprimirPDF(id);
-        return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=pedido-" + id + ".pdf").body(pdf);
-    }
-
     public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusPedidoDTO dto) {
         service.atualizarStatusPedido(id, dto.status());
         return ResponseEntity.noContent().build();
@@ -46,5 +41,19 @@ public class TelaPedido implements PedidoApi {
 
     public ResponseEntity<PedidoStatusResponseDTO> consultarStatus(@PathVariable String codigoRastreio) {
         return ResponseEntity.ok(service.consultarStatusPorCodigo(codigoRastreio));
+    }
+
+    @Override
+    public ResponseEntity<byte[]> imprimirPDF(Long id) {
+
+        byte[] pdf = service.imprimirPDF(id);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"pedido-" + id + ".pdf\""
+                )
+                .body(pdf);
     }
 }
