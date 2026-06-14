@@ -39,8 +39,12 @@ public class TelaPedido implements PedidoApi {
         return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<Void> criarPedido(@RequestBody PedidoAddDTO dto) {
-        service.criarPedido(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<PedidoCriadoResponseDTO> criarPedido(@RequestBody PedidoAddDTO dto) {
+        PedidoCriadoResponseDTO response = service.criarPedido(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    public ResponseEntity<PedidoStatusResponseDTO> consultarStatus(@PathVariable String codigoRastreio) {
+        return ResponseEntity.ok(service.consultarStatusPorCodigo(codigoRastreio));
     }
 }

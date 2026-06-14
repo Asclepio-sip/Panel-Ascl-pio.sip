@@ -9,12 +9,10 @@ import projeto_base_de_telas_e_login.Loja.LojaBairro.LojaBairro;
 import projeto_base_de_telas_e_login.Loja.LojaBairro.LojaBairroRepository;
 import projeto_base_de_telas_e_login.MovimentacaoEstoque.Repository.MovimentacaoEstoqueRepository;
 import projeto_base_de_telas_e_login.Pedido.Repository.PedidoRepository;
-import projeto_base_de_telas_e_login.Pedido.dto.PedidoAddDTO;
+import projeto_base_de_telas_e_login.Pedido.dto.*;
 import org.springframework.transaction.annotation.Transactional;
 import projeto_base_de_telas_e_login.Pedido.Enum.StatusDoPedido;
 import projeto_base_de_telas_e_login.Pedido.Repository.PedidoSpecification;
-import projeto_base_de_telas_e_login.Pedido.dto.PedidoFiltro;
-import projeto_base_de_telas_e_login.Pedido.dto.ListaDePedidoDTO;
 import projeto_base_de_telas_e_login.Estoque.Estoque;
 import projeto_base_de_telas_e_login.Estoque.Repository.EstoqueRepository;
 
@@ -22,6 +20,7 @@ import projeto_base_de_telas_e_login.Loja.Loja.Loja;
 import projeto_base_de_telas_e_login.Loja.Loja.LojaRepository;
 import projeto_base_de_telas_e_login.MovimentacaoEstoque.MovimentacaoEstoque;
 import projeto_base_de_telas_e_login.MovimentacaoEstoque.Enum.TipoMovimentacaoEstoque;
+import projeto_base_de_telas_e_login.config.security.CodigoRastreioGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -47,7 +46,7 @@ public class PedidoService {
     }
 
     @Transactional
-    public void criarPedido(PedidoAddDTO dto) {
+    public PedidoCriadoResponseDTO criarPedido(PedidoAddDTO dto) {
 
         Loja loja = lojaRepository.findById(dto.lojaId())
                 .orElseThrow(() -> new RuntimeException("Loja não encontrada"));
@@ -185,8 +184,18 @@ public class PedidoService {
                     )
             );
         }
-
+        pedido.setCodigoRastreio(gerarCodigoRastreioUnico());
         pedidoRepository.save(pedido);
+
+        pedido.setCodigoRastreio(gerarCodigoRastreioUnico());
+
+        Pedido pedidoSalvo = pedidoRepository.save(pedido);
+
+        return new PedidoCriadoResponseDTO(
+                pedidoSalvo.getId(),
+                pedidoSalvo.getCodigoRastreio(),
+                pedidoSalvo.getStatus()
+        );
     }
 
 
@@ -207,7 +216,17 @@ public class PedidoService {
 
     @Transactional
     public void atualizarStatusPedido(Long id, StatusDoPedido status) {
-        pedidoRepository.atualizarStatus(id, status);
+
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        pedido.setStatus(status);
+
+        if (status == StatusDoPedido.CONCLUIDO) {
+            pedido.setConcluidoEm(LocalDateTime.now());
+        }
+
+        pedidoRepository.save(pedido);
     }
 
 
@@ -216,5 +235,39 @@ public class PedidoService {
      //   Pedido pedido = buscarPorId(id);
 
         return new byte[0];
+    }
+
+    private String gerarCodigoRastreioUnico() {
+        String codigo;
+
+        do {
+            codigo = CodigoRastreioGenerator.gerar();
+        } while (pedidoRepository.existsByCodigoRastreio(codigo));
+
+        return codigo;
+    }
+
+    public PedidoStatusResponseDTO consultarStatusPorCodigo(String codigoRastreio) {
+
+        Pedido pedido = pedidoRepository.findByCodigoRastreio(codigoRastreio)
+                .orElseThrow(() -> new RuntimeException("Código de rastreio inválido"));
+
+        if (pedido.getStatus() == StatusDoPedido.CONCLUIDO) {
+
+            if (pedido.getConcluidoEm() == null) {
+                throw new RuntimeException("Data de conclusão do pedido não encontrada");
+            }
+
+            LocalDateTime limite = pedido.getConcluidoEm().plusHours(24);
+
+            if (LocalDateTime.now().isAfter(limite)) {
+                throw new RuntimeException("O prazo para acompanhamento deste pedido foi encerrado");
+            }
+        }
+
+        return new PedidoStatusResponseDTO(
+                pedido.getCodigoRastreio(),
+                pedido.getStatus()
+        );
     }
 }

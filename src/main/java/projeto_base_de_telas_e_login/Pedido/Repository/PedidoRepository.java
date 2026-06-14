@@ -10,6 +10,7 @@ import projeto_base_de_telas_e_login.Pedido.Enum.StatusDoPedido;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Long>, JpaSpecificationExecutor<Pedido> {
 
@@ -22,4 +23,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long>, JpaSpecif
             where p.id = :id
             """)
     void atualizarStatus(@Param("id") Long id, @Param("status") StatusDoPedido status);
+
+    boolean existsByCodigoRastreio(String codigoRastreio);
+
+    Optional<Pedido> findByCodigoRastreio(String codigoRastreio);
 }

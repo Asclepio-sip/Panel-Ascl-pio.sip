@@ -28,7 +28,7 @@ public interface PedidoApi {
 
     @Operation(summary = "Criar pedido")
     @PostMapping("/pedidos")
-    public ResponseEntity<Void> criarPedido(@RequestBody PedidoAddDTO dto);
+    public ResponseEntity<PedidoCriadoResponseDTO> criarPedido(@RequestBody PedidoAddDTO dto);
 
 
 
@@ -64,5 +64,10 @@ public interface PedidoApi {
             @ParameterObject PedidoFiltro filtro,
             @ParameterObject Pageable pageable
     );
+
+
+
+    @GetMapping("/status/{codigoRastreio}")
+    public ResponseEntity<PedidoStatusResponseDTO> consultarStatus(@PathVariable String codigoRastreio);
 
 }
