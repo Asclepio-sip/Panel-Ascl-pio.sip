@@ -28,9 +28,7 @@ public class ProdutoVariacaoController implements ProdutoVariacaoApi {
     }
 
     @Override
-    public ResponseEntity<List<ProdutoVariacaoResponseDTO>> listarPorProduto(
-            Long produtoId
-    ) {
+    public ResponseEntity<List<ProdutoVariacaoResponseDTO>> listarPorProduto(Long produtoId) {
         return ResponseEntity.ok(service.listarPorProduto(produtoId));
     }
 
