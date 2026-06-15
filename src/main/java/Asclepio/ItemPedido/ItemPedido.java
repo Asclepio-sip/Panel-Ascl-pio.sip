@@ -1,49 +1,56 @@
 package Asclepio.ItemPedido;
 
-import jakarta.persistence.*;
 import Asclepio.Pedido.Pedido;
+import Asclepio.exception.BusinessException;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity
-@Table(name = "pedido_item")
+@Table(name = "TB_ITEM_PEDIDO")
 public class ItemPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ITP_ID")
     private Long id;
 
-    // snapshot do produto
-    private Long produtoId;
-
-    private String nomeProduto;
-
-    private String variacao;
-
-    @Column(columnDefinition = "TEXT")
-    private String imagemUrl;
-
-    private String categoria;
-
-    @Column(precision = 10, scale = 2)
-    private BigDecimal precoUnitario;
-
-    private Integer quantidade;
-
-    @Column(precision = 10, scale = 2)
-    private BigDecimal subtotal;
-
-    @Column(precision = 10, scale = 2)
-    private BigDecimal percentualDesconto;
-
+    @Column(name = "ITP_VARIACAO_ID", nullable = false)
     private Long variacaoId;
 
+    @Column(name = "ITP_PRODUTO_ID", nullable = false)
+    private Long produtoId;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "pedido_id")
+    @Column(name = "ITP_NOME_PRODUTO", nullable = false, length = 200)
+    private String nomeProduto;
+
+    @Column(name = "ITP_VARIACAO", length = 100)
+    private String variacao;
+
+    @Column(name = "ITP_IMAGEM_URL", columnDefinition = "TEXT")
+    private String imagemUrl;
+
+    @Column(name = "ITP_CATEGORIA", length = 100)
+    private String categoria;
+
+    @Column(name = "ITP_PRECO_UNITARIO", nullable = false, precision = 10, scale = 2)
+    private BigDecimal precoUnitario;
+
+    @Column(name = "ITP_QUANTIDADE", nullable = false)
+    private Integer quantidade;
+
+    @Column(name = "ITP_SUBTOTAL", nullable = false, precision = 10, scale = 2)
+    private BigDecimal subtotal;
+
+    @Column(name = "ITP_PERCENTUAL_DESCONTO", nullable = false, precision = 5, scale = 2)
+    private BigDecimal percentualDesconto = BigDecimal.ZERO;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ITP_PEDIDO_ID", nullable = false)
     private Pedido pedido;
 
-    public ItemPedido() {
+    protected ItemPedido() {
     }
 
     public ItemPedido(
@@ -59,10 +66,7 @@ public class ItemPedido {
             Pedido pedido,
             BigDecimal percentualDesconto
     ) {
-
-        if (quantidade == null || quantidade <= 0) {
-            throw new RuntimeException("Quantidade inválida");
-        }
+        validarQuantidade(quantidade);
 
         this.id = id;
         this.variacaoId = variacaoId;
@@ -74,38 +78,71 @@ public class ItemPedido {
         this.precoUnitario = precoUnitario;
         this.quantidade = quantidade;
         this.pedido = pedido;
-
-        this.percentualDesconto =
-                percentualDesconto != null
-                        ? percentualDesconto
-                        : BigDecimal.ZERO;
+        this.percentualDesconto = percentualDesconto != null
+                ? percentualDesconto
+                : BigDecimal.ZERO;
 
         recalcularSubtotal();
     }
 
+    @PrePersist
+    public void prePersist() {
+        prepararDadosAntesDeSalvar();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        prepararDadosAntesDeSalvar();
+    }
+
+    private void prepararDadosAntesDeSalvar() {
+        if (percentualDesconto == null) {
+            percentualDesconto = BigDecimal.ZERO;
+        }
+
+        validarQuantidade(quantidade);
+        recalcularSubtotal();
+    }
+
     private void recalcularSubtotal() {
+        if (precoUnitario == null || quantidade == null) {
+            subtotal = BigDecimal.ZERO;
+            return;
+        }
 
-        if (this.precoUnitario != null
-                && this.quantidade != null) {
+        subtotal = getPrecoFinalUnitario()
+                .multiply(BigDecimal.valueOf(quantidade))
+                .setScale(2, RoundingMode.HALF_UP);
+    }
 
-            BigDecimal desconto =
-                    percentualDesconto != null
-                            ? percentualDesconto
-                            : BigDecimal.ZERO;
+    public BigDecimal getPrecoFinalUnitario() {
+        if (precoUnitario == null) {
+            return BigDecimal.ZERO;
+        }
 
-            BigDecimal precoComDesconto =
-                    precoUnitario.subtract(
-                            precoUnitario.multiply(desconto)
-                                    .divide(BigDecimal.valueOf(100))
-                    );
+        BigDecimal desconto = percentualDesconto != null
+                ? percentualDesconto
+                : BigDecimal.ZERO;
 
-            this.subtotal =
-                    precoComDesconto.multiply(
-                            BigDecimal.valueOf(quantidade)
-                    );
+        BigDecimal valorDesconto = precoUnitario
+                .multiply(desconto)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
+        return precoUnitario
+                .subtract(valorDesconto)
+                .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public boolean possuiDesconto() {
+        return percentualDesconto != null
+                && percentualDesconto.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    private void validarQuantidade(Integer quantidade) {
+        if (quantidade == null || quantidade <= 0) {
+            throw new BusinessException("Quantidade inválida");
         }
     }
-    // GETTERS
 
     public Long getId() {
         return id;
@@ -147,30 +184,20 @@ public class ItemPedido {
         return subtotal;
     }
 
-    public Pedido getPedido() {
-        return pedido;
-    }
-
-    public void setSubtotal(BigDecimal subtotal) {
-        this.subtotal = subtotal;
-    }
-
     public BigDecimal getPercentualDesconto() {
         return percentualDesconto;
     }
 
-    public void setPercentualDesconto(BigDecimal percentualDesconto) {
-        this.percentualDesconto = percentualDesconto;
-    }
-
-    // SETTERS
-
-    public void setVariacaoId(Long variacaoId) {
-        this.variacaoId = variacaoId;
+    public Pedido getPedido() {
+        return pedido;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setVariacaoId(Long variacaoId) {
+        this.variacaoId = variacaoId;
     }
 
     public void setProdutoId(Long produtoId) {
@@ -199,16 +226,42 @@ public class ItemPedido {
     }
 
     public void setQuantidade(Integer quantidade) {
-
-        if (quantidade <= 0) {
-            throw new RuntimeException("Quantidade inválida");
-        }
-
+        validarQuantidade(quantidade);
         this.quantidade = quantidade;
+        recalcularSubtotal();
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public void setPercentualDesconto(BigDecimal percentualDesconto) {
+        this.percentualDesconto = percentualDesconto != null
+                ? percentualDesconto
+                : BigDecimal.ZERO;
+
         recalcularSubtotal();
     }
 
     public void setPedido(Pedido pedido) {
         this.pedido = pedido;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof ItemPedido itemPedido)) {
+            return false;
+        }
+
+        return id != null && id.equals(itemPedido.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

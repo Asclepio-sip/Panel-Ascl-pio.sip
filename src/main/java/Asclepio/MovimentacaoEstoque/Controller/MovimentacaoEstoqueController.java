@@ -19,10 +19,7 @@ public class MovimentacaoEstoqueController implements MovimentacaoEstoqueApi {
     }
 
     @Override
-    public ResponseEntity<Page<MovimentacaoEstoqueResponse>> listar(
-            MovimentacaoEstoqueFiltro filtro,
-            Pageable pageable
-    ) {
+    public ResponseEntity<Page<MovimentacaoEstoqueResponse>> listar(MovimentacaoEstoqueFiltro filtro, Pageable pageable) {
         return ResponseEntity.ok(service.listar(filtro, pageable));
     }
 }

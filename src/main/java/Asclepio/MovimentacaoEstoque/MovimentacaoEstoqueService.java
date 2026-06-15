@@ -17,12 +17,7 @@ public class MovimentacaoEstoqueService {
         this.repository = repository;
     }
 
-    public Page<MovimentacaoEstoqueResponse> listar(
-            MovimentacaoEstoqueFiltro filtro,
-            Pageable pageable
-    ) {
-        return repository
-                .findAll(MovimentacaoEstoqueSpecification.filtrar(filtro), pageable)
-                .map(MovimentacaoEstoqueResponse::fromEntity);
+    public Page<MovimentacaoEstoqueResponse> listar(MovimentacaoEstoqueFiltro filtro, Pageable pageable) {
+        return repository.findAll(MovimentacaoEstoqueSpecification.filtrar(filtro), pageable).map(MovimentacaoEstoqueResponse::fromEntity);
     }
 }

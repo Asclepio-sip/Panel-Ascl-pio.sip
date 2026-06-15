@@ -1,14 +1,17 @@
 package Asclepio.Loja.Bairro.Controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import Asclepio.Loja.Bairro.Bairro;
 import Asclepio.Loja.Bairro.BairroService;
 import Asclepio.Loja.Bairro.Controller.api.BairroApi;
+import Asclepio.Loja.Bairro.dto.BairroFiltroDTO;
 import Asclepio.Loja.Bairro.dto.BairroRequestDTO;
 import Asclepio.Loja.Bairro.dto.BairroResponseDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 @RestController
 public class BairroController implements BairroApi {
 
@@ -18,21 +21,32 @@ public class BairroController implements BairroApi {
         this.service = service;
     }
 
-    public ResponseEntity<BairroResponseDTO> criar(@RequestBody BairroRequestDTO dto) {
+    @Override
+    public ResponseEntity<BairroResponseDTO> criar(BairroRequestDTO dto) {
 
-        Bairro bairro = service.criar(dto.nome());
+        Bairro bairro = service.criar(dto);
 
-        return ResponseEntity.ok(BairroResponseDTO.fromEntity(bairro));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(BairroResponseDTO.fromEntity(bairro));
     }
 
-    public ResponseEntity<List<BairroResponseDTO>> listar() {
-
-        List<BairroResponseDTO> response = service.listar().stream().map(BairroResponseDTO::fromEntity).toList();
-
-        return ResponseEntity.ok(response);
+    @Override
+    public ResponseEntity<Page<BairroResponseDTO>> listar(BairroFiltroDTO filtro, Pageable pageable) {
+        return ResponseEntity.ok(service.listar(filtro, pageable));
     }
 
-    public ResponseEntity  deletarBairro(@PathVariable Long id){
+    @Override
+    public ResponseEntity<BairroResponseDTO> atualizar(Long id, BairroRequestDTO dto) {
+        return ResponseEntity.ok(
+                BairroResponseDTO.fromEntity(
+                        service.atualizar(id, dto)
+                )
+        );
+    }
+
+    @Override
+    public ResponseEntity<Void> deletarBairro(Long id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }

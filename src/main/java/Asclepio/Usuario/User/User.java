@@ -1,123 +1,157 @@
 package Asclepio.Usuario.User;
 
+import Asclepio.Usuario.Permission.Permission;
+import Asclepio.Usuario.Role.Role;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import Asclepio.Usuario.Permission.Permission;
-import Asclepio.Usuario.Role.Role;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "users")
+@Table(name = "TB_USER", uniqueConstraints = {
+
+        @UniqueConstraint(name = "UK_USER_USERNAME", columnNames = "USR_USERNAME"),
+
+        @UniqueConstraint(name = "UK_USER_EMAIL", columnNames = "USR_EMAIL")}
+
+)
 public class User implements UserDetails {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "USR_ID")
     private UUID id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "USR_USERNAME", nullable = false, length = 100)
     private String username;
 
+    @Column(name = "USR_PASSWORD", nullable = false)
     private String password;
 
+    @Column(name = "USR_EMAIL", nullable = false, length = 150)
     private String email;
 
+    @Column(name = "USR_ATIVO", nullable = false)
     private Boolean ativo = true;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
+
+    @JoinColumn(name = "USR_ROLE_ID", nullable = false)
     private Role role;
 
     @ManyToMany(fetch = FetchType.EAGER)
+
     @JoinTable(
-            name = "user_permissions",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
+
+            name = "TB_USER_PERMISSION",
+
+            joinColumns = @JoinColumn(name = "USP_USER_ID", referencedColumnName = "USR_ID"),
+
+            inverseJoinColumns = @JoinColumn(name = "USP_PERMISSION_ID", referencedColumnName = "PER_ID"))
     private List<Permission> permissionsExtras = new ArrayList<>();
 
-    public User() {}
+    public User() {
+    }
+
+// ==========================
+// USER DETAILS
+// ==========================
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
+        Set<String> permissoes = new HashSet<>();
 
-        if (role != null && role.getPermissions() != null) {
-            role.getPermissions().forEach(permission ->
-                    authorities.add(new SimpleGrantedAuthority(permission.getNome()))
-            );
+        if (role != null) {
+
+            role.getPermissions()
+
+                    .forEach(p ->
+
+                            permissoes.add(p.getNome()));
         }
 
-        if (permissionsExtras != null) {
-            permissionsExtras.forEach(permission ->
-                    authorities.add(new SimpleGrantedAuthority(permission.getNome()))
-            );
-        }
+        permissionsExtras
 
-        return authorities;
-    }
+                .forEach(p ->
 
-    public List<Permission> getPermissionsExtras() {
-        return permissionsExtras;
-    }
+                        permissoes.add(p.getNome()));
 
-    public void setPermissionsExtras(List<Permission> permissionsExtras) {
-        this.permissionsExtras = permissionsExtras;
+        return permissoes
+
+                .stream()
+
+                .map(SimpleGrantedAuthority::new)
+
+                .collect(Collectors.toList());
     }
 
     @Override
     public boolean isAccountNonExpired() {
+
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
+
         return ativo;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
+
         return true;
     }
 
     @Override
     public boolean isEnabled() {
+
         return ativo;
     }
+
+// ==========================
+// REGRAS DE NEGÓCIO
+// ==========================
+
+    public void ativar() {
+
+        this.ativo = true;
+    }
+
+    public void desativar() {
+
+        this.ativo = false;
+    }
+
+    public void adicionarPermissaoExtra(Permission permission) {
+
+        if (permission != null && !permissionsExtras.contains(permission)) {
+
+            permissionsExtras.add(permission);
+        }
+    }
+
+    public void removerPermissaoExtra(Permission permission) {
+
+        permissionsExtras.remove(permission);
+    }
+
+// ==========================
+// GETTERS
+// ==========================
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     @Override
     public String getUsername() {
         return username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     @Override
@@ -133,12 +167,70 @@ public class User implements UserDetails {
         return ativo;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public List<Permission> getPermissionsExtras() {
+        return permissionsExtras;
+    }
+
+// ==========================
+// SETTERS
+// ==========================
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+
+        this.username = username != null ? username.trim() : null;
+    }
+
+    public void setPassword(String password) {
+
+        this.password = password;
+    }
+
     public void setEmail(String email) {
-        this.email = email;
+
+        this.email = email != null ? email.trim() : null;
     }
 
     public void setAtivo(Boolean ativo) {
+
         this.ativo = ativo;
+    }
+
+    public void setRole(Role role) {
+
+        this.role = role;
+    }
+
+    public void setPermissionsExtras(List<Permission> permissionsExtras) {
+
+        this.permissionsExtras = permissionsExtras;
+    }
+
+// ==========================
+// EQUALS E HASHCODE
+// ==========================
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+
+        if (!(o instanceof User other)) return false;
+
+        return id != null && id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return getClass().hashCode();
     }
 
 

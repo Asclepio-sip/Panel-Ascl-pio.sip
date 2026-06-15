@@ -1,77 +1,77 @@
 package Asclepio.MovimentacaoEstoque;
 
-import jakarta.persistence.*;
 import Asclepio.Estoque.Estoque;
 import Asclepio.Loja.Loja.Loja;
 import Asclepio.MovimentacaoEstoque.Enum.TipoMovimentacaoEstoque;
 import Asclepio.Produto.Product;
 import Asclepio.ProdutoVariacao.ProdutoVariacao;
 import Asclepio.Usuario.User.User;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "movimentacao_estoque")
+@Table(name = "TB_MOVIMENTACAO_ESTOQUE")
 public class MovimentacaoEstoque {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "MOV_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MOV_ESTOQUE_ID")
     private Estoque estoque;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MOV_LOJA_ID")
     private Loja loja;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MOV_PRODUTO_ID")
     private Product produto;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MOV_VARIACAO_ID")
+    private ProdutoVariacao produtoVariacao;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MOV_USUARIO_ID")
     private User usuario;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "MOV_TIPO", nullable = false, length = 30)
     private TipoMovimentacaoEstoque tipo;
 
+    @Column(name = "MOV_QUANTIDADE_ANTES")
     private Integer quantidadeAntes;
 
+    @Column(name = "MOV_QUANTIDADE_DEPOIS")
     private Integer quantidadeDepois;
 
+    @Column(name = "MOV_PRECO_ANTES", precision = 10, scale = 2)
     private BigDecimal precoAntes;
 
+    @Column(name = "MOV_PRECO_DEPOIS", precision = 10, scale = 2)
     private BigDecimal precoDepois;
 
+    @Column(name = "MOV_DESCONTO_ANTES", precision = 5, scale = 2)
     private BigDecimal descontoAntes;
 
+    @Column(name = "MOV_DESCONTO_DEPOIS", precision = 5, scale = 2)
     private BigDecimal descontoDepois;
 
+    @Column(name = "MOV_CRIADO_EM", nullable = false)
     private LocalDateTime criadoEm;
 
-    @Column(length = 500)
+    @Column(name = "MOV_OBSERVACAO", length = 500)
     private String observacao;
 
-    @ManyToOne
-    @JoinColumn(name = "produto_variacao_id")
-    private ProdutoVariacao produtoVariacao;
+    protected MovimentacaoEstoque() {
+    }
 
-    protected MovimentacaoEstoque() {}
-
-    public MovimentacaoEstoque(
-            Estoque estoque,
-            Loja loja,
-            Product produto,
-            ProdutoVariacao produtoVariacao,
-            User usuario,
-            TipoMovimentacaoEstoque tipo,
-            Integer quantidadeAntes,
-            Integer quantidadeDepois,
-            BigDecimal precoAntes,
-            BigDecimal precoDepois,
-            BigDecimal descontoAntes,
-            BigDecimal descontoDepois,
-            String observacao
-    ) {
+    public MovimentacaoEstoque(Estoque estoque, Loja loja, Product produto, ProdutoVariacao produtoVariacao, User usuario, TipoMovimentacaoEstoque tipo, Integer quantidadeAntes, Integer quantidadeDepois, BigDecimal precoAntes, BigDecimal precoDepois, BigDecimal descontoAntes, BigDecimal descontoDepois, String observacao) {
         this.estoque = estoque;
         this.loja = loja;
         this.produto = produto;
@@ -84,8 +84,27 @@ public class MovimentacaoEstoque {
         this.precoDepois = precoDepois;
         this.descontoAntes = descontoAntes;
         this.descontoDepois = descontoDepois;
-        this.criadoEm = LocalDateTime.now();
         this.observacao = observacao;
+        this.criadoEm = LocalDateTime.now();
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.criadoEm == null) {
+            this.criadoEm = LocalDateTime.now();
+        }
+    }
+
+    public boolean alterouQuantidade() {
+        return quantidadeAntes != null && quantidadeDepois != null && !quantidadeAntes.equals(quantidadeDepois);
+    }
+
+    public boolean alterouPreco() {
+        return precoAntes != null && precoDepois != null && precoAntes.compareTo(precoDepois) != 0;
+    }
+
+    public boolean alterouDesconto() {
+        return descontoAntes != null && descontoDepois != null && descontoAntes.compareTo(descontoDepois) != 0;
     }
 
     public Long getId() {
@@ -102,6 +121,10 @@ public class MovimentacaoEstoque {
 
     public Product getProduto() {
         return produto;
+    }
+
+    public ProdutoVariacao getProdutoVariacao() {
+        return produtoVariacao;
     }
 
     public User getUsuario() {
@@ -148,11 +171,17 @@ public class MovimentacaoEstoque {
         this.observacao = observacao;
     }
 
-    public ProdutoVariacao getProdutoVariacao() {
-        return produtoVariacao;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof MovimentacaoEstoque movimentacao)) return false;
+
+        return id != null && id.equals(movimentacao.id);
     }
 
-    public void setProdutoVariacao(ProdutoVariacao produtoVariacao) {
-        this.produtoVariacao = produtoVariacao;
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

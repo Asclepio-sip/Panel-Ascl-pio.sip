@@ -1,14 +1,15 @@
 package Asclepio.Loja.Loja.Controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import Asclepio.Loja.Loja.Controller.Api.LojaApi;
 import Asclepio.Loja.Loja.LojaService;
 import Asclepio.Loja.Loja.dto.CreateLojaRequest;
+import Asclepio.Loja.Loja.dto.LojaFiltroDTO;
 import Asclepio.Loja.Loja.dto.LojaResponse;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LojaController implements LojaApi {
@@ -19,19 +20,25 @@ public class LojaController implements LojaApi {
         this.service = service;
     }
 
-    public ResponseEntity<LojaResponse> criar(@RequestBody CreateLojaRequest request) {
-        return ResponseEntity.ok(service.criar(request));
+    @Override
+    public ResponseEntity<LojaResponse> criar(CreateLojaRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(service.criar(request));
     }
 
-    public ResponseEntity<List<LojaResponse>> listar() {
-        return ResponseEntity.ok(service.listar());
+    @Override
+    public ResponseEntity<Page<LojaResponse>> listar(LojaFiltroDTO filtro, Pageable pageable) {
+        return ResponseEntity.ok(service.listar(filtro, pageable));
     }
 
-    public ResponseEntity<LojaResponse> atualizar(@PathVariable Long id, @RequestBody CreateLojaRequest request) {
+    @Override
+    public ResponseEntity<LojaResponse> atualizar(Long id, CreateLojaRequest request) {
         return ResponseEntity.ok(service.atualizar(id, request));
     }
 
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    @Override
+    public ResponseEntity<Void> deletar(Long id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }

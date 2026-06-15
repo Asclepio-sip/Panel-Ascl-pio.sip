@@ -58,8 +58,7 @@ public record PedidoAddDTO(
         pedido.setFormaDePagamento(formaDePagamento);
 
         List<ItemPedido> itensEntity = new ArrayList<>(
-                itens.stream()
-                        .map(itemDto -> {
+                itens.stream().map(itemDto -> {
 
                             Estoque estoque = estoquesDaLoja.stream()
                                     .filter(e ->
@@ -69,28 +68,25 @@ public record PedidoAddDTO(
                                     )
                                     .findFirst()
                                     .orElseThrow(() ->
-                                            new RuntimeException(
-                                                    "Variação não encontrada no estoque"
-                                            )
+                                            new RuntimeException("Variação não encontrada no estoque")
                                     );
 
                             var variacao = estoque.getProdutoVariacao();
                             var produto = variacao.getProduto();
 
-                            ItemPedido item = new ItemPedido();
-
-                            item.setPedido(pedido);
-                            item.setProdutoId(produto.getId());
-                            item.setVariacaoId(variacao.getId());
-                            item.setNomeProduto(produto.getName());
-                            item.setVariacao(variacao.getNomeVariacao());
-                            item.setImagemUrl(produto.getImagemBase64());
-                            item.setCategoria(produto.getCategoria().getNomeCategoria());
-                            item.setPrecoUnitario(estoque.getPrecoVenda());
-                            item.setPercentualDesconto(estoque.getPercentualDesconto());
-                            item.setQuantidade(itemDto.quantidade());
-
-                            return item;
+                            return new ItemPedido(
+                                    null,
+                                    variacao.getId(),
+                                    produto.getId(),
+                                    produto.getName(),
+                                    variacao.getNomeVariacao(),
+                                    produto.getImagemBase64(),
+                                    produto.getCategoria().getNomeCategoria(),
+                                    estoque.getPrecoVenda(),
+                                    itemDto.quantidade(),
+                                    pedido,
+                                    estoque.getPercentualDesconto()
+                            );
                         })
                         .toList()
         );

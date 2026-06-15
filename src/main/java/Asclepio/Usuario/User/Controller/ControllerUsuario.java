@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import Asclepio.Usuario.User.Controller.API.UserAPI;
 import Asclepio.Usuario.User.User;
 import Asclepio.Usuario.User.UserService;
-import projeto_base_de_telas_e_login.Usuario.User.dto.*;
 import Asclepio.config.security.TokenService;
 
 import java.util.UUID;

@@ -1,8 +1,10 @@
 package Asclepio.Categoria;
 
+import Asclepio.Categoria.dto.CriarCategoria;
+import Asclepio.exception.BusinessException;
+import Asclepio.exception.ResourceNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import Asclepio.Categoria.dto.CriarCategoria;
 
 import java.util.List;
 import java.util.Set;
@@ -43,7 +45,7 @@ public class CategoriaService {
 
         repository.findByNomeCategoria(dto.nomeCategoria().trim())
                 .ifPresent(c -> {
-                    throw new IllegalArgumentException("Categoria já existe");
+                    throw new BusinessException("Categoria já existe");
                 });
 
         Categoria categoriaPai = null;
@@ -76,9 +78,7 @@ public class CategoriaService {
             categoriaPai = buscarPorId(dto.categoriaPaiId());
 
             if (categoriaPai.getId().equals(categoria.getId())) {
-                throw new IllegalArgumentException(
-                        "A categoria não pode ser pai dela mesma"
-                );
+                throw new BusinessException("A categoria não pode ser pai dela mesma");
             }
         }
 
@@ -97,39 +97,31 @@ public class CategoriaService {
         validarCategoriaProtegida(categoria);
 
         if (!categoria.getSubcategorias().isEmpty()) {
-            throw new IllegalStateException(
-                    "Categoria possui subcategorias vinculadas."
-            );
+            throw new BusinessException("Categoria possui subcategorias vinculadas.");
         }
 
         try {
             repository.delete(categoria);
         } catch (DataIntegrityViolationException e) {
-            throw new IllegalStateException(
-                    "Categoria possui produtos vinculados."
-            );
+            throw new BusinessException("Categoria possui produtos vinculados.");
         }
     }
 
     private Categoria buscarPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Categoria não encontrada"));
+                        new ResourceNotFoundException("Categoria não encontrada"));
     }
 
     private void validarNome(String nome) {
         if (nome == null || nome.isBlank()) {
-            throw new IllegalArgumentException(
-                    "Nome da categoria é obrigatório"
-            );
+            throw new BusinessException("Nome da categoria é obrigatório");
         }
     }
 
     private void validarCategoriaProtegida(Categoria categoria) {
         if (CATEGORIAS_PROTEGIDAS.contains(categoria.getNomeCategoria())) {
-            throw new IllegalStateException(
-                    "Essa categoria é fundamental e não pode ser alterada"
-            );
+            throw new BusinessException("Essa categoria é fundamental e não pode ser alterada");
         }
     }
 }

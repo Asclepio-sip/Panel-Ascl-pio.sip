@@ -13,7 +13,6 @@ import java.util.List;
 public interface PermissionAPI {
 
 
-
     @GetMapping
     @PreAuthorize("hasAuthority('VerPermissoes')")
     ResponseEntity<List<Permission>> Lista();

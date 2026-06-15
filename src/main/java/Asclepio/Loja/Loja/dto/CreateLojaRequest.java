@@ -6,14 +6,13 @@ import java.math.BigDecimal;
 
 public record CreateLojaRequest(
         String nomeLoja,
-        TipoAtendimentoLoja tipoAtendimento,
-        BigDecimal valorMinimoFreteGratis,
         String cep,
-        String cpnj,
+        String cnpj,
         String telefone,
         String TextoDescricao,
-        String imagemUrl
+        String imagemUrl,
+        TipoAtendimentoLoja tipoAtendimento,
+        BigDecimal valorMinimoFreteGratis
 
 ) {
-
 }

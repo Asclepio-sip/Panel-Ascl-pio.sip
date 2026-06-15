@@ -1,6 +1,7 @@
 package Asclepio.Estoque.controller;
 
 import Asclepio.Estoque.dto.*;
+import Asclepio.Estoque.service.EstoqueQueryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -8,16 +9,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import Asclepio.Estoque.controller.api.EstoqueApi;
-import projeto_base_de_telas_e_login.Estoque.dto.*;
 import Asclepio.Estoque.EstoqueService;
 
 @RestController
 public class TelaEstoque implements EstoqueApi {
 
     private final EstoqueService service;
+    private final EstoqueQueryService estoqueQueryService;
 
-    public TelaEstoque(EstoqueService useCase) {
+    public TelaEstoque(EstoqueService useCase,EstoqueQueryService estoqueQueryService) {
         this.service = useCase;
+        this.estoqueQueryService = estoqueQueryService;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class TelaEstoque implements EstoqueApi {
 
     @Override
     public ResponseEntity<Page<ListaDeEstoqueDasLojasResponse>> lista(EstoqueFiltro filtro, Pageable pageable) {
-        return ResponseEntity.ok(service.listarTodos(filtro, pageable));
+        return ResponseEntity.ok(estoqueQueryService.listarTodos(filtro, pageable));
     }
 
     @Override

@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import projeto_base_de_telas_e_login.Estoque.dto.*;
 
 @RequestMapping("/estoque")
 @Tag(name = "Estoque", description = "Gerenciamento de estoque")

@@ -1,9 +1,15 @@
 package Asclepio.Loja.Bairro;
 
+import Asclepio.Loja.Bairro.Repository.BairroRepository;
+import Asclepio.Loja.Bairro.Repository.BairroSpecification;
+import Asclepio.Loja.Bairro.dto.BairroFiltroDTO;
+import Asclepio.Loja.Bairro.dto.BairroRequestDTO;
+import Asclepio.Loja.Bairro.dto.BairroResponseDTO;
+import Asclepio.exception.BusinessException;
+import Asclepio.exception.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BairroService {
@@ -14,39 +20,67 @@ public class BairroService {
         this.bairroRepository = bairroRepository;
     }
 
-    public Bairro criar(String nome) {
+    public Bairro criar(BairroRequestDTO dto) {
 
-        if (nome == null || nome.isBlank()) {
-            throw new RuntimeException("Nome do bairro não pode ser vazio");
+        validarNome(dto.nome());
+
+        String nomeTratado = dto.nome().trim();
+
+        if (bairroRepository.existsByNomeIgnoreCase(nomeTratado)) {
+            throw new BusinessException("Bairro já cadastrado");
         }
 
-        Bairro bairro = new Bairro(null, nome);
+        Bairro bairro = new Bairro(null, nomeTratado);
 
         return bairroRepository.save(bairro);
     }
 
-    public List<Bairro> listar() {
-        return bairroRepository.findAll();
+    public Page<BairroResponseDTO> listar(BairroFiltroDTO filtro, Pageable pageable) {
+        return bairroRepository
+                .findAll(BairroSpecification.filtrar(filtro), pageable)
+                .map(BairroResponseDTO::fromEntity);
     }
 
-    public Optional<Bairro> buscarPorId(Long id) {
-        return bairroRepository.findById(id);
+    public Bairro buscarPorId(Long id) {
+        return bairroRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Bairro não encontrado"));
     }
 
-    public Optional<Bairro> buscarPorNome(String nome) {
-        return bairroRepository.findByNome(nome);
+    public Bairro buscarPorNome(String nome) {
+        return bairroRepository.findByNomeIgnoreCase(nome)
+                .orElseThrow(() -> new ResourceNotFoundException("Bairro não encontrado"));
     }
 
-    public Bairro atualizar(Long id, String nome) {
+    public Bairro atualizar(Long id, BairroRequestDTO dto) {
 
-        Bairro bairro = bairroRepository.findById(id).orElseThrow(() -> new RuntimeException("Bairro não encontrado"));
+        validarNome(dto.nome());
 
-        bairro.setNome(nome);
+        Bairro bairro = buscarPorId(id);
+
+        String nomeTratado = dto.nome().trim();
+
+        bairroRepository.findByNomeIgnoreCase(nomeTratado)
+                .ifPresent(bairroExistente -> {
+                    if (!bairroExistente.getId().equals(id)) {
+                        throw new BusinessException("Já existe outro bairro com esse nome");
+                    }
+                });
+
+        bairro.setNome(nomeTratado);
 
         return bairroRepository.save(bairro);
     }
 
     public void deletar(Long id) {
-        bairroRepository.deleteById(id);
+
+        Bairro bairro = buscarPorId(id);
+
+        bairroRepository.delete(bairro);
+    }
+
+    private void validarNome(String nome) {
+        if (nome == null || nome.isBlank()) {
+            throw new BusinessException("Nome do bairro não pode ser vazio");
+        }
     }
 }

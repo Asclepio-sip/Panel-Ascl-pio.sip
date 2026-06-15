@@ -11,11 +11,11 @@ import Asclepio.Categoria.dto.CriarCategoria;
 import java.util.List;
 
 @RestController
-public class TelaCategoria implements CategoriaApi {
+public class CategoriaController implements CategoriaApi {
 
     private final CategoriaService categoriaService;
 
-    public TelaCategoria(CategoriaService categoriaService) {
+    public CategoriaController(CategoriaService categoriaService) {
         this.categoriaService = categoriaService;
     }
 

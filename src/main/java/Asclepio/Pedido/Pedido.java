@@ -13,61 +13,73 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "pedido")
+@Table(name = "TB_PEDIDO")
 public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "PED_ID")
     private Long id;
 
+    @Column(name = "PED_CRIADO_EM", nullable = false)
     private LocalDateTime criadoEm = LocalDateTime.now();
 
+    @Column(name = "PED_NOME_CLIENTE", nullable = false, length = 150)
     private String nomeCliente;
 
+    @Column(name = "PED_EMAIL", length = 150)
     private String email;
 
+    @Column(name = "PED_TELEFONE", length = 20)
     private String telefone;
 
+    @Column(name = "PED_ENDERECO", length = 255)
     private String endereco;
 
+    @Column(name = "PED_BAIRRO", length = 100)
     private String bairro;
 
+    @Column(name = "PED_COMPLEMENTO", length = 255)
     private String complemento;
 
-    @ManyToOne
-    @JoinColumn(name = "loja_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PED_LOJA_ID")
     private Loja loja;
 
-    @Column(length = 500)
+    @Column(name = "PED_OBSERVACAO", length = 500)
     private String observacao;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "PED_STATUS", nullable = false, length = 30)
     private StatusDoPedido status = StatusDoPedido.AGUARDANDO;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "PED_TIPO_ENTREGA", length = 30)
     private TipoEntrega tipoEntrega;
 
-    @Column(precision = 10, scale = 2)
+    @Column(name = "PED_TOTAL_PRODUTOS", precision = 10, scale = 2)
     private BigDecimal totalProdutos;
 
-    @Column(precision = 10, scale = 2)
+    @Column(name = "PED_VALOR_FRETE", precision = 10, scale = 2)
     private BigDecimal valorFrete;
 
-    @Column(precision = 10, scale = 2)
+    @Column(name = "PED_TOTAL_FINAL", precision = 10, scale = 2)
     private BigDecimal totalFinal;
 
+    @Column(name = "PED_FRETE_GRATIS")
     private Boolean freteGratis;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "PED_FORMA_PAGAMENTO", length = 30)
     private FormaDePagamento formaDePagamento;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itens;
 
-    @Column(nullable = false, unique = true, length = 40)
+    @Column(name = "PED_CODIGO_RASTREIO", nullable = false, unique = true, length = 40)
     private String codigoRastreio;
 
+    @Column(name = "PED_CONCLUIDO_EM")
     private LocalDateTime concluidoEm;
 
     public Pedido() {

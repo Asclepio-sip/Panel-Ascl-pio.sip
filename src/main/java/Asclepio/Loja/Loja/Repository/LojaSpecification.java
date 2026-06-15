@@ -1,5 +1,6 @@
-package Asclepio.Loja.Loja;
+package Asclepio.Loja.Loja.Repository;
 
+import Asclepio.Loja.Loja.Loja;
 import Asclepio.Loja.Loja.dto.LojaFiltroDTO;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;

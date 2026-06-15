@@ -1,14 +1,17 @@
 package Asclepio.Loja.LojaBairro.Controller;
 
-import org.springframework.web.bind.annotation.*;
-
 import Asclepio.Loja.LojaBairro.Controller.api.LojaBairroApi;
 import Asclepio.Loja.LojaBairro.LojaBairroService;
 import Asclepio.Loja.LojaBairro.dto.CreateLojaBairroRequest;
+import Asclepio.Loja.LojaBairro.dto.LojaBairroFiltroDTO;
 import Asclepio.Loja.LojaBairro.dto.LojaBairroResponse;
-import Asclepio.Loja.LojaBairro.dto.LojaComBairrosResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @RestController
 public class LojaBairroController implements LojaBairroApi {
@@ -19,33 +22,32 @@ public class LojaBairroController implements LojaBairroApi {
         this.service = service;
     }
 
-    @PostMapping
-    public LojaBairroResponse criar(@RequestBody CreateLojaBairroRequest request) {
-
-        return service.criar(request);
+    @Override
+    public ResponseEntity<LojaBairroResponse> criar(CreateLojaBairroRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(service.criar(request));
     }
 
-    @GetMapping("/loja/{lojaId}")
-    public List<LojaBairroResponse> listarPorLoja(@PathVariable Long lojaId) {
-
-        return service.listarPorLoja(lojaId);
+    @Override
+    public ResponseEntity<Page<LojaBairroResponse>> listar(
+            LojaBairroFiltroDTO filtro,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(service.listar(filtro, pageable));
     }
 
-    @GetMapping
-    public List<LojaBairroResponse> listarTodos() {
-
-        return service.listarTodos();
+    @Override
+    public ResponseEntity<LojaBairroResponse> atualizarFrete(
+            Long id,
+            BigDecimal valorFrete
+    ) {
+        return ResponseEntity.ok(service.atualizarFrete(id, valorFrete));
     }
 
-    @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
-
+    @Override
+    public ResponseEntity<Void> deletar(Long id) {
         service.deletar(id);
-    }
-
-    @GetMapping("/lojas-com-bairros")
-    public List<LojaComBairrosResponse> listarLojasComBairros() {
-
-        return service.listarLojasComBairros();
+        return ResponseEntity.noContent().build();
     }
 }

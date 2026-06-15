@@ -1,38 +1,41 @@
 package Asclepio.Estoque;
 
-import jakarta.persistence.*;
 import Asclepio.Loja.Loja.Loja;
 import Asclepio.ProdutoVariacao.ProdutoVariacao;
+import Asclepio.exception.BusinessException;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "estoque", uniqueConstraints = {@UniqueConstraint(columnNames = {"loja_id", "produto_variacao_id"})})
+@Table(name = "TB_ESTOQUE", uniqueConstraints = {@UniqueConstraint(name = "UK_EST_LOJA_VARIACAO", columnNames = {"EST_LOJA_ID", "EST_VARIACAO_ID"})})
 public class Estoque {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "EST_ID")
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "loja_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "EST_LOJA_ID", nullable = false)
     private Loja loja;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "produto_variacao_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "EST_VARIACAO_ID", nullable = false)
     private ProdutoVariacao produtoVariacao;
 
-    @Column(nullable = false)
+    @Column(name = "EST_QUANTIDADE", nullable = false)
     private Integer quantidade;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "EST_PRECO_VENDA", nullable = false, precision = 10, scale = 2)
     private BigDecimal precoVenda;
 
-    @Column(precision = 5, scale = 2)
-    private BigDecimal percentualDesconto;
+    @Column(name = "EST_PERCENTUAL_DESCONTO", nullable = false, precision = 5, scale = 2)
+    private BigDecimal percentualDesconto = BigDecimal.ZERO;
 
-    @Column(nullable = false)
+    @Column(name = "EST_ATUALIZADO_EM", nullable = false)
     private LocalDateTime atualizadoEm;
 
     protected Estoque() {
@@ -48,25 +51,79 @@ public class Estoque {
         this.atualizadoEm = LocalDateTime.now();
     }
 
+    @PrePersist
+    public void prePersist() {
+        if (this.atualizadoEm == null) {
+            this.atualizadoEm = LocalDateTime.now();
+        }
+
+        if (this.percentualDesconto == null) {
+            this.percentualDesconto = BigDecimal.ZERO;
+        }
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.atualizadoEm = LocalDateTime.now();
+
+        if (this.percentualDesconto == null) {
+            this.percentualDesconto = BigDecimal.ZERO;
+        }
+    }
+
     public void baixarEstoque(Integer quantidadeVendida) {
 
         if (quantidadeVendida == null || quantidadeVendida <= 0) {
-
-            throw new RuntimeException("Quantidade inválida");
+            throw new BusinessException("Quantidade inválida");
         }
 
-        if (this.quantidade < quantidadeVendida) {
-
-            throw new RuntimeException("Estoque insuficiente");
+        if (!possuiEstoque(quantidadeVendida)) {
+            throw new BusinessException("Estoque insuficiente");
         }
 
         this.quantidade -= quantidadeVendida;
-
         this.atualizadoEm = LocalDateTime.now();
     }
 
-    public Integer getQuantidade() {
-        return quantidade;
+    public boolean possuiEstoque(Integer quantidadeSolicitada) {
+        return quantidadeSolicitada != null && quantidadeSolicitada > 0 && this.quantidade >= quantidadeSolicitada;
+    }
+
+    public BigDecimal getValorFinal() {
+
+        if (precoVenda == null) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal desconto = percentualDesconto == null ? BigDecimal.ZERO : percentualDesconto;
+
+        BigDecimal valorDesconto = precoVenda.multiply(desconto).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
+        return precoVenda.subtract(valorDesconto);
+    }
+
+    public boolean possuiPromocao() {
+        return percentualDesconto != null && percentualDesconto.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    public void aplicarPromocao(BigDecimal percentual) {
+        this.percentualDesconto = percentual != null ? percentual : BigDecimal.ZERO;
+        this.atualizadoEm = LocalDateTime.now();
+    }
+
+    public void removerPromocao() {
+        this.percentualDesconto = BigDecimal.ZERO;
+        this.atualizadoEm = LocalDateTime.now();
+    }
+
+    public void atualizarQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
+        this.atualizadoEm = LocalDateTime.now();
+    }
+
+    public void atualizarPrecoVenda(BigDecimal precoVenda) {
+        this.precoVenda = precoVenda;
+        this.atualizadoEm = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -80,6 +137,11 @@ public class Estoque {
     public ProdutoVariacao getProdutoVariacao() {
         return produtoVariacao;
     }
+
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+
     public BigDecimal getPrecoVenda() {
         return precoVenda;
     }
@@ -91,7 +153,6 @@ public class Estoque {
     public LocalDateTime getAtualizadoEm() {
         return atualizadoEm;
     }
-
 
     public void setId(Long id) {
         this.id = id;
@@ -119,5 +180,24 @@ public class Estoque {
 
     public void setAtualizadoEm(LocalDateTime atualizadoEm) {
         this.atualizadoEm = atualizadoEm;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof Estoque estoque)) {
+            return false;
+        }
+
+        return id != null && id.equals(estoque.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

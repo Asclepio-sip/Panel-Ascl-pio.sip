@@ -1,4 +1,4 @@
-package Asclepio.Loja.Bairro;
+package Asclepio.Loja.Bairro.Repository;
 
 import Asclepio.Loja.Bairro.Bairro;
 import Asclepio.Loja.Bairro.dto.BairroFiltroDTO;

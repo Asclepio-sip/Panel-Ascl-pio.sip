@@ -1,36 +1,47 @@
 package Asclepio.Categoria;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "categoria")
+@Table(name = "TB_CATEGORIA", uniqueConstraints = {
+        @UniqueConstraint(name = "UK_CAT_NOME_PAI", columnNames = {
+                "CAT_NOME", "CAT_CATEGORIA_PAI_ID"})})
 public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "CAT_ID")
     private Long id;
 
-    @Column(name = "nome_categoria", nullable = false)
+    @Column(name = "CAT_NOME", nullable = false, length = 100)
     private String nomeCategoria;
 
-    @Column(length = 500)
+    @Column(name = "CAT_DESCRICAO", length = 500)
     private String descricao;
 
+    @Column(name = "CAT_ICONE", length = 100)
     private String icone;
 
+    @Column(name = "CAT_ATIVA", nullable = false)
     private Boolean ativa = true;
 
-    @ManyToOne
-    @JoinColumn(name = "categoria_pai_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CAT_CATEGORIA_PAI_ID")
     private Categoria categoriaPai;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "categoriaPai")
     private List<Categoria> subcategorias = new ArrayList<>();
+
+    public boolean isCategoriaPrincipal() {
+        return categoriaPai == null;
+    }
+
+    public boolean possuiSubcategorias() {
+        return !subcategorias.isEmpty();
+    }
 
     public Categoria() {
     }

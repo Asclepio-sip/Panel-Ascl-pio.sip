@@ -28,7 +28,7 @@ public record LojaResponse(
                 loja.getTipoAtendimento(),
                 loja.getValorMinimoFreteGratis(),
                 loja.getCep(),
-                loja.getCpnj(),
+                loja.getCnpj(),
                 loja.getTelefone(),
                 loja.getTextoDescricao()
 

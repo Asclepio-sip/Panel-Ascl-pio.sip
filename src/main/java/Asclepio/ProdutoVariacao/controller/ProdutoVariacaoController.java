@@ -1,5 +1,6 @@
 package Asclepio.ProdutoVariacao.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import Asclepio.ProdutoVariacao.ProdutoVariacaoService;
@@ -20,11 +21,9 @@ public class ProdutoVariacaoController implements ProdutoVariacaoApi {
     }
 
     @Override
-    public ResponseEntity<ProdutoVariacaoResponseDTO> criar(
-            Long produtoId,
-            ProdutoVariacaoAddDTO dto
-    ) {
-        return ResponseEntity.ok(service.criar(produtoId, dto));
+    public ResponseEntity<ProdutoVariacaoResponseDTO> criar(Long produtoId, ProdutoVariacaoAddDTO dto) {
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.criar(produtoId, dto));
     }
 
     @Override
@@ -33,19 +32,12 @@ public class ProdutoVariacaoController implements ProdutoVariacaoApi {
     }
 
     @Override
-    public ResponseEntity<ProdutoVariacaoResponseDTO> atualizar(
-            Long produtoId,
-            Long id,
-            ProdutoVariacaoUpdateDTO dto
-    ) {
+    public ResponseEntity<ProdutoVariacaoResponseDTO> atualizar(Long produtoId, Long id, ProdutoVariacaoUpdateDTO dto) {
         return ResponseEntity.ok(service.atualizar(id, dto));
     }
 
     @Override
-    public ResponseEntity<Void> deletar(
-            Long produtoId,
-            Long id
-    ) {
+    public ResponseEntity<Void> deletar(Long produtoId, Long id) {
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }

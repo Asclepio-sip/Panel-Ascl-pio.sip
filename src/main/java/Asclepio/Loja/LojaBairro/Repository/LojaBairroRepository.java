@@ -1,5 +1,6 @@
-package Asclepio.Loja.LojaBairro;
+package Asclepio.Loja.LojaBairro.Repository;
 
+import Asclepio.Loja.LojaBairro.LojaBairro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

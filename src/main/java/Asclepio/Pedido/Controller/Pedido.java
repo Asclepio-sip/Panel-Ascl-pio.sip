@@ -1,5 +1,6 @@
 package Asclepio.Pedido.Controller;
 
+import Asclepio.Pedido.Service.PedidoQueryService;
 import Asclepio.Pedido.dto.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,17 +16,19 @@ import Asclepio.Pedido.PedidoService;
 
 @RestController
 @RequestMapping("/pedidos")
-public class TelaPedido implements PedidoApi {
+public class Pedido implements PedidoApi {
 
     private final PedidoService service;
+    private final PedidoQueryService pedidoQueryService;
 
-    public TelaPedido(PedidoService service) {
+    public Pedido(PedidoService service, PedidoQueryService pedidoQueryService) {
         this.service = service;
+        this.pedidoQueryService = pedidoQueryService;
     }
 
     @Override
     public ResponseEntity<Page<ListaDePedidoDTO>> listar(PedidoFiltro filtro, Pageable pageable) {
-        return ResponseEntity.ok(service.listarComFiltro(filtro, pageable));
+        return ResponseEntity.ok(pedidoQueryService.listarComFiltro(filtro, pageable));
     }
 
     public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusPedidoDTO dto) {
