@@ -1,31 +1,27 @@
 package Asclepio.Categoria.Controller.api;
 
+import Asclepio.Categoria.dto.CategoriaFiltro;
+import Asclepio.Categoria.dto.CategoriaPageResponse;
+import Asclepio.Categoria.dto.CategoriaResponse;
+import Asclepio.Categoria.dto.CriarCategoria;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import Asclepio.Categoria.dto.CategoriaResponse;
-import Asclepio.Categoria.dto.CriarCategoria;
-
-import java.util.List;
 
 @RequestMapping("/categorias")
 @Tag(name = "Categorias")
 public interface CategoriaApi {
 
     @GetMapping
-    @Operation(summary = "Listar todas as categorias")
-    ResponseEntity<List<CategoriaResponse>> listar();
-
-    @GetMapping("/principais")
-    @Operation(summary = "Listar categorias principais")
-    ResponseEntity<List<CategoriaResponse>> listarPrincipais();
-
-    @GetMapping("/{categoriaPaiId}/subcategorias")
-    @Operation(summary = "Listar subcategorias de uma categoria")
-    ResponseEntity<List<CategoriaResponse>> listarSubcategorias(
-            @PathVariable Long categoriaPaiId
+    @Operation(summary = "Listar categorias com filtros")
+    @PreAuthorize("hasAuthority('VerCategoria')")
+    ResponseEntity<CategoriaPageResponse> listar(
+            @ParameterObject CategoriaFiltro filtro,
+            @ParameterObject Pageable pageable
     );
 
     @PostMapping
@@ -45,7 +41,7 @@ public interface CategoriaApi {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar categoria")
-    @PreAuthorize("hasAuthority('ExcluirUsuario')")
+    @PreAuthorize("hasAuthority('ExcluirCategoria')")
     ResponseEntity<Void> deletar(
             @PathVariable Long id
     );

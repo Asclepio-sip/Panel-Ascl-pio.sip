@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/bairros")
+@RequestMapping("/bairro")
 @Tag(name = "Bairros", description = "Gerenciamento dos bairros atendidos pelas lojas")
 public interface BairroApi {
 

@@ -62,6 +62,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(error);
     }
 
+    @ExceptionHandler(ApiExternaException.class)
+    public ResponseEntity<ErrorResponse> handleApiExterna(
+            ApiExternaException ex,
+            HttpServletRequest request
+    ) {
+        return ResponseEntity
+                .status(ex.getStatus())
+                .body(new ErrorResponse(
+                        LocalDateTime.now(),
+                        ex.getStatus(),
+                        "API_EXTERNA_ERROR",
+                        ex.getMessage(),
+                        request.getRequestURI()
+                ));
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(
@@ -88,5 +103,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(error);
     }
+
+
 
 }

@@ -55,6 +55,8 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/products").permitAll()
                         .requestMatchers(HttpMethod.GET, "/pedidos/status/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/pedidos/pedidos").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/products").permitAll()
+
 
 
                         .anyRequest()
@@ -105,8 +107,8 @@ public class SecurityConfigurations {
 
         configuration.setAllowedOrigins(
                 java.util.List.of("http://localhost:4200",
-                        "https://customer-ascl-pio-sip.vercel.app/",
-                        "https://administration-ascl-pio-sip.vercel.app/"
+                        "https://customer-ascl-pio-sip.vercel.app",
+                        "https://administration-ascl-pio-sip.vercel.app"
 
                 ));
 

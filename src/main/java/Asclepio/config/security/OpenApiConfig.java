@@ -11,11 +11,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(
-                title = "API - Projeto Base",
+                title = "API - Asclepio",
                 version = "1.0",
-                description = "Documentação da API com JWT"
-        ),
-        security = @SecurityRequirement(name = "bearerAuth")
+                description = "Documentação da API"
+        )
 )
 @SecurityScheme(
         name = "bearerAuth",

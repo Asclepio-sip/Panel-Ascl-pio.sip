@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
-@RequestMapping("/loja-bairros")
+@RequestMapping("/loja-bairro")
 @Tag(name = "Loja Bairro", description = "Gerenciamento dos bairros atendidos por cada loja")
 public interface LojaBairroApi {
 

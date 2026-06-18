@@ -1,34 +1,35 @@
 package Asclepio.ProdutoVariacao.controller.api;
 
+import Asclepio.ProdutoVariacao.ProdutoVariacaoPageResponse;
+import Asclepio.ProdutoVariacao.dto.*;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoAddDTO;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoUpdateDTO;
 
-import java.util.List;
-
-@RequestMapping("/produtos/{produtoId}/variacoes")
+@RequestMapping("/variacoes")
 public interface ProdutoVariacaoApi {
 
-    @PostMapping
+    @GetMapping
+    @PreAuthorize("hasAuthority('VerProdutoVariacao')")
+    ResponseEntity<ProdutoVariacaoPageResponse> listar(
+            @ParameterObject ProdutoVariacaoFiltro filtro,
+            @ParameterObject Pageable pageable
+    );
+
+
+    @PostMapping("/produtos/{produtoId}")
     @PreAuthorize("hasAuthority('CriarProdutoVariacao')")
     ResponseEntity<ProdutoVariacaoResponseDTO> criar(
             @PathVariable Long produtoId,
             @RequestBody ProdutoVariacaoAddDTO dto
     );
 
-    @GetMapping
-    @PreAuthorize("hasAuthority('VerProdutoVariacao')")
-    ResponseEntity<List<ProdutoVariacaoResponseDTO>> listarPorProduto(
-            @PathVariable Long produtoId
-    );
-
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('EditarProdutoVariacao')")
     ResponseEntity<ProdutoVariacaoResponseDTO> atualizar(
-            @PathVariable Long produtoId,
             @PathVariable Long id,
             @RequestBody ProdutoVariacaoUpdateDTO dto
     );
@@ -36,7 +37,6 @@ public interface ProdutoVariacaoApi {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ExcluirProdutoVariacao')")
     ResponseEntity<Void> deletar(
-            @PathVariable Long produtoId,
             @PathVariable Long id
     );
 }

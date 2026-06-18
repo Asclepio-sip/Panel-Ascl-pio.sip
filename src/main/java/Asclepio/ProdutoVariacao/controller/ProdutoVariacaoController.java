@@ -1,15 +1,14 @@
 package Asclepio.ProdutoVariacao.controller;
 
+import Asclepio.ProdutoVariacao.ProdutoVariacaoPageResponse;
+import Asclepio.ProdutoVariacao.ProdutoVariacaoService;
+import Asclepio.ProdutoVariacao.controller.api.ProdutoVariacaoApi;
+import Asclepio.ProdutoVariacao.dto.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import Asclepio.ProdutoVariacao.ProdutoVariacaoService;
-import Asclepio.ProdutoVariacao.controller.api.ProdutoVariacaoApi;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoAddDTO;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoUpdateDTO;
-
-import java.util.List;
 
 @RestController
 public class ProdutoVariacaoController implements ProdutoVariacaoApi {
@@ -21,24 +20,39 @@ public class ProdutoVariacaoController implements ProdutoVariacaoApi {
     }
 
     @Override
-    public ResponseEntity<ProdutoVariacaoResponseDTO> criar(Long produtoId, ProdutoVariacaoAddDTO dto) {
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.criar(produtoId, dto));
+    public ResponseEntity<ProdutoVariacaoPageResponse> listar(
+            ProdutoVariacaoFiltro filtro,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(
+                service.listar(filtro, pageable)
+        );
     }
 
     @Override
-    public ResponseEntity<List<ProdutoVariacaoResponseDTO>> listarPorProduto(Long produtoId) {
-        return ResponseEntity.ok(service.listarPorProduto(produtoId));
+    public ResponseEntity<ProdutoVariacaoResponseDTO> criar(
+            Long produtoId,
+            ProdutoVariacaoAddDTO dto
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                service.criar(produtoId, dto)
+        );
     }
 
     @Override
-    public ResponseEntity<ProdutoVariacaoResponseDTO> atualizar(Long produtoId, Long id, ProdutoVariacaoUpdateDTO dto) {
-        return ResponseEntity.ok(service.atualizar(id, dto));
+    public ResponseEntity<ProdutoVariacaoResponseDTO> atualizar(
+            Long id,
+            ProdutoVariacaoUpdateDTO dto
+    ) {
+        return ResponseEntity.ok(
+                service.atualizar(id, dto)
+        );
     }
 
     @Override
-    public ResponseEntity<Void> deletar(Long produtoId, Long id) {
+    public ResponseEntity<Void> deletar(Long id) {
         service.deletar(id);
+
         return ResponseEntity.noContent().build();
     }
 }

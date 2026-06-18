@@ -30,7 +30,7 @@ public class MovimentacaoEstoque {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MOV_PRODUTO_ID")
-    private Product produto;
+    private Product  produto;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MOV_VARIACAO_ID")

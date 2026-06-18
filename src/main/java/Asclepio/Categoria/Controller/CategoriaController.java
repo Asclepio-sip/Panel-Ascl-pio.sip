@@ -1,14 +1,15 @@
 package Asclepio.Categoria.Controller;
 
+import Asclepio.Categoria.CategoriaService;
+import Asclepio.Categoria.Controller.api.CategoriaApi;
+import Asclepio.Categoria.dto.CategoriaFiltro;
+import Asclepio.Categoria.dto.CategoriaPageResponse;
+import Asclepio.Categoria.dto.CategoriaResponse;
+import Asclepio.Categoria.dto.CriarCategoria;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import Asclepio.Categoria.Controller.api.CategoriaApi;
-import Asclepio.Categoria.CategoriaService;
-import Asclepio.Categoria.dto.CategoriaResponse;
-import Asclepio.Categoria.dto.CriarCategoria;
-
-import java.util.List;
 
 @RestController
 public class CategoriaController implements CategoriaApi {
@@ -20,50 +21,26 @@ public class CategoriaController implements CategoriaApi {
     }
 
     @Override
-    public ResponseEntity<List<CategoriaResponse>> listar() {
+    public ResponseEntity<CategoriaPageResponse> listar(
+            CategoriaFiltro filtro,
+            Pageable pageable
+    ) {
         return ResponseEntity.ok(
-                categoriaService.listarTodas()
-                        .stream()
-                        .map(CategoriaResponse::fromEntity)
-                        .toList()
-        );
-    }
-
-    @Override
-    public ResponseEntity<List<CategoriaResponse>> listarPrincipais() {
-        return ResponseEntity.ok(
-                categoriaService.listarCategoriasPrincipais()
-                        .stream()
-                        .map(CategoriaResponse::fromEntity)
-                        .toList()
-        );
-    }
-
-    @Override
-    public ResponseEntity<List<CategoriaResponse>> listarSubcategorias(Long categoriaPaiId) {
-        return ResponseEntity.ok(
-                categoriaService.listarSubcategorias(categoriaPaiId)
-                        .stream()
-                        .map(CategoriaResponse::fromEntity)
-                        .toList()
+                categoriaService.listar(filtro, pageable)
         );
     }
 
     @Override
     public ResponseEntity<CategoriaResponse> criar(CriarCategoria dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                CategoriaResponse.fromEntity(
-                        categoriaService.criar(dto)
-                )
+                categoriaService.criar(dto)
         );
     }
 
     @Override
     public ResponseEntity<CategoriaResponse> editar(Long id, CriarCategoria dto) {
         return ResponseEntity.ok(
-                CategoriaResponse.fromEntity(
-                        categoriaService.editar(id, dto)
-                )
+                categoriaService.editar(id, dto)
         );
     }
 

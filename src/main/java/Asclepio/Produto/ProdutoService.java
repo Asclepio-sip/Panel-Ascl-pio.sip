@@ -2,109 +2,95 @@ package Asclepio.Produto;
 
 import Asclepio.Categoria.Categoria;
 import Asclepio.Categoria.CategoriaRepository;
-import Asclepio.Produto.Repository.ProductRepository;
-import Asclepio.Produto.Repository.ProdutoSpecification;
+import Asclepio.Produto.dto.PageResponse;
 import Asclepio.Produto.dto.ProductoAddDto;
-import Asclepio.Produto.dto.ProductoResponseDto;
 import Asclepio.Produto.dto.ProdutoFiltro;
 import Asclepio.Produto.dto.ProdutoUpdateDto;
 import Asclepio.exception.BusinessException;
 import Asclepio.exception.ResourceNotFoundException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ProdutoService {
 
-    private final ProductRepository repository;
     private final CategoriaRepository categoriaRepository;
+    private final ProdutoStorageClient produtoStorageClient;
+
 
     public ProdutoService(
-            ProductRepository repository,
-            CategoriaRepository categoriaRepository
+            CategoriaRepository categoriaRepository,
+            ProdutoStorageClient produtoStorageClient
     ) {
-        this.repository = repository;
         this.categoriaRepository = categoriaRepository;
+        this.produtoStorageClient = produtoStorageClient;
     }
 
-    public Product criar(ProductoAddDto dto) {
 
-        validarCriacao(dto);
+    public ProdutoStorageResponse criarComStorage(
+            String nome,
+            String descricao,
+            String marca,
+            Long categoriaId,
+            MultipartFile imagem
+    ) {
+        if (nome == null || nome.isBlank()) {
+            throw new BusinessException("Nome do produto é obrigatório");
+        }
 
-        Categoria categoria = categoriaRepository
-                .findByNomeCategoria(dto.categoriaNome().trim())
-                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
+        if (categoriaId == null) {
+            throw new BusinessException("Categoria é obrigatória");
+        }
 
-        Product product = dto.toDomain();
-
-        product.setCategoria(categoria);
-
-        return repository.save(product);
+        return produtoStorageClient.criarProduto(
+                nome,
+                descricao,
+                marca,
+                categoriaId,
+                imagem
+        );
     }
 
-    public Page<ProductoResponseDto> listarTodos(
+
+    public PageResponse<ProdutoStorageResponse> listarTodosStorage(
             ProdutoFiltro filtro,
             Pageable pageable
     ) {
-        return repository
-                .findAll(ProdutoSpecification.filtrar(filtro), pageable)
-                .map(ProductoResponseDto::fromEntity);
+        return produtoStorageClient.listarProdutos(
+                filtro != null ? filtro.nome() : null,
+                filtro != null ? filtro.categoriaId() : null,
+                filtro != null ? filtro.nomeCategoria() : null,
+                pageable
+        );
     }
 
-    public Product editar(Long id, ProdutoUpdateDto dto) {
 
-        if (dto == null) {
-            throw new BusinessException("Dados para edição do produto são obrigatórios");
+    public void deletarComStorage(Long id) {
+        if (id == null) {
+            throw new BusinessException("ID do produto é obrigatório");
         }
 
-        Product product = buscarPorId(id);
-
-        if (dto.name() != null && !dto.name().isBlank()) {
-            product.setName(dto.name().trim());
-        }
-
-        if (dto.imagemBase64() != null) {
-            product.setImagemBase64(dto.imagemBase64());
-        }
-
-        if (dto.categoriaNome() != null && !dto.categoriaNome().isBlank()) {
-
-            Categoria categoria = categoriaRepository
-                    .findByNomeCategoria(dto.categoriaNome().trim())
-                    .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
-
-            product.setCategoria(categoria);
-        }
-
-        return repository.save(product);
+        produtoStorageClient.deletarProduto(id);
     }
 
-    public void deletar(Long id) {
 
-        Product product = buscarPorId(id);
 
-        repository.delete(product);
-    }
-
-    private Product buscarPorId(Long id) {
+    public ProdutoStorageResponse atualizarComStorage(
+            Long id,
+            ProdutoUpdateDto dto
+    ) {
 
         if (id == null) {
             throw new BusinessException("ID do produto é obrigatório");
         }
 
-        return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado"));
-    }
-
-    private void validarCriacao(ProductoAddDto dto) {
-
         if (dto == null) {
-            throw new BusinessException("Dados do produto são obrigatórios");
+            throw new BusinessException("Dados para atualização são obrigatórios");
         }
 
-        if (dto.categoriaNome() == null || dto.categoriaNome().isBlank()) {
-            throw new BusinessException("Categoria obrigatória");
-        }
+        return produtoStorageClient.atualizarProduto(id, dto);
     }
+
+
 }

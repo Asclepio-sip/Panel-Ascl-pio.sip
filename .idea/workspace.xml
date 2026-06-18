@@ -5,215 +5,57 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88792f31-c9d2-42fd-9c39-246dd5948413" name="Changes" comment="feat:ajuste na arquitetura">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/CategoriaSpecification.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/CategoriaStorageClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/dto/CategoriaFiltro.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/dto/CategoriaPageResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/dto/RestPage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/ProdutoStorageClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/ProdutoStorageResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/ProdutoVariacaoPageResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/ProdutoVariacaoStorageClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/RestPageProdutoVariacao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/dto/ProdutoVariacaoFiltro.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/RestTemplateConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/SwaggerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/exception/ApiExternaException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Asclepio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Asclepio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/Categoria.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/Categoria.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/CategoriaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/CategoriaRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/CategoriaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/CategoriaService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/Controller/CategoriaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/Controller/CategoriaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/Estoque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/Estoque.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/EstoqueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/EstoqueService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/controller/TelaEstoque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/controller/TelaEstoque.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/controller/api/EstoqueApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/controller/api/EstoqueApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/service/EstoqueMovimentacaoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/service/EstoqueMovimentacaoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/service/EstoqueQueryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/service/EstoqueQueryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/service/EstoqueValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/service/EstoqueValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/ItemPedido/ItemPedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ItemPedido/ItemPedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/Bairro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/Bairro.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/BairroService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/BairroService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/Controller/BairroController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/Controller/BairroController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/Controller/api/CategoriaApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/Controller/api/CategoriaApi.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/Controller/api/BairroApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/Controller/api/BairroApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/Repository/BairroRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/Repository/BairroRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/Repository/BairroSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/Repository/BairroSpecification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/dto/BairroFiltroDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Bairro/dto/BairroFiltroDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/Controller/Api/LojaApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/Controller/Api/LojaApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/Controller/LojaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/Controller/LojaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/Loja.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/Loja.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/LojaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/LojaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/Repository/LojaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/Repository/LojaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/Repository/LojaSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/Repository/LojaSpecification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/dto/CreateLojaRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/dto/CreateLojaRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/dto/LojaFiltroDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/dto/LojaFiltroDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/dto/LojaResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/dto/LojaResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/Controller/LojaBairroController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/Controller/LojaBairroController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/Controller/api/LojaBairroApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/Controller/api/LojaBairroApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/LojaBairro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/LojaBairro.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/LojaBairroService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/LojaBairroService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/Repository/LojaBairroRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/Repository/LojaBairroRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/Repository/LojaBairroSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/Repository/LojaBairroSpecification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/dto/LojaBairroFiltroDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/dto/LojaBairroFiltroDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/service/LojaBairroValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/LojaBairro/service/LojaBairroValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/Controller/MovimentacaoEstoqueController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/Controller/MovimentacaoEstoqueController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/MovimentacaoEstoque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/MovimentacaoEstoque.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/MovimentacaoEstoqueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/MovimentacaoEstoqueService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Controller/Pedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Controller/Pedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Controller/api/PedidoApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Controller/api/PedidoApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Pedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Pedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/PedidoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/PedidoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoCodigoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoCodigoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoEntregaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoEntregaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoEstoqueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoEstoqueService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoQueryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoQueryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/dto/PedidoAddDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/dto/PedidoAddDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/Controller/TelaProdutos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/Controller/TelaProdutos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/Controller/api/ProdutoApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/Controller/api/ProdutoApi.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/ProdutoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/ProdutoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/ProdutoVariacao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/ProdutoVariacao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/ProdutoVariacaoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/ProdutoVariacaoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/Repository/ProdutoSpecification.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/ProdutoVariacaoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/ProdutoVariacaoService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/controller/ProdutoVariacaoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/controller/ProdutoVariacaoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Permission/Controller/API/PermissionAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Permission/Controller/API/PermissionAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Permission/Controller/ControllerPermission.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Permission/Controller/ControllerPermission.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Permission/Permission.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Permission/Permission.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Permission/PermissionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Permission/PermissionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Role/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Role/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Controller/API/UserAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Controller/API/UserAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Controller/ControllerUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Controller/ControllerUsuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/dto/RegisterDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/dto/RegisterDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/exception/BusinessException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/exception/BusinessException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/exception/ErrorResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/exception/ErrorResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/controller/api/ProdutoVariacaoApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/controller/api/ProdutoVariacaoApi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/OpenApiConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/OpenApiConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/SecurityConfigurations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/SecurityConfigurations.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/exception/ResourceNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/exception/ResourceNotFoundException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/banner.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/banner.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Categoria/CategoriaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Categoria/CategoriaRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Categoria/CategoriaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Categoria/CategoriaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Categoria/Controller/CategoriaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Categoria/Controller/CategoriaController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Categoria/Controller/api/CategoriaApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Categoria/Controller/api/CategoriaApi.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Loja/Bairro/Controller/api/BairroApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Loja/Bairro/Controller/api/BairroApi.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Loja/LojaBairro/Controller/api/LojaBairroApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Loja/LojaBairro/Controller/api/LojaBairroApi.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/Controller/TelaProdutos.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/Controller/TelaProdutos.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/Controller/api/ProdutoApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/Controller/api/ProdutoApi.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/Repository/ProdutoSpecification.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/ProdutoVariacao/ProdutoVariacaoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/ProdutoVariacao/ProdutoVariacaoService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/ProdutoVariacao/controller/ProdutoVariacaoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/ProdutoVariacao/controller/ProdutoVariacaoController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/ProdutoVariacao/controller/api/ProdutoVariacaoApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/ProdutoVariacao/controller/api/ProdutoVariacaoApi.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/config/bootstrap/CategoriaDataInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/config/bootstrap/CategoriaDataInitializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/config/security/OpenApiConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/config/security/OpenApiConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/config/security/SecurityConfigurations.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/config/security/SecurityConfigurations.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/banner.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/banner.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Categoria/Categoria.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Categoria/CategoriaRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Categoria/CategoriaService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Categoria/Controller/TelaCategoria.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Categoria/Controller/api/CategoriaApi.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Categoria/dto/CategoriaResponse.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Categoria/dto/CriarCategoria.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/Estoque.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/EstoqueService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/Repository/EstoqueRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/Repository/EstoqueSpecification.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/controller/TelaEstoque.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/controller/api/EstoqueApi.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/dto/AplicarPromocaoDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/dto/AtulizarResquet.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/dto/EstoqueAddDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/dto/EstoqueFiltro.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Estoque/dto/ListaDeEstoqueDasLojasResponse.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ItemPedido/DTO/ItemPedidoAddDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ItemPedido/DTO/ItemPedidoDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ItemPedido/ItemPedido.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ItemPedido/ItemPedidoRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Bairro/Bairro.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Bairro/BairroRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Bairro/BairroService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Bairro/Controller/BairroController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Bairro/Controller/api/BairroApi.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Bairro/Enum/TipoAtendimentoLoja.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Bairro/dto/BairroRequestDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Bairro/dto/BairroResponseDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/Controller/Api/LojaApi.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/Controller/LojaController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/Loja.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/LojaRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/LojaService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/dto/CreateLojaRequest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/Loja/dto/LojaResponse.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/Controller/LojaBairroController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/Controller/api/LojaBairroApi.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairro.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/dto/CreateLojaBairroRequest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/dto/LojaBairroItemResponse.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/dto/LojaBairroResponse.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/dto/LojaComBairrosResponse.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/MovimentacaoEstoque/Controller/Api/MovimentacaoEstoqueApi.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/MovimentacaoEstoque/Controller/MovimentacaoEstoqueController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/MovimentacaoEstoque/Enum/TipoMovimentacaoEstoque.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/MovimentacaoEstoque/MovimentacaoEstoque.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/MovimentacaoEstoque/MovimentacaoEstoqueService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/MovimentacaoEstoque/Repository/MovimentacaoEstoqueRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/MovimentacaoEstoque/Repository/MovimentacaoEstoqueSpecification.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/MovimentacaoEstoque/dto/MovimentacaoEstoqueFiltro.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/MovimentacaoEstoque/dto/MovimentacaoEstoqueResponse.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Controller/TelaPedido.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Controller/api/PedidoApi.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Enum/FormaDePagamento.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Enum/StatusDoPedido.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Enum/TipoEntrega.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Pdf/PedidoPdfService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Pdf/PedidoPdfTemplate.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Pedido.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/PedidoService$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/PedidoService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Repository/PedidoRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/Repository/PedidoSpecification.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/AtualizarStatusPedidoDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/DetalhePedidoDTO$ItemDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/DetalhePedidoDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/ListaDePedidoDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/PedidoAddDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/PedidoCriadoResponseDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/PedidoFiltro.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/PedidoStatusResponseDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/ProductListaDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/pdfDTO/ItemPedidoPdfDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Pedido/dto/pdfDTO/PedidoPdfDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/Controller/TelaProdutos.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/Controller/api/ProdutoApi.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/Product.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/ProdutoService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/Repository/ProductRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/Repository/ProdutoSpecification.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/dto/ProductoAddDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/dto/ProductoResponseDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/dto/ProdutoFiltro.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Produto/dto/ProdutoUpdateDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ProdutoVariacao/ProdutoVariacao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ProdutoVariacao/ProdutoVariacaoRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ProdutoVariacao/ProdutoVariacaoService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ProdutoVariacao/controller/ProdutoVariacaoController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ProdutoVariacao/controller/api/ProdutoVariacaoApi.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ProdutoVariacao/dto/ProdutoVariacaoAddDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ProdutoVariacao/dto/ProdutoVariacaoResponseDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ProdutoVariacao/dto/ProdutoVariacaoUpdateDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/ProjetoBaseDeTelasELoginApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Permission/Controller/API/PermissionAPI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Permission/Controller/ControllerPermission.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Permission/Permission.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Permission/PermissionRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Permission/ServicePermisson.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Permission/dto/PermissionResponseDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Role/Controller/ControllerRota.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Role/Controller/api/RoleApi.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Role/Role.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Role/RoleRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Role/ServiceRole.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/Role/dto/RoleResponseDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/Controller/API/UserAPI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/Controller/ControllerUsuario.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/Repository/UserRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/Repository/UserSpecification.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/UserService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/dto/AuthenticationDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/dto/LoginResponseDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/dto/RegisterDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/dto/ResponseListaDeUserDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/dto/UpdateUserDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/dto/UserFiltroDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/Usuario/user/dto/UserResponseDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/bootstrap/CategoriaDataInitializer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/bootstrap/DataInitializer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/AuthorizationService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/CodigoRastreioGenerator.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/OpenApiConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/SecurityFilter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/SpringDataConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/projeto_base_de_telas_e_login/config/security/TokenService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/projeto_base_de_telas_e_login/ProjetoBaseDeTelasELoginApplicationTests.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -271,6 +113,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Application.Asclepio.executor&quot;: &quot;Run&quot;,
     &quot;Application.ProjetoBaseDeTelasELoginApplication.executor&quot;: &quot;Run&quot;,
     &quot;Maven.Projeto-farmacia_back [clean,install].executor&quot;: &quot;Run&quot;,
     &quot;Maven.projeto_base_de_telas_e_login [clean...].executor&quot;: &quot;Run&quot;,

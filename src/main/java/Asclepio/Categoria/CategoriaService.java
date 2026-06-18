@@ -1,127 +1,60 @@
 package Asclepio.Categoria;
 
+import Asclepio.Categoria.dto.CategoriaFiltro;
+import Asclepio.Categoria.dto.CategoriaPageResponse;
+import Asclepio.Categoria.dto.CategoriaResponse;
 import Asclepio.Categoria.dto.CriarCategoria;
 import Asclepio.exception.BusinessException;
-import Asclepio.exception.ResourceNotFoundException;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Set;
 
 @Service
 public class CategoriaService {
 
-    private final CategoriaRepository repository;
+    private final CategoriaStorageClient categoriaStorageClient;
 
-    private static final Set<String> CATEGORIAS_PROTEGIDAS = Set.of(
-            "Medicamentos",
-            "Beleza",
-            "Higiene",
-            "Infantil",
-            "Vitaminas",
-            "Promoções"
-    );
-
-    public CategoriaService(CategoriaRepository repository) {
-        this.repository = repository;
+    public CategoriaService(CategoriaStorageClient categoriaStorageClient) {
+        this.categoriaStorageClient = categoriaStorageClient;
     }
 
-    public List<Categoria> listarTodas() {
-        return repository.findAll();
+    public CategoriaPageResponse listar(
+            CategoriaFiltro filtro,
+            Pageable pageable
+    ) {
+        return categoriaStorageClient.listar(filtro, pageable);
     }
 
-    public List<Categoria> listarCategoriasPrincipais() {
-        return repository.findByCategoriaPaiIsNull();
+    public CategoriaResponse criar(CriarCategoria dto) {
+        validarDto(dto);
+
+        return categoriaStorageClient.criar(dto);
     }
 
-    public List<Categoria> listarSubcategorias(Long categoriaPaiId) {
-        return repository.findByCategoriaPaiId(categoriaPaiId);
-    }
-
-    public Categoria criar(CriarCategoria dto) {
-
-        validarNome(dto.nomeCategoria());
-
-        repository.findByNomeCategoria(dto.nomeCategoria().trim())
-                .ifPresent(c -> {
-                    throw new BusinessException("Categoria já existe");
-                });
-
-        Categoria categoriaPai = null;
-
-        if (dto.categoriaPaiId() != null) {
-            categoriaPai = buscarPorId(dto.categoriaPaiId());
+    public CategoriaResponse editar(Long id, CriarCategoria dto) {
+        if (id == null) {
+            throw new BusinessException("ID da categoria é obrigatório");
         }
 
-        Categoria categoria = new Categoria();
-        categoria.setNomeCategoria(dto.nomeCategoria().trim());
-        categoria.setDescricao(dto.descricao());
-        categoria.setIcone(dto.icone());
-        categoria.setCategoriaPai(categoriaPai);
-        categoria.setAtiva(true);
+        validarDto(dto);
 
-        return repository.save(categoria);
-    }
-
-    public Categoria editar(Long id, CriarCategoria dto) {
-
-        validarNome(dto.nomeCategoria());
-
-        Categoria categoria = buscarPorId(id);
-
-        validarCategoriaProtegida(categoria);
-
-        Categoria categoriaPai = null;
-
-        if (dto.categoriaPaiId() != null) {
-            categoriaPai = buscarPorId(dto.categoriaPaiId());
-
-            if (categoriaPai.getId().equals(categoria.getId())) {
-                throw new BusinessException("A categoria não pode ser pai dela mesma");
-            }
-        }
-
-        categoria.setNomeCategoria(dto.nomeCategoria().trim());
-        categoria.setDescricao(dto.descricao());
-        categoria.setIcone(dto.icone());
-        categoria.setCategoriaPai(categoriaPai);
-
-        return repository.save(categoria);
+        return categoriaStorageClient.editar(id, dto);
     }
 
     public void deletar(Long id) {
-
-        Categoria categoria = buscarPorId(id);
-
-        validarCategoriaProtegida(categoria);
-
-        if (!categoria.getSubcategorias().isEmpty()) {
-            throw new BusinessException("Categoria possui subcategorias vinculadas.");
+        if (id == null) {
+            throw new BusinessException("ID da categoria é obrigatório");
         }
 
-        try {
-            repository.delete(categoria);
-        } catch (DataIntegrityViolationException e) {
-            throw new BusinessException("Categoria possui produtos vinculados.");
+        categoriaStorageClient.deletar(id);
+    }
+
+    private void validarDto(CriarCategoria dto) {
+        if (dto == null) {
+            throw new BusinessException("Dados da categoria são obrigatórios");
         }
-    }
 
-    private Categoria buscarPorId(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Categoria não encontrada"));
-    }
-
-    private void validarNome(String nome) {
-        if (nome == null || nome.isBlank()) {
+        if (dto.nomeCategoria() == null || dto.nomeCategoria().isBlank()) {
             throw new BusinessException("Nome da categoria é obrigatório");
-        }
-    }
-
-    private void validarCategoriaProtegida(Categoria categoria) {
-        if (CATEGORIAS_PROTEGIDAS.contains(categoria.getNomeCategoria())) {
-            throw new BusinessException("Essa categoria é fundamental e não pode ser alterada");
         }
     }
 }
