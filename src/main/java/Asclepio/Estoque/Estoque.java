@@ -1,7 +1,6 @@
 package Asclepio.Estoque;
 
 import Asclepio.Loja.Loja.Loja;
-import Asclepio.ProdutoVariacao.ProdutoVariacao;
 import Asclepio.exception.BusinessException;
 import jakarta.persistence.*;
 
@@ -10,7 +9,15 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "TB_ESTOQUE", uniqueConstraints = {@UniqueConstraint(name = "UK_EST_LOJA_VARIACAO", columnNames = {"EST_LOJA_ID", "EST_VARIACAO_ID"})})
+@Table(
+        name = "TB_ESTOQUE",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "UK_EST_LOJA_VARIACAO",
+                        columnNames = {"EST_LOJA_ID", "EST_VARIACAO_ID"}
+                )
+        }
+)
 public class Estoque {
 
     @Id
@@ -22,9 +29,8 @@ public class Estoque {
     @JoinColumn(name = "EST_LOJA_ID", nullable = false)
     private Loja loja;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "EST_VARIACAO_ID", nullable = false)
-    private ProdutoVariacao produtoVariacao;
+    @Column(name = "EST_VARIACAO_ID", nullable = false)
+    private Long variacaoId;
 
     @Column(name = "EST_QUANTIDADE", nullable = false)
     private Integer quantidade;
@@ -38,17 +44,31 @@ public class Estoque {
     @Column(name = "EST_ATUALIZADO_EM", nullable = false)
     private LocalDateTime atualizadoEm;
 
+    @Column(name = "EST_IMAGEM_URL", nullable = false)
+    private String imagemUrl;
+
     protected Estoque() {
     }
 
-    public Estoque(Long id, Loja loja, ProdutoVariacao produtoVariacao, Integer quantidade, BigDecimal precoVenda, BigDecimal percentualDesconto) {
+    public Estoque(
+            Long id,
+            Loja loja,
+            Long variacaoId,
+            Integer quantidade,
+            BigDecimal precoVenda,
+            BigDecimal percentualDesconto,
+            String imagemUrl
+    ) {
         this.id = id;
         this.loja = loja;
-        this.produtoVariacao = produtoVariacao;
+        this.variacaoId = variacaoId;
         this.quantidade = quantidade;
         this.precoVenda = precoVenda;
-        this.percentualDesconto = percentualDesconto != null ? percentualDesconto : BigDecimal.ZERO;
+        this.percentualDesconto = percentualDesconto != null
+                ? percentualDesconto
+                : BigDecimal.ZERO;
         this.atualizadoEm = LocalDateTime.now();
+        this.imagemUrl =  imagemUrl;
     }
 
     @PrePersist
@@ -86,7 +106,9 @@ public class Estoque {
     }
 
     public boolean possuiEstoque(Integer quantidadeSolicitada) {
-        return quantidadeSolicitada != null && quantidadeSolicitada > 0 && this.quantidade >= quantidadeSolicitada;
+        return quantidadeSolicitada != null
+                && quantidadeSolicitada > 0
+                && this.quantidade >= quantidadeSolicitada;
     }
 
     public BigDecimal getValorFinal() {
@@ -95,19 +117,26 @@ public class Estoque {
             return BigDecimal.ZERO;
         }
 
-        BigDecimal desconto = percentualDesconto == null ? BigDecimal.ZERO : percentualDesconto;
+        BigDecimal desconto = percentualDesconto == null
+                ? BigDecimal.ZERO
+                : percentualDesconto;
 
-        BigDecimal valorDesconto = precoVenda.multiply(desconto).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        BigDecimal valorDesconto = precoVenda
+                .multiply(desconto)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
         return precoVenda.subtract(valorDesconto);
     }
 
     public boolean possuiPromocao() {
-        return percentualDesconto != null && percentualDesconto.compareTo(BigDecimal.ZERO) > 0;
+        return percentualDesconto != null
+                && percentualDesconto.compareTo(BigDecimal.ZERO) > 0;
     }
 
     public void aplicarPromocao(BigDecimal percentual) {
-        this.percentualDesconto = percentual != null ? percentual : BigDecimal.ZERO;
+        this.percentualDesconto = percentual != null
+                ? percentual
+                : BigDecimal.ZERO;
         this.atualizadoEm = LocalDateTime.now();
     }
 
@@ -134,8 +163,16 @@ public class Estoque {
         return loja;
     }
 
-    public ProdutoVariacao getProdutoVariacao() {
-        return produtoVariacao;
+    public Long getVariacaoId() {
+        return variacaoId;
+    }
+
+    public String getImagemUrl() {
+        return imagemUrl;
+    }
+
+    public void setImagemUrl(String imagemUrl) {
+        this.imagemUrl = imagemUrl;
     }
 
     public Integer getQuantidade() {
@@ -162,8 +199,8 @@ public class Estoque {
         this.loja = loja;
     }
 
-    public void setProdutoVariacao(ProdutoVariacao produtoVariacao) {
-        this.produtoVariacao = produtoVariacao;
+    public void setVariacaoId(Long variacaoId) {
+        this.variacaoId = variacaoId;
     }
 
     public void setQuantidade(Integer quantidade) {

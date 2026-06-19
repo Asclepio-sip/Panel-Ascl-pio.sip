@@ -1,6 +1,7 @@
 package Asclepio.ProdutoVariacao.dto;
 
 public record ProdutoVariacaoFiltro(
+        Long id,
         Long produtoId,
         String nomeProduto,
         String nomeVariacao,

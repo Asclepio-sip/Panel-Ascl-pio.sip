@@ -2,6 +2,7 @@ package Asclepio.Pedido;
 
 import Asclepio.Estoque.Estoque;
 import Asclepio.Estoque.Repository.EstoqueRepository;
+import Asclepio.ItemPedido.DTO.ItemPedidoAddDTO;
 import Asclepio.Loja.Loja.Loja;
 import Asclepio.Loja.Loja.Repository.LojaRepository;
 import Asclepio.Pedido.Enum.StatusDoPedido;
@@ -11,6 +12,8 @@ import Asclepio.Pedido.Service.*;
 import Asclepio.Pedido.dto.PedidoAddDTO;
 import Asclepio.Pedido.dto.PedidoCriadoResponseDTO;
 import Asclepio.Pedido.dto.PedidoStatusResponseDTO;
+import Asclepio.ProdutoVariacao.ProdutoVariacaoStorageClient;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
 import Asclepio.exception.BusinessException;
 import Asclepio.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class PedidoService {
@@ -33,17 +38,9 @@ public class PedidoService {
     private final PedidoCodigoService codigoService;
     private final PedidoQueryService queryService;
 
-    public PedidoService(
-            PedidoRepository pedidoRepository,
-            LojaRepository lojaRepository,
-            EstoqueRepository estoqueRepository,
-            PedidoPdfService pedidoPdfService,
-            PedidoValidator validator,
-            PedidoEntregaService entregaService,
-            PedidoEstoqueService estoqueService,
-            PedidoCodigoService codigoService,
-            PedidoQueryService queryService
-    ) {
+    private final ProdutoVariacaoStorageClient produtoVariacaoClient;
+
+    public PedidoService(PedidoRepository pedidoRepository, LojaRepository lojaRepository, EstoqueRepository estoqueRepository, PedidoPdfService pedidoPdfService, PedidoValidator validator, PedidoEntregaService entregaService, PedidoEstoqueService estoqueService, PedidoCodigoService codigoService, PedidoQueryService queryService, ProdutoVariacaoStorageClient produtoVariacaoClient) {
         this.pedidoRepository = pedidoRepository;
         this.lojaRepository = lojaRepository;
         this.estoqueRepository = estoqueRepository;
@@ -53,6 +50,7 @@ public class PedidoService {
         this.estoqueService = estoqueService;
         this.codigoService = codigoService;
         this.queryService = queryService;
+        this.produtoVariacaoClient = produtoVariacaoClient;
     }
 
     @Transactional
@@ -60,15 +58,15 @@ public class PedidoService {
 
         validator.validarCriacao(dto);
 
-        Loja loja = lojaRepository.findById(dto.lojaId())
-                .orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
+        Loja loja = lojaRepository.findById(dto.lojaId()).orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
 
         List<Estoque> estoquesDaLoja = estoqueRepository.findByLoja_Id(loja.getId());
 
         validator.validarEstoqueDosItens(dto, estoquesDaLoja);
 
-        Pedido pedido = dto.toEntity(loja, estoquesDaLoja);
+        Map<Long, ProdutoVariacaoResponseDTO> variacoesPorId = dto.itens().stream().collect(Collectors.toMap(ItemPedidoAddDTO::variacaoId, item -> produtoVariacaoClient.buscarPorId(item.variacaoId())));
 
+        Pedido pedido = dto.toEntity(loja, estoquesDaLoja, variacoesPorId);
         pedido.calcularSubtotalProdutos();
 
         entregaService.aplicarEntrega(pedido, dto, loja);
@@ -79,12 +77,7 @@ public class PedidoService {
 
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
 
-        return new PedidoCriadoResponseDTO(
-                pedidoSalvo.getId(),
-                pedidoSalvo.getCodigoRastreio(),
-                pedidoSalvo.getStatus(),
-                "/pedidos/" + pedidoSalvo.getId() + "/pdf"
-        );
+        return new PedidoCriadoResponseDTO(pedidoSalvo.getId(), pedidoSalvo.getCodigoRastreio(), pedidoSalvo.getStatus(), "/pedidos/" + pedidoSalvo.getId() + "/pdf");
     }
 
     @Transactional
@@ -129,9 +122,6 @@ public class PedidoService {
             }
         }
 
-        return new PedidoStatusResponseDTO(
-                pedido.getCodigoRastreio(),
-                pedido.getStatus()
-        );
+        return new PedidoStatusResponseDTO(pedido.getCodigoRastreio(), pedido.getStatus());
     }
 }

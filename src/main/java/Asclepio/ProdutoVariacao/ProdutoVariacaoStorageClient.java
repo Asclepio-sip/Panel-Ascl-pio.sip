@@ -5,6 +5,7 @@ import Asclepio.exception.ApiExternaException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,11 @@ public class ProdutoVariacaoStorageClient {
                 .queryParam("size", pageable.getPageSize());
 
         if (filtro != null) {
+
+            if (filtro.id() != null) {
+                builder.queryParam("id", filtro.id());
+            }
+
             if (filtro.produtoId() != null) {
                 builder.queryParam("produtoId", filtro.produtoId());
             }
@@ -142,4 +148,31 @@ public class ProdutoVariacaoStorageClient {
             return "Erro ao comunicar com a API de produtos";
         }
     }
+
+    public ProdutoVariacaoResponseDTO buscarPorId(Long id) {
+
+        ProdutoVariacaoFiltro filtro = new ProdutoVariacaoFiltro(
+                id,
+                null,
+                null,
+                null,
+                null,
+                true
+        );
+
+        ProdutoVariacaoPageResponse page = listar(
+                filtro,
+                PageRequest.of(0, 1)
+        );
+
+        if (page == null || page.content() == null || page.content().isEmpty()) {
+            throw new ApiExternaException(
+                    404,
+                    "Variação não encontrada com id: " + id
+            );
+        }
+
+        return page.content().get(0);
+    }
+
 }

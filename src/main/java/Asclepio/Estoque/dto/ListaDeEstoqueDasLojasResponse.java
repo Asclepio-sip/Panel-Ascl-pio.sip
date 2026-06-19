@@ -2,6 +2,7 @@ package Asclepio.Estoque.dto;
 
 import Asclepio.Estoque.Estoque;
 import Asclepio.Loja.Bairro.Enum.TipoAtendimentoLoja;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -12,7 +13,7 @@ public record ListaDeEstoqueDasLojasResponse(
         Long lojaId,
         String nomeLoja,
         Long produtoId,
-        String imagemBase64,
+        String imagemUrl,
         String nomeProduto,
         Integer quantidade,
         BigDecimal precoVenda,
@@ -23,9 +24,12 @@ public record ListaDeEstoqueDasLojasResponse(
 
 ) {
 
-    public static ListaDeEstoqueDasLojasResponse fromDomain(Estoque estoque) {
+    public static ListaDeEstoqueDasLojasResponse fromDomain(
+            Estoque estoque,
+            ProdutoVariacaoResponseDTO variacao
+    ) {
 
-        String Entregar;
+        String entregar;
 
         BigDecimal desconto = estoque.getPercentualDesconto() != null
                 ? estoque.getPercentualDesconto()
@@ -38,17 +42,17 @@ public record ListaDeEstoqueDasLojasResponse(
         BigDecimal valorFinal = estoque.getPrecoVenda()
                 .subtract(valorDesconto);
 
-        if (estoque.getLoja().getTipoAtendimento() == TipoAtendimentoLoja.ENTREGA ||estoque.getLoja().getTipoAtendimento() == TipoAtendimentoLoja.AMBOS  ){
-            Entregar = "ENTREGA";
-        }else {
-            Entregar = "RETIRADA";
+        if (
+                estoque.getLoja().getTipoAtendimento() == TipoAtendimentoLoja.ENTREGA
+                        || estoque.getLoja().getTipoAtendimento() == TipoAtendimentoLoja.AMBOS
+        ) {
+
+            entregar = "ENTREGA";
+
+        } else {
+
+            entregar = "RETIRADA";
         }
-
-
-        var variacao = estoque.getProdutoVariacao();
-
-        var produto = variacao.getProduto();
-
 
         return new ListaDeEstoqueDasLojasResponse(
 
@@ -58,11 +62,11 @@ public record ListaDeEstoqueDasLojasResponse(
 
                 estoque.getLoja().getNomeLoja(),
 
-                produto.getId(),
+                variacao.produtoId(),
 
-                produto.getImagemBase64(),
+                estoque.getImagemUrl(),
 
-                produto.getName(),
+                variacao.nomeProduto(),
 
                 estoque.getQuantidade(),
 
@@ -72,10 +76,10 @@ public record ListaDeEstoqueDasLojasResponse(
 
                 valorFinal,
 
-                variacao.getNomeVariacao(),
+                variacao.nomeVariacao(),
 
-                Entregar
-
+                entregar
         );
     }
+
 }

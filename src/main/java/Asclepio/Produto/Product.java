@@ -20,7 +20,7 @@ public class Product {
     private String name;
 
     @Column(columnDefinition = "TEXT", name = "PRO_IMAGEM_BASE64")
-    private String imagemBase64;
+    private String ImagemUrl;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "PRO_CATEGORIA_ID", nullable = false)
@@ -40,7 +40,7 @@ public class Product {
 
         this.name = name.trim();
 
-        this.imagemBase64 = imagemBase64;
+        this.ImagemUrl = imagemBase64;
 
         this.categoria = categoria;
     }
@@ -63,7 +63,7 @@ public class Product {
 
     public void alterarImagem(String imagemBase64) {
 
-        this.imagemBase64 = imagemBase64;
+        this.ImagemUrl = imagemBase64;
     }
 
     public void alterarCategoria(Categoria categoria) {
@@ -106,8 +106,8 @@ public class Product {
         return name;
     }
 
-    public String getImagemBase64() {
-        return imagemBase64;
+    public String getImagemUrl() {
+        return ImagemUrl;
     }
 
     public Categoria getCategoria() {
@@ -130,8 +130,8 @@ public class Product {
         alterarNome(name);
     }
 
-    public void setImagemBase64(String imagemBase64) {
-        this.imagemBase64 = imagemBase64;
+    public void setImagemUrl(String imagemUrl) {
+        this.ImagemUrl = imagemUrl;
     }
 
     public void setCategoria(Categoria categoria) {

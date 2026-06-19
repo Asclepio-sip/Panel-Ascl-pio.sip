@@ -3,6 +3,7 @@ package Asclepio.Produto;
 import Asclepio.Produto.dto.PageResponse;
 import Asclepio.Produto.dto.ProdutoUpdateDto;
 import Asclepio.exception.ApiExternaException;
+import Asclepio.exception.ResourceNotFoundException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -165,6 +166,40 @@ public class ProdutoStorageClient {
 
         } catch (Exception e) {
             return "Erro ao comunicar com a API de produtos";
+        }
+    }
+
+    public ProdutoStorageResponse buscarPorId(Long id) {
+
+        String url = UriComponentsBuilder
+                .fromHttpUrl(storageServiceUrl + "/produtos")
+                .queryParam("id", id)
+                .queryParam("page", 0)
+                .queryParam("size", 1)
+                .toUriString();
+
+        try {
+            ResponseEntity<PageResponse<ProdutoStorageResponse>> response =
+                    restTemplate.exchange(
+                            url,
+                            HttpMethod.GET,
+                            null,
+                            new ParameterizedTypeReference<PageResponse<ProdutoStorageResponse>>() {}
+                    );
+
+            PageResponse<ProdutoStorageResponse> page = response.getBody();
+
+            if (page == null || page.content() == null || page.content().isEmpty()) {
+                throw new ResourceNotFoundException("Produto não encontrado com id: " + id);
+            }
+
+            return page.content().get(0);
+
+        } catch (HttpClientErrorException | HttpServerErrorException ex) {
+            throw new ApiExternaException(
+                    ex.getStatusCode().value(),
+                    extrairMensagem(ex.getResponseBodyAsString())
+            );
         }
     }
 }

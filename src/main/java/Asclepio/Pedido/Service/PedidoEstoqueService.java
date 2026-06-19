@@ -2,9 +2,7 @@ package Asclepio.Pedido.Service;
 
 import Asclepio.Estoque.Estoque;
 import Asclepio.Estoque.Repository.EstoqueRepository;
-import Asclepio.MovimentacaoEstoque.Enum.TipoMovimentacaoEstoque;
-import Asclepio.MovimentacaoEstoque.MovimentacaoEstoque;
-import Asclepio.MovimentacaoEstoque.Repository.MovimentacaoEstoqueRepository;
+import Asclepio.Estoque.service.EstoqueMovimentacaoService;
 import Asclepio.Pedido.Pedido;
 import Asclepio.exception.BusinessException;
 import org.springframework.stereotype.Service;
@@ -17,14 +15,14 @@ import java.util.List;
 public class PedidoEstoqueService {
 
     private final EstoqueRepository estoqueRepository;
-    private final MovimentacaoEstoqueRepository movimentacaoEstoqueRepository;
+    private final EstoqueMovimentacaoService movimentacaoService;
 
     public PedidoEstoqueService(
             EstoqueRepository estoqueRepository,
-            MovimentacaoEstoqueRepository movimentacaoEstoqueRepository
+            EstoqueMovimentacaoService movimentacaoService
     ) {
         this.estoqueRepository = estoqueRepository;
-        this.movimentacaoEstoqueRepository = movimentacaoEstoqueRepository;
+        this.movimentacaoService = movimentacaoService;
     }
 
     @Transactional
@@ -33,7 +31,7 @@ public class PedidoEstoqueService {
         for (var item : pedido.getItens()) {
 
             Estoque estoque = estoquesDaLoja.stream()
-                    .filter(e -> e.getProdutoVariacao().getId().equals(item.getVariacaoId()))
+                    .filter(e -> e.getVariacaoId().equals(item.getVariacaoId()))
                     .findFirst()
                     .orElseThrow(() -> new BusinessException("Estoque não encontrado para baixa"));
 
@@ -45,21 +43,12 @@ public class PedidoEstoqueService {
 
             estoqueRepository.save(estoque);
 
-            movimentacaoEstoqueRepository.save(new MovimentacaoEstoque(
+            movimentacaoService.registrarSaidaPedido(
                     estoque,
-                    estoque.getLoja(),
-                    estoque.getProdutoVariacao().getProduto(),
-                    estoque.getProdutoVariacao(),
-                    null,
-                    TipoMovimentacaoEstoque.SAIDA_PEDIDO,
                     quantidadeAntes,
-                    estoque.getQuantidade(),
                     precoAntes,
-                    estoque.getPrecoVenda(),
-                    descontoAntes,
-                    estoque.getPercentualDesconto(),
-                    "Baixa automática por pedido"
-            ));
+                    descontoAntes
+            );
         }
     }
 }

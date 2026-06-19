@@ -46,16 +46,13 @@ public class PedidoValidator {
             }
 
             Estoque estoque = estoquesDaLoja.stream()
-                    .filter(e -> e.getProdutoVariacao().getId().equals(itemDto.variacaoId()))
+                    .filter(e -> e.getVariacaoId().equals(itemDto.variacaoId()))
                     .findFirst()
                     .orElseThrow(() -> new BusinessException("Variação não encontrada no estoque"));
 
             if (estoque.getQuantidade() < itemDto.quantidade()) {
                 throw new BusinessException(
-                        "Estoque insuficiente para: "
-                                + estoque.getProdutoVariacao().getProduto().getName()
-                                + " - "
-                                + estoque.getProdutoVariacao().getNomeVariacao()
+                        "Estoque insuficiente para a variação id: " + itemDto.variacaoId()
                 );
             }
         }

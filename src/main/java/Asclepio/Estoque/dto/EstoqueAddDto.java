@@ -24,5 +24,6 @@ public record EstoqueAddDto(
 
         Long variacaoId
 
+
 ) {
 }

@@ -14,7 +14,7 @@ public record ProductoResponseDto (
         return new ProductoResponseDto(
                 p.getId(),
                 p.getName(),
-                p.getImagemBase64(),
+                p.getImagemUrl(),
                 p.getCategoria() != null
                         ? p.getCategoria().getNomeCategoria()
                         : null

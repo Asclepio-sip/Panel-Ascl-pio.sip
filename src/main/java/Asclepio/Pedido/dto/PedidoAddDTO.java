@@ -1,18 +1,20 @@
 package Asclepio.Pedido.dto;
 
+import Asclepio.Estoque.Estoque;
 import Asclepio.ItemPedido.DTO.ItemPedidoAddDTO;
+import Asclepio.ItemPedido.ItemPedido;
+import Asclepio.Loja.Loja.Loja;
 import Asclepio.Pedido.Enum.FormaDePagamento;
 import Asclepio.Pedido.Enum.StatusDoPedido;
 import Asclepio.Pedido.Enum.TipoEntrega;
-import Asclepio.Estoque.Estoque;
-import Asclepio.ItemPedido.ItemPedido;
-import Asclepio.Loja.Loja.Loja;
 import Asclepio.Pedido.Pedido;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public record PedidoAddDTO(
 
@@ -36,7 +38,8 @@ public record PedidoAddDTO(
 
     public Pedido toEntity(
             Loja loja,
-            List<Estoque> estoquesDaLoja
+            List<Estoque> estoquesDaLoja,
+            Map<Long, ProdutoVariacaoResponseDTO> variacoesPorId
     ) {
 
         Pedido pedido = new Pedido();
@@ -61,27 +64,27 @@ public record PedidoAddDTO(
                 itens.stream().map(itemDto -> {
 
                             Estoque estoque = estoquesDaLoja.stream()
-                                    .filter(e ->
-                                            e.getProdutoVariacao()
-                                                    .getId()
-                                                    .equals(itemDto.variacaoId())
-                                    )
+                                    .filter(e -> e.getVariacaoId().equals(itemDto.variacaoId()))
                                     .findFirst()
                                     .orElseThrow(() ->
                                             new RuntimeException("Variação não encontrada no estoque")
                                     );
 
-                            var variacao = estoque.getProdutoVariacao();
-                            var produto = variacao.getProduto();
+                            ProdutoVariacaoResponseDTO variacao =
+                                    variacoesPorId.get(itemDto.variacaoId());
+
+                            if (variacao == null) {
+                                throw new RuntimeException("Dados da variação não encontrados");
+                            }
 
                             return new ItemPedido(
                                     null,
-                                    variacao.getId(),
-                                    produto.getId(),
-                                    produto.getName(),
-                                    variacao.getNomeVariacao(),
-                                    produto.getImagemBase64(),
-                                    produto.getCategoria().getNomeCategoria(),
+                                    variacao.id(),
+                                    variacao.produtoId(),
+                                    variacao.nomeProduto(),
+                                    variacao.nomeVariacao(),
+                                    null,
+                                    null,
                                     estoque.getPrecoVenda(),
                                     itemDto.quantidade(),
                                     pedido,
@@ -96,9 +99,7 @@ public record PedidoAddDTO(
         if (tipoEntrega == TipoEntrega.RETIRADA) {
 
             if (!loja.aceitaRetirada()) {
-                throw new RuntimeException(
-                        "Essa loja não aceita retirada"
-                );
+                throw new RuntimeException("Essa loja não aceita retirada");
             }
 
             pedido.setEndereco(null);
@@ -112,25 +113,18 @@ public record PedidoAddDTO(
         if (tipoEntrega == TipoEntrega.ENTREGA) {
 
             if (!loja.aceitaEntrega()) {
-                throw new RuntimeException(
-                        "Essa loja não faz entrega"
-                );
+                throw new RuntimeException("Essa loja não faz entrega");
             }
 
             if (bairroId == null) {
-                throw new RuntimeException(
-                        "Bairro obrigatório"
-                );
+                throw new RuntimeException("Bairro obrigatório");
             }
 
             if (endereco == null || endereco.isBlank()) {
-                throw new RuntimeException(
-                        "Endereço obrigatório"
-                );
+                throw new RuntimeException("Endereço obrigatório");
             }
         }
 
         return pedido;
     }
-
 }

@@ -123,10 +123,6 @@ public class MovimentacaoEstoque {
         return produto;
     }
 
-    public ProdutoVariacao getProdutoVariacao() {
-        return produtoVariacao;
-    }
-
     public User getUsuario() {
         return usuario;
     }

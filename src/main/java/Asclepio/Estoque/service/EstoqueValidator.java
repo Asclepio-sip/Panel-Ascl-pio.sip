@@ -56,10 +56,8 @@ public class EstoqueValidator {
     }
 
     public void validarEstoqueDuplicado(Long lojaId, Long variacaoId) {
-        var existente = estoqueRepository.findByLoja_IdAndProdutoVariacao_Id(lojaId, variacaoId);
-
-        if (existente.isPresent()) {
-            throw new BusinessException("Essa variação já existe no estoque");
+        if (estoqueRepository.existsByLoja_IdAndVariacaoId(lojaId, variacaoId)) {
+            throw new BusinessException("Já existe estoque para essa loja e variação");
         }
     }
 

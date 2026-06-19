@@ -4,7 +4,12 @@ import Asclepio.Estoque.Estoque;
 import Asclepio.MovimentacaoEstoque.Enum.TipoMovimentacaoEstoque;
 import Asclepio.MovimentacaoEstoque.MovimentacaoEstoque;
 import Asclepio.MovimentacaoEstoque.Repository.MovimentacaoEstoqueRepository;
+import Asclepio.ProdutoVariacao.ProdutoVariacaoStorageClient;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoFiltro;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
 import Asclepio.Usuario.User.User;
+import Asclepio.exception.ResourceNotFoundException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +19,25 @@ import java.math.BigDecimal;
 public class EstoqueMovimentacaoService {
 
     private final MovimentacaoEstoqueRepository repository;
+    private final ProdutoVariacaoStorageClient produtoVariacaoClient;
 
-    public EstoqueMovimentacaoService(MovimentacaoEstoqueRepository repository) {
+    public EstoqueMovimentacaoService(
+            MovimentacaoEstoqueRepository repository,
+            ProdutoVariacaoStorageClient produtoVariacaoClient
+    ) {
         this.repository = repository;
+        this.produtoVariacaoClient = produtoVariacaoClient;
     }
 
     public void registrarCriacao(Estoque estoque) {
-        repository.save(new MovimentacaoEstoque(
+
+        buscarVariacao(estoque.getVariacaoId());
+
+        MovimentacaoEstoque movimentacao = new MovimentacaoEstoque(
                 estoque,
                 estoque.getLoja(),
-                estoque.getProdutoVariacao().getProduto(),
-                estoque.getProdutoVariacao(),
+                null,
+                null,
                 usuarioLogado(),
                 TipoMovimentacaoEstoque.CRIACAO,
                 0,
@@ -34,7 +47,9 @@ public class EstoqueMovimentacaoService {
                 BigDecimal.ZERO,
                 estoque.getPercentualDesconto(),
                 "Produto adicionado ao estoque"
-        ));
+        );
+
+        repository.save(movimentacao);
     }
 
     public void registrarAtualizacao(
@@ -43,11 +58,14 @@ public class EstoqueMovimentacaoService {
             BigDecimal precoAntes,
             BigDecimal descontoAntes
     ) {
-        repository.save(new MovimentacaoEstoque(
+
+        buscarVariacao(estoque.getVariacaoId());
+
+        MovimentacaoEstoque movimentacao = new MovimentacaoEstoque(
                 estoque,
                 estoque.getLoja(),
-                estoque.getProdutoVariacao().getProduto(),
-                estoque.getProdutoVariacao(),
+                null,
+                null,
                 usuarioLogado(),
                 TipoMovimentacaoEstoque.ATUALIZACAO,
                 quantidadeAntes,
@@ -57,15 +75,20 @@ public class EstoqueMovimentacaoService {
                 descontoAntes,
                 estoque.getPercentualDesconto(),
                 "Estoque atualizado manualmente"
-        ));
+        );
+
+        repository.save(movimentacao);
     }
 
     public void registrarDelecao(Estoque estoque) {
-        repository.save(new MovimentacaoEstoque(
+
+        buscarVariacao(estoque.getVariacaoId());
+
+        MovimentacaoEstoque movimentacao = new MovimentacaoEstoque(
                 estoque,
                 estoque.getLoja(),
-                estoque.getProdutoVariacao().getProduto(),
-                estoque.getProdutoVariacao(),
+                null,
+                null,
                 usuarioLogado(),
                 TipoMovimentacaoEstoque.DELECAO,
                 estoque.getQuantidade(),
@@ -75,15 +98,24 @@ public class EstoqueMovimentacaoService {
                 estoque.getPercentualDesconto(),
                 BigDecimal.ZERO,
                 "Estoque removido pelo usuário"
-        ));
+        );
+
+        repository.save(movimentacao);
     }
 
-    public void registrarPromocao(Estoque estoque, BigDecimal descontoAntes, String observacao) {
-        repository.save(new MovimentacaoEstoque(
+    public void registrarPromocao(
+            Estoque estoque,
+            BigDecimal descontoAntes,
+            String observacao
+    ) {
+
+        buscarVariacao(estoque.getVariacaoId());
+
+        MovimentacaoEstoque movimentacao = new MovimentacaoEstoque(
                 estoque,
                 estoque.getLoja(),
-                estoque.getProdutoVariacao().getProduto(),
-                estoque.getProdutoVariacao(),
+                null,
+                null,
                 usuarioLogado(),
                 TipoMovimentacaoEstoque.PROMOCAO,
                 estoque.getQuantidade(),
@@ -93,13 +125,75 @@ public class EstoqueMovimentacaoService {
                 descontoAntes,
                 estoque.getPercentualDesconto(),
                 observacao
-        ));
+        );
+
+        repository.save(movimentacao);
+    }
+
+    public void registrarSaidaPedido(
+            Estoque estoque,
+            Integer quantidadeAntes,
+            BigDecimal precoAntes,
+            BigDecimal descontoAntes
+    ) {
+
+        buscarVariacao(estoque.getVariacaoId());
+
+        MovimentacaoEstoque movimentacao = new MovimentacaoEstoque(
+                estoque,
+                estoque.getLoja(),
+                null,
+                null,
+                usuarioLogado(),
+                TipoMovimentacaoEstoque.SAIDA_PEDIDO,
+                quantidadeAntes,
+                estoque.getQuantidade(),
+                precoAntes,
+                estoque.getPrecoVenda(),
+                descontoAntes,
+                estoque.getPercentualDesconto(),
+                "Baixa automática por pedido"
+        );
+
+        repository.save(movimentacao);
+    }
+
+    private ProdutoVariacaoResponseDTO buscarVariacao(Long variacaoId) {
+
+        ProdutoVariacaoFiltro filtro = new ProdutoVariacaoFiltro(
+                variacaoId,
+                null,
+                null,
+                null,
+                null,
+                true
+        );
+
+        var page = produtoVariacaoClient.listar(filtro, PageRequest.of(0, 1));
+
+        if (page == null || page.content() == null || page.content().isEmpty()) {
+            throw new ResourceNotFoundException("Variação não encontrada com id: " + variacaoId);
+        }
+
+        return page.content().get(0);
     }
 
     private User usuarioLogado() {
-        return (User) SecurityContextHolder
+
+        var authentication = SecurityContextHolder
                 .getContext()
-                .getAuthentication()
-                .getPrincipal();
+                .getAuthentication();
+
+        if (authentication == null || authentication.getPrincipal() == null) {
+            return null;
+        }
+
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof User user) {
+            return user;
+        }
+
+        return null;
     }
 }

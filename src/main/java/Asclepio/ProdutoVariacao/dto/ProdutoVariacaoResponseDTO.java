@@ -10,6 +10,8 @@ public record ProdutoVariacaoResponseDTO(
 
         String nomeProduto,
 
+        String imagemUrl,
+
         String nomeVariacao,
 
         String codigoBarras,
@@ -18,9 +20,7 @@ public record ProdutoVariacaoResponseDTO(
 
 ) {
 
-    public static ProdutoVariacaoResponseDTO fromEntity(
-            ProdutoVariacao p
-    ) {
+    public static ProdutoVariacaoResponseDTO fromEntity(ProdutoVariacao p) {
 
         return new ProdutoVariacaoResponseDTO(
 
@@ -29,6 +29,8 @@ public record ProdutoVariacaoResponseDTO(
                 p.getProduto().getId(),
 
                 p.getProduto().getName(),
+
+                p.getProduto().getImagemUrl(),
 
                 p.getNomeVariacao(),
 

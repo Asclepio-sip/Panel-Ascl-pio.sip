@@ -6,8 +6,14 @@ import Asclepio.Estoque.service.EstoqueMovimentacaoService;
 import Asclepio.Estoque.service.EstoqueQueryService;
 import Asclepio.Estoque.service.EstoqueValidator;
 import Asclepio.Loja.Loja.Repository.LojaRepository;
-import Asclepio.ProdutoVariacao.ProdutoVariacaoRepository;
+import Asclepio.MovimentacaoEstoque.MovimentacaoEstoque;
+import Asclepio.Produto.ProdutoStorageClient;
+import Asclepio.Produto.ProdutoStorageResponse;
+import Asclepio.ProdutoVariacao.ProdutoVariacaoStorageClient;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoFiltro;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
 import Asclepio.exception.ResourceNotFoundException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,18 +25,28 @@ public class EstoqueService {
 
     private final EstoqueRepository estoqueRepository;
     private final LojaRepository lojaRepository;
-    private final ProdutoVariacaoRepository produtoVariacaoRepository;
     private final EstoqueValidator validator;
     private final EstoqueQueryService queryService;
     private final EstoqueMovimentacaoService movimentacaoService;
+    private final ProdutoVariacaoStorageClient produtoVariacaoClient;
+    private final ProdutoStorageClient produtoStorageClient;
 
-    public EstoqueService(EstoqueRepository estoqueRepository, LojaRepository lojaRepository, ProdutoVariacaoRepository produtoVariacaoRepository, EstoqueValidator validator, EstoqueQueryService queryService, EstoqueMovimentacaoService movimentacaoService) {
+    public EstoqueService(
+            EstoqueRepository estoqueRepository,
+            LojaRepository lojaRepository,
+            EstoqueValidator validator,
+            EstoqueQueryService queryService,
+            EstoqueMovimentacaoService movimentacaoService,
+            ProdutoVariacaoStorageClient produtoVariacaoClient,
+            ProdutoStorageClient produtoStorageClient
+    ) {
         this.estoqueRepository = estoqueRepository;
         this.lojaRepository = lojaRepository;
-        this.produtoVariacaoRepository = produtoVariacaoRepository;
         this.validator = validator;
         this.queryService = queryService;
         this.movimentacaoService = movimentacaoService;
+        this.produtoVariacaoClient = produtoVariacaoClient;
+        this.produtoStorageClient = produtoStorageClient;
     }
 
     @Transactional
@@ -38,15 +54,46 @@ public class EstoqueService {
 
         validator.validarCriacao(dto);
 
-        var loja = dto.lojaID() != null ? lojaRepository.findById(dto.lojaID()) : lojaRepository.findByNomeLoja(dto.nomeLoja());
+        var lojaOptional = dto.lojaID() != null
+                ? lojaRepository.findById(dto.lojaID())
+                : lojaRepository.findByNomeLoja(dto.nomeLoja());
 
-        var lojaFinal = loja.orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
+        var lojaFinal = lojaOptional.orElseThrow(
+                () -> new ResourceNotFoundException("Loja não encontrada")
+        );
 
-        var variacaoFinal = produtoVariacaoRepository.findById(dto.variacaoId()).orElseThrow(() -> new ResourceNotFoundException("Variação não encontrada"));
+        ProdutoVariacaoFiltro filtro = new ProdutoVariacaoFiltro(
+                dto.variacaoId(),
+                null,
+                null,
+                null,
+                null,
+                true
+        );
 
-        validator.validarEstoqueDuplicado(lojaFinal.getId(), variacaoFinal.getId());
+        var page = produtoVariacaoClient.listar(filtro, PageRequest.of(0, 1));
 
-        Estoque estoque = new Estoque(null, lojaFinal, variacaoFinal, dto.quantidade(), dto.precoVenda(), BigDecimal.ZERO);
+        if (page == null || page.content() == null || page.content().isEmpty()) {
+            throw new ResourceNotFoundException("Variação não encontrada");
+        }
+
+        ProdutoVariacaoResponseDTO variacaoFinal = page.content().get(0);
+
+        validator.validarEstoqueDuplicado(lojaFinal.getId(), variacaoFinal.id());
+
+        ProdutoStorageResponse produto = produtoStorageClient.buscarPorId(
+                variacaoFinal.produtoId()
+        );
+
+        Estoque estoque = new Estoque(
+                null,
+                lojaFinal,
+                variacaoFinal.id(),
+                dto.quantidade(),
+                dto.precoVenda(),
+                BigDecimal.ZERO,
+                produto.imagemUrl()
+        );
 
         estoqueRepository.save(estoque);
 
