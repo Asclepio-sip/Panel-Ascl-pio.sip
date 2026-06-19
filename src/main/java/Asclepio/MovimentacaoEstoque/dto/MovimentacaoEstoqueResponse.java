@@ -1,12 +1,13 @@
 package Asclepio.MovimentacaoEstoque.dto;
 
-import Asclepio.MovimentacaoEstoque.MovimentacaoEstoque;
 import Asclepio.MovimentacaoEstoque.Enum.TipoMovimentacaoEstoque;
+import Asclepio.MovimentacaoEstoque.MovimentacaoEstoque;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record MovimentacaoEstoqueResponse(
+
         Long id,
 
         Long estoqueId,
@@ -18,6 +19,7 @@ public record MovimentacaoEstoqueResponse(
         String nomeProduto,
 
         String usuario,
+
         TipoMovimentacaoEstoque tipo,
 
         Integer quantidadeAntes,
@@ -32,21 +34,39 @@ public record MovimentacaoEstoqueResponse(
         String observacao,
 
         LocalDateTime criadoEm
+
 ) {
 
-    public static MovimentacaoEstoqueResponse fromEntity(MovimentacaoEstoque mov) {
+    public static MovimentacaoEstoqueResponse fromEntity(
+            MovimentacaoEstoque mov
+    ) {
+
         return new MovimentacaoEstoqueResponse(
+
                 mov.getId(),
 
-                mov.getEstoque() != null ? mov.getEstoque().getId() : null,
+                mov.getEstoque() != null
+                        ? mov.getEstoque().getId()
+                        : null,
 
-                mov.getLoja() != null ? mov.getLoja().getId() : null,
-                mov.getLoja() != null ? mov.getLoja().getNomeLoja() : null,
+                mov.getLoja() != null
+                        ? mov.getLoja().getId()
+                        : null,
 
-                mov.getProduto() != null ? mov.getProduto().getId() : null,
-                mov.getProduto() != null ? mov.getProduto().getName() : null,
+                mov.getLoja() != null
+                        ? mov.getLoja().getNomeLoja()
+                        : null,
 
-                mov.getUsuario() != null ? mov.getUsuario().getUsername() : "Sistema",
+                // agora vem direto do ID salvo
+                mov.getProdutoId(),
+
+                // como Produto está em outro microservice,
+                // você não consegue pegar o nome daqui
+                null,
+
+                mov.getUsuario() != null
+                        ? mov.getUsuario().getUsername()
+                        : "Sistema",
 
                 mov.getTipo(),
 
@@ -64,4 +84,5 @@ public record MovimentacaoEstoqueResponse(
                 mov.getCriadoEm()
         );
     }
+
 }

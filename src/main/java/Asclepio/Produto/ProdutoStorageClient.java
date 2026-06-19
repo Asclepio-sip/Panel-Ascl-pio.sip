@@ -1,6 +1,7 @@
 package Asclepio.Produto;
 
 import Asclepio.Produto.dto.PageResponse;
+import Asclepio.Produto.dto.ProdutoStorageResponse;
 import Asclepio.Produto.dto.ProdutoUpdateDto;
 import Asclepio.exception.ApiExternaException;
 import Asclepio.exception.ResourceNotFoundException;

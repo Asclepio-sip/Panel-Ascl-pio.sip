@@ -3,8 +3,6 @@ package Asclepio.MovimentacaoEstoque;
 import Asclepio.Estoque.Estoque;
 import Asclepio.Loja.Loja.Loja;
 import Asclepio.MovimentacaoEstoque.Enum.TipoMovimentacaoEstoque;
-import Asclepio.Produto.Product;
-import Asclepio.ProdutoVariacao.ProdutoVariacao;
 import Asclepio.Usuario.User.User;
 import jakarta.persistence.*;
 
@@ -28,13 +26,11 @@ public class MovimentacaoEstoque {
     @JoinColumn(name = "MOV_LOJA_ID")
     private Loja loja;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MOV_PRODUTO_ID")
-    private Product  produto;
+    @Column(name = "MOV_PRODUTO_ID")
+    private Long produtoId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MOV_VARIACAO_ID")
-    private ProdutoVariacao produtoVariacao;
+    @Column(name = "MOV_VARIACAO_ID")
+    private Long produtoVariacaoId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MOV_USUARIO_ID")
@@ -71,11 +67,25 @@ public class MovimentacaoEstoque {
     protected MovimentacaoEstoque() {
     }
 
-    public MovimentacaoEstoque(Estoque estoque, Loja loja, Product produto, ProdutoVariacao produtoVariacao, User usuario, TipoMovimentacaoEstoque tipo, Integer quantidadeAntes, Integer quantidadeDepois, BigDecimal precoAntes, BigDecimal precoDepois, BigDecimal descontoAntes, BigDecimal descontoDepois, String observacao) {
+    public MovimentacaoEstoque(
+            Estoque estoque,
+            Loja loja,
+            Long produtoId,
+            Long produtoVariacaoId,
+            User usuario,
+            TipoMovimentacaoEstoque tipo,
+            Integer quantidadeAntes,
+            Integer quantidadeDepois,
+            BigDecimal precoAntes,
+            BigDecimal precoDepois,
+            BigDecimal descontoAntes,
+            BigDecimal descontoDepois,
+            String observacao
+    ) {
         this.estoque = estoque;
         this.loja = loja;
-        this.produto = produto;
-        this.produtoVariacao = produtoVariacao;
+        this.produtoId = produtoId;
+        this.produtoVariacaoId = produtoVariacaoId;
         this.usuario = usuario;
         this.tipo = tipo;
         this.quantidadeAntes = quantidadeAntes;
@@ -96,15 +106,21 @@ public class MovimentacaoEstoque {
     }
 
     public boolean alterouQuantidade() {
-        return quantidadeAntes != null && quantidadeDepois != null && !quantidadeAntes.equals(quantidadeDepois);
+        return quantidadeAntes != null &&
+                quantidadeDepois != null &&
+                !quantidadeAntes.equals(quantidadeDepois);
     }
 
     public boolean alterouPreco() {
-        return precoAntes != null && precoDepois != null && precoAntes.compareTo(precoDepois) != 0;
+        return precoAntes != null &&
+                precoDepois != null &&
+                precoAntes.compareTo(precoDepois) != 0;
     }
 
     public boolean alterouDesconto() {
-        return descontoAntes != null && descontoDepois != null && descontoAntes.compareTo(descontoDepois) != 0;
+        return descontoAntes != null &&
+                descontoDepois != null &&
+                descontoAntes.compareTo(descontoDepois) != 0;
     }
 
     public Long getId() {
@@ -119,8 +135,12 @@ public class MovimentacaoEstoque {
         return loja;
     }
 
-    public Product getProduto() {
-        return produto;
+    public Long getProdutoId() {
+        return produtoId;
+    }
+
+    public Long getProdutoVariacaoId() {
+        return produtoVariacaoId;
     }
 
     public User getUsuario() {

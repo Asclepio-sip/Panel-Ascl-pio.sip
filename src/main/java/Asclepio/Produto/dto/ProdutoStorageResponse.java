@@ -1,4 +1,4 @@
-package Asclepio.Produto;
+package Asclepio.Produto.dto;
 
 public record ProdutoStorageResponse(
         Long id,

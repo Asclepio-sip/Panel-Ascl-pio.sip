@@ -1,7 +1,7 @@
 package Asclepio.Produto.Controller.api;
 
 import Asclepio.Produto.dto.PageResponse;
-import Asclepio.Produto.ProdutoStorageResponse;
+import Asclepio.Produto.dto.ProdutoStorageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;

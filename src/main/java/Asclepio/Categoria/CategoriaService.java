@@ -17,10 +17,7 @@ public class CategoriaService {
         this.categoriaStorageClient = categoriaStorageClient;
     }
 
-    public CategoriaPageResponse listar(
-            CategoriaFiltro filtro,
-            Pageable pageable
-    ) {
+    public CategoriaPageResponse listar(CategoriaFiltro filtro, Pageable pageable) {
         return categoriaStorageClient.listar(filtro, pageable);
     }
 

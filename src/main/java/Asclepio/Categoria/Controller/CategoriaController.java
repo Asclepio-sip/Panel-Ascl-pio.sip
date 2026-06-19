@@ -21,27 +21,18 @@ public class CategoriaController implements CategoriaApi {
     }
 
     @Override
-    public ResponseEntity<CategoriaPageResponse> listar(
-            CategoriaFiltro filtro,
-            Pageable pageable
-    ) {
-        return ResponseEntity.ok(
-                categoriaService.listar(filtro, pageable)
-        );
+    public ResponseEntity<CategoriaPageResponse> listar(CategoriaFiltro filtro, Pageable pageable) {
+        return ResponseEntity.ok(categoriaService.listar(filtro, pageable));
     }
 
     @Override
     public ResponseEntity<CategoriaResponse> criar(CriarCategoria dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                categoriaService.criar(dto)
-        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoriaService.criar(dto));
     }
 
     @Override
     public ResponseEntity<CategoriaResponse> editar(Long id, CriarCategoria dto) {
-        return ResponseEntity.ok(
-                categoriaService.editar(id, dto)
-        );
+        return ResponseEntity.ok(categoriaService.editar(id, dto));
     }
 
     @Override

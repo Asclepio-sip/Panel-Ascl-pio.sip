@@ -1,13 +1,10 @@
 package Asclepio.Produto;
 
-import Asclepio.Categoria.Categoria;
-import Asclepio.Categoria.CategoriaRepository;
 import Asclepio.Produto.dto.PageResponse;
-import Asclepio.Produto.dto.ProductoAddDto;
 import Asclepio.Produto.dto.ProdutoFiltro;
+import Asclepio.Produto.dto.ProdutoStorageResponse;
 import Asclepio.Produto.dto.ProdutoUpdateDto;
 import Asclepio.exception.BusinessException;
-import Asclepio.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,15 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ProdutoService {
 
-    private final CategoriaRepository categoriaRepository;
     private final ProdutoStorageClient produtoStorageClient;
 
 
     public ProdutoService(
-            CategoriaRepository categoriaRepository,
             ProdutoStorageClient produtoStorageClient
     ) {
-        this.categoriaRepository = categoriaRepository;
         this.produtoStorageClient = produtoStorageClient;
     }
 

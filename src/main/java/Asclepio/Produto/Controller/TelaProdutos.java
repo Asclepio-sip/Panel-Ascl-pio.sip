@@ -2,6 +2,7 @@ package Asclepio.Produto.Controller;
 
 import Asclepio.Produto.*;
 import Asclepio.Produto.dto.PageResponse;
+import Asclepio.Produto.dto.ProdutoStorageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

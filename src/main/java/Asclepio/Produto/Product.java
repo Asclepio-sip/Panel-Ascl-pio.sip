@@ -7,26 +7,16 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "TB_PRODUTO", uniqueConstraints = {@UniqueConstraint(name = "UK_PRODUTO_NOME", columnNames = "PRO_NOME")})
 public class Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PRO_ID")
     private Long id;
 
-    @Column(name = "PRO_NOME", nullable = false, length = 150)
     private String name;
 
-    @Column(columnDefinition = "TEXT", name = "PRO_IMAGEM_BASE64")
     private String ImagemUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "PRO_CATEGORIA_ID", nullable = false)
     private Categoria categoria;
 
-    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProdutoVariacao> variacoes = new ArrayList<>();
 
     public Product() {

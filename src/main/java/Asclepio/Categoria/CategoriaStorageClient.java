@@ -28,15 +28,9 @@ public class CategoriaStorageClient {
         this.restTemplate = restTemplate;
     }
 
-    public CategoriaPageResponse listar(
-            CategoriaFiltro filtro,
-            Pageable pageable
-    ) {
+    public CategoriaPageResponse listar(CategoriaFiltro filtro, Pageable pageable) {
 
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromHttpUrl(storageServiceUrl + "/categorias")
-                .queryParam("page", pageable.getPageNumber())
-                .queryParam("size", pageable.getPageSize());
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(storageServiceUrl + "/categorias").queryParam("page", pageable.getPageNumber()).queryParam("size", pageable.getPageSize());
 
         if (filtro != null) {
 
@@ -59,22 +53,13 @@ public class CategoriaStorageClient {
 
         try {
 
-            ResponseEntity<CategoriaPageResponse> response =
-                    restTemplate.exchange(
-                            builder.toUriString(),
-                            HttpMethod.GET,
-                            null,
-                            CategoriaPageResponse.class
-                    );
+            ResponseEntity<CategoriaPageResponse> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null, CategoriaPageResponse.class);
 
             return response.getBody();
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
 
-            throw new ApiExternaException(
-                    ex.getStatusCode().value(),
-                    extrairMensagem(ex.getResponseBodyAsString())
-            );
+            throw new ApiExternaException(ex.getStatusCode().value(), extrairMensagem(ex.getResponseBodyAsString()));
         }
     }
 
@@ -84,21 +69,13 @@ public class CategoriaStorageClient {
 
         try {
 
-            ResponseEntity<CategoriaResponse> response =
-                    restTemplate.postForEntity(
-                            url,
-                            dto,
-                            CategoriaResponse.class
-                    );
+            ResponseEntity<CategoriaResponse> response = restTemplate.postForEntity(url, dto, CategoriaResponse.class);
 
             return response.getBody();
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
 
-            throw new ApiExternaException(
-                    ex.getStatusCode().value(),
-                    extrairMensagem(ex.getResponseBodyAsString())
-            );
+            throw new ApiExternaException(ex.getStatusCode().value(), extrairMensagem(ex.getResponseBodyAsString()));
         }
     }
 
@@ -109,27 +86,17 @@ public class CategoriaStorageClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<CriarCategoria> request =
-                new HttpEntity<>(dto, headers);
+        HttpEntity<CriarCategoria> request = new HttpEntity<>(dto, headers);
 
         try {
 
-            ResponseEntity<CategoriaResponse> response =
-                    restTemplate.exchange(
-                            url,
-                            HttpMethod.PUT,
-                            request,
-                            CategoriaResponse.class
-                    );
+            ResponseEntity<CategoriaResponse> response = restTemplate.exchange(url, HttpMethod.PUT, request, CategoriaResponse.class);
 
             return response.getBody();
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
 
-            throw new ApiExternaException(
-                    ex.getStatusCode().value(),
-                    extrairMensagem(ex.getResponseBodyAsString())
-            );
+            throw new ApiExternaException(ex.getStatusCode().value(), extrairMensagem(ex.getResponseBodyAsString()));
         }
     }
 
@@ -143,10 +110,7 @@ public class CategoriaStorageClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
 
-            throw new ApiExternaException(
-                    ex.getStatusCode().value(),
-                    extrairMensagem(ex.getResponseBodyAsString())
-            );
+            throw new ApiExternaException(ex.getStatusCode().value(), extrairMensagem(ex.getResponseBodyAsString()));
         }
     }
 

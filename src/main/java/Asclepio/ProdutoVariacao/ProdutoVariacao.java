@@ -3,36 +3,16 @@ package Asclepio.ProdutoVariacao;
 import Asclepio.Produto.Product;
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "TB_PRODUTO_VARIACAO",
-
-        uniqueConstraints = {
-
-                @UniqueConstraint(name = "UK_PRODUTO_VARIACAO_NOME", columnNames = {"PROV_PRODUTO_ID", "PROV_NOME"}),
-
-                @UniqueConstraint(name = "UK_PRODUTO_VARIACAO_CODIGO_BARRAS", columnNames = "PROV_CODIGO_BARRAS")},
-
-        indexes = {
-
-                @Index(name = "IDX_PRODUTO_VARIACAO_PRODUTO", columnList = "PROV_PRODUTO_ID")})
 public class ProdutoVariacao {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PROV_ID")
     private Long id;
 
-    @Column(name = "PROV_NOME", nullable = false, length = 150)
     private String nomeVariacao;
 
-    @Column(name = "PROV_CODIGO_BARRAS", length = 100, unique = true)
     private String codigoBarras;
 
-    @Column(name = "PROV_ATIVO", nullable = false)
     private Boolean ativo = true;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "PROV_PRODUTO_ID", nullable = false)
     private Product produto;
 
     public ProdutoVariacao() {
