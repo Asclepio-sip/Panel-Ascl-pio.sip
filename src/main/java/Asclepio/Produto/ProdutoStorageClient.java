@@ -7,6 +7,7 @@ import Asclepio.exception.ApiExternaException;
 import Asclepio.exception.ResourceNotFoundException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -51,7 +54,7 @@ public class ProdutoStorageClient {
             body.add("imagem", imagem.getResource());
         }
 
-        HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = criarHeadersComToken();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         HttpEntity<MultiValueMap<String, Object>> request =
@@ -90,12 +93,15 @@ public class ProdutoStorageClient {
                 .queryParam("size", pageable.getPageSize())
                 .toUriString();
 
+        HttpHeaders headers = criarHeadersComToken();
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
         try {
             ResponseEntity<PageResponse<ProdutoStorageResponse>> response =
                     restTemplate.exchange(
                             url,
                             HttpMethod.GET,
-                            null,
+                            request,
                             new ParameterizedTypeReference<PageResponse<ProdutoStorageResponse>>() {}
                     );
 
@@ -112,8 +118,16 @@ public class ProdutoStorageClient {
     public void deletarProduto(Long id) {
         String url = storageServiceUrl + "/produtos/" + id;
 
+        HttpHeaders headers = criarHeadersComToken();
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
         try {
-            restTemplate.delete(url);
+            restTemplate.exchange(
+                    url,
+                    HttpMethod.DELETE,
+                    request,
+                    Void.class
+            );
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
             throw new ApiExternaException(
@@ -129,7 +143,7 @@ public class ProdutoStorageClient {
     ) {
         String url = storageServiceUrl + "/produtos/" + id;
 
-        HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = criarHeadersComToken();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<ProdutoUpdateDto> request =
@@ -154,22 +168,6 @@ public class ProdutoStorageClient {
         }
     }
 
-    private String extrairMensagem(String responseBody) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode json = mapper.readTree(responseBody);
-
-            if (json.has("message")) {
-                return json.get("message").asText();
-            }
-
-            return "Erro ao comunicar com a API de produtos";
-
-        } catch (Exception e) {
-            return "Erro ao comunicar com a API de produtos";
-        }
-    }
-
     public ProdutoStorageResponse buscarPorId(Long id) {
 
         String url = UriComponentsBuilder
@@ -179,12 +177,15 @@ public class ProdutoStorageClient {
                 .queryParam("size", 1)
                 .toUriString();
 
+        HttpHeaders headers = criarHeadersComToken();
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
         try {
             ResponseEntity<PageResponse<ProdutoStorageResponse>> response =
                     restTemplate.exchange(
                             url,
                             HttpMethod.GET,
-                            null,
+                            request,
                             new ParameterizedTypeReference<PageResponse<ProdutoStorageResponse>>() {}
                     );
 
@@ -201,6 +202,41 @@ public class ProdutoStorageClient {
                     ex.getStatusCode().value(),
                     extrairMensagem(ex.getResponseBodyAsString())
             );
+        }
+    }
+
+    private HttpHeaders criarHeadersComToken() {
+        HttpHeaders headers = new HttpHeaders();
+
+        ServletRequestAttributes attributes =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+
+            String authorization = request.getHeader("Authorization");
+
+            if (authorization != null && !authorization.isBlank()) {
+                headers.set("Authorization", authorization);
+            }
+        }
+
+        return headers;
+    }
+
+    private String extrairMensagem(String responseBody) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode json = mapper.readTree(responseBody);
+
+            if (json.has("message")) {
+                return json.get("message").asText();
+            }
+
+            return "Erro ao comunicar com a API de produtos";
+
+        } catch (Exception e) {
+            return "Erro ao comunicar com a API de produtos";
         }
     }
 }

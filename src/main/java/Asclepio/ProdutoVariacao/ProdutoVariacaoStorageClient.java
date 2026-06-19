@@ -4,6 +4,7 @@ import Asclepio.ProdutoVariacao.dto.*;
 import Asclepio.exception.ApiExternaException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
@@ -29,9 +32,20 @@ public class ProdutoVariacaoStorageClient {
     public ProdutoVariacaoResponseDTO criar(Long produtoId, ProdutoVariacaoAddDTO dto) {
         String url = storageServiceUrl + "/variacoes/produtos/" + produtoId;
 
+        HttpHeaders headers = criarHeadersComToken();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<ProdutoVariacaoAddDTO> request =
+                new HttpEntity<>(dto, headers);
+
         try {
             ResponseEntity<ProdutoVariacaoResponseDTO> response =
-                    restTemplate.postForEntity(url, dto, ProdutoVariacaoResponseDTO.class);
+                    restTemplate.exchange(
+                            url,
+                            HttpMethod.POST,
+                            request,
+                            ProdutoVariacaoResponseDTO.class
+                    );
 
             return response.getBody();
 
@@ -43,7 +57,10 @@ public class ProdutoVariacaoStorageClient {
         }
     }
 
-    public ProdutoVariacaoPageResponse listar(ProdutoVariacaoFiltro filtro, Pageable pageable) {
+    public ProdutoVariacaoPageResponse listar(
+            ProdutoVariacaoFiltro filtro,
+            Pageable pageable
+    ) {
         UriComponentsBuilder builder = UriComponentsBuilder
                 .fromHttpUrl(storageServiceUrl + "/variacoes")
                 .queryParam("page", pageable.getPageNumber())
@@ -76,12 +93,15 @@ public class ProdutoVariacaoStorageClient {
             }
         }
 
+        HttpHeaders headers = criarHeadersComToken();
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
         try {
             ResponseEntity<ProdutoVariacaoPageResponse> response =
                     restTemplate.exchange(
                             builder.toUriString(),
                             HttpMethod.GET,
-                            null,
+                            request,
                             ProdutoVariacaoPageResponse.class
                     );
 
@@ -95,10 +115,17 @@ public class ProdutoVariacaoStorageClient {
         }
     }
 
-    public ProdutoVariacaoResponseDTO atualizar(Long id, ProdutoVariacaoUpdateDTO dto) {
+    public ProdutoVariacaoResponseDTO atualizar(
+            Long id,
+            ProdutoVariacaoUpdateDTO dto
+    ) {
         String url = storageServiceUrl + "/variacoes/" + id;
 
-        HttpEntity<ProdutoVariacaoUpdateDTO> request = new HttpEntity<>(dto);
+        HttpHeaders headers = criarHeadersComToken();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<ProdutoVariacaoUpdateDTO> request =
+                new HttpEntity<>(dto, headers);
 
         try {
             ResponseEntity<ProdutoVariacaoResponseDTO> response =
@@ -122,30 +149,22 @@ public class ProdutoVariacaoStorageClient {
     public void deletar(Long id) {
         String url = storageServiceUrl + "/variacoes/" + id;
 
+        HttpHeaders headers = criarHeadersComToken();
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
         try {
-            restTemplate.delete(url);
+            restTemplate.exchange(
+                    url,
+                    HttpMethod.DELETE,
+                    request,
+                    Void.class
+            );
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
             throw new ApiExternaException(
                     ex.getStatusCode().value(),
                     extrairMensagem(ex.getResponseBodyAsString())
             );
-        }
-    }
-
-    private String extrairMensagem(String responseBody) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode json = mapper.readTree(responseBody);
-
-            if (json.has("message")) {
-                return json.get("message").asText();
-            }
-
-            return "Erro ao comunicar com a API de produtos";
-
-        } catch (Exception e) {
-            return "Erro ao comunicar com a API de produtos";
         }
     }
 
@@ -175,4 +194,38 @@ public class ProdutoVariacaoStorageClient {
         return page.content().get(0);
     }
 
+    private HttpHeaders criarHeadersComToken() {
+        HttpHeaders headers = new HttpHeaders();
+
+        ServletRequestAttributes attributes =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+
+            String authorization = request.getHeader("Authorization");
+
+            if (authorization != null && !authorization.isBlank()) {
+                headers.set("Authorization", authorization);
+            }
+        }
+
+        return headers;
+    }
+
+    private String extrairMensagem(String responseBody) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode json = mapper.readTree(responseBody);
+
+            if (json.has("message")) {
+                return json.get("message").asText();
+            }
+
+            return "Erro ao comunicar com a API de variações";
+
+        } catch (Exception e) {
+            return "Erro ao comunicar com a API de variações";
+        }
+    }
 }

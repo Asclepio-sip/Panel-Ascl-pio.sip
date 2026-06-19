@@ -7,6 +7,7 @@ import Asclepio.Categoria.dto.CriarCategoria;
 import Asclepio.exception.ApiExternaException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
@@ -30,7 +33,10 @@ public class CategoriaStorageClient {
 
     public CategoriaPageResponse listar(CategoriaFiltro filtro, Pageable pageable) {
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(storageServiceUrl + "/categorias").queryParam("page", pageable.getPageNumber()).queryParam("size", pageable.getPageSize());
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromHttpUrl(storageServiceUrl + "/categorias")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize());
 
         if (filtro != null) {
 
@@ -51,15 +57,27 @@ public class CategoriaStorageClient {
             }
         }
 
+        HttpHeaders headers = criarHeadersComToken();
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
         try {
 
-            ResponseEntity<CategoriaPageResponse> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null, CategoriaPageResponse.class);
+            ResponseEntity<CategoriaPageResponse> response =
+                    restTemplate.exchange(
+                            builder.toUriString(),
+                            HttpMethod.GET,
+                            request,
+                            CategoriaPageResponse.class
+                    );
 
             return response.getBody();
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
 
-            throw new ApiExternaException(ex.getStatusCode().value(), extrairMensagem(ex.getResponseBodyAsString()));
+            throw new ApiExternaException(
+                    ex.getStatusCode().value(),
+                    extrairMensagem(ex.getResponseBodyAsString())
+            );
         }
     }
 
@@ -67,15 +85,30 @@ public class CategoriaStorageClient {
 
         String url = storageServiceUrl + "/categorias";
 
+        HttpHeaders headers = criarHeadersComToken();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<CriarCategoria> request =
+                new HttpEntity<>(dto, headers);
+
         try {
 
-            ResponseEntity<CategoriaResponse> response = restTemplate.postForEntity(url, dto, CategoriaResponse.class);
+            ResponseEntity<CategoriaResponse> response =
+                    restTemplate.exchange(
+                            url,
+                            HttpMethod.POST,
+                            request,
+                            CategoriaResponse.class
+                    );
 
             return response.getBody();
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
 
-            throw new ApiExternaException(ex.getStatusCode().value(), extrairMensagem(ex.getResponseBodyAsString()));
+            throw new ApiExternaException(
+                    ex.getStatusCode().value(),
+                    extrairMensagem(ex.getResponseBodyAsString())
+            );
         }
     }
 
@@ -83,20 +116,30 @@ public class CategoriaStorageClient {
 
         String url = storageServiceUrl + "/categorias/" + id;
 
-        HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = criarHeadersComToken();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<CriarCategoria> request = new HttpEntity<>(dto, headers);
+        HttpEntity<CriarCategoria> request =
+                new HttpEntity<>(dto, headers);
 
         try {
 
-            ResponseEntity<CategoriaResponse> response = restTemplate.exchange(url, HttpMethod.PUT, request, CategoriaResponse.class);
+            ResponseEntity<CategoriaResponse> response =
+                    restTemplate.exchange(
+                            url,
+                            HttpMethod.PUT,
+                            request,
+                            CategoriaResponse.class
+                    );
 
             return response.getBody();
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
 
-            throw new ApiExternaException(ex.getStatusCode().value(), extrairMensagem(ex.getResponseBodyAsString()));
+            throw new ApiExternaException(
+                    ex.getStatusCode().value(),
+                    extrairMensagem(ex.getResponseBodyAsString())
+            );
         }
     }
 
@@ -104,14 +147,44 @@ public class CategoriaStorageClient {
 
         String url = storageServiceUrl + "/categorias/" + id;
 
+        HttpHeaders headers = criarHeadersComToken();
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
         try {
 
-            restTemplate.delete(url);
+            restTemplate.exchange(
+                    url,
+                    HttpMethod.DELETE,
+                    request,
+                    Void.class
+            );
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
 
-            throw new ApiExternaException(ex.getStatusCode().value(), extrairMensagem(ex.getResponseBodyAsString()));
+            throw new ApiExternaException(
+                    ex.getStatusCode().value(),
+                    extrairMensagem(ex.getResponseBodyAsString())
+            );
         }
+    }
+
+    private HttpHeaders criarHeadersComToken() {
+        HttpHeaders headers = new HttpHeaders();
+
+        ServletRequestAttributes attributes =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+
+            String authorization = request.getHeader("Authorization");
+
+            if (authorization != null && !authorization.isBlank()) {
+                headers.set("Authorization", authorization);
+            }
+        }
+
+        return headers;
     }
 
     private String extrairMensagem(String responseBody) {

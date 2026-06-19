@@ -1,5 +1,6 @@
 package Asclepio.Usuario.User.Controller;
 
+import Asclepio.Usuario.StorageWakeUpService;
 import Asclepio.Usuario.User.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -21,24 +22,27 @@ public class ControllerUsuario implements UserAPI {
     private final UserService userService;
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
+    private final StorageWakeUpService storageWakeUpService;
 
-    public ControllerUsuario(UserService userService, TokenService tokenService, AuthenticationManager authenticationManager) {
-
+    public ControllerUsuario(
+            UserService userService,
+            TokenService tokenService,
+            AuthenticationManager authenticationManager,
+            StorageWakeUpService storageWakeUpService
+    ) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
+        this.storageWakeUpService = storageWakeUpService;
     }
 
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
 
         var authToken = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-
         var auth = authenticationManager.authenticate(authToken);
-
         var user = (User) auth.getPrincipal();
-
         var token = tokenService.generateToken(user);
-
+        storageWakeUpService.acordarStorage();
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
