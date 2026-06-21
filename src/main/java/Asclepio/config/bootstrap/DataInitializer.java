@@ -1,5 +1,7 @@
 package Asclepio.config.bootstrap;
 
+import Asclepio.Empresa.Empresa;
+import Asclepio.Empresa.EmpresaRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,17 +21,20 @@ public class DataInitializer implements CommandLineRunner {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmpresaRepository empresaRepository;
 
     public DataInitializer(
             PermissionRepository permissionRepository,
             RoleRepository roleRepository,
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            EmpresaRepository empresaRepository
     ) {
         this.permissionRepository = permissionRepository;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.empresaRepository = empresaRepository;
     }
 
     @Override
@@ -93,6 +98,12 @@ public class DataInitializer implements CommandLineRunner {
         criarPermission("EditarProdutoVariacao", "Editar variação de produto");
         criarPermission("ExcluirProdutoVariacao", "Excluir variação de produto");
 
+
+        criarPermission("VerEmpresa", "Ver empresa");
+        criarPermission("CriarEmpresa", "Criar empresa");
+        criarPermission("EditarEmpresa", "Editar empresa");
+        criarPermission("ExcluirEmpresa", "Excluir empresa");
+
         criarPermission("VerPermissoes", "Ver permissões");
 
         criarPermission("VerRole", "Ver Role");
@@ -134,6 +145,8 @@ public class DataInitializer implements CommandLineRunner {
                 "VerBairro", "CriarBairro", "EditarBairro", "ExcluirBairro",
 
                 "VerLojaBairro", "CriarLojaBairro", "EditarLojaBairro", "ExcluirLojaBairro",
+
+                "VerEmpresa", "CriarEmpresa", "EditarEmpresa", "ExcluirEmpresa",
 
                 "VerPermissoes",
                 "VerProdutoVariacao",
@@ -230,19 +243,23 @@ public class DataInitializer implements CommandLineRunner {
             Role role = roleRepository.findByNome("SuperAdministrador")
                     .orElseThrow();
 
+            Empresa empresa = empresaRepository.findById(1L)
+                    .orElseGet(() -> empresaRepository.save(
+                            new Empresa(
+                                    null,
+                                    "Empresa Suporte",
+                                    "00000000000000"
+                            )
+                    ));
+
             User user = new User();
 
             user.setUsername("suporte1");
-
-            user.setPassword(
-                    passwordEncoder.encode("123")
-            );
-
+            user.setPassword(passwordEncoder.encode("123"));
             user.setEmail("suporte@email.com");
-
             user.setAtivo(true);
-
             user.setRole(role);
+            user.setEmpresa(empresa);
 
             userRepository.save(user);
 

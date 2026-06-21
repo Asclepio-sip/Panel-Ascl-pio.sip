@@ -1,5 +1,6 @@
 package Asclepio.Estoque;
 
+import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Estoque.Repository.EstoqueRepository;
 import Asclepio.Estoque.dto.EstoqueAddDto;
 import Asclepio.Estoque.service.EstoqueMovimentacaoService;
@@ -29,16 +30,9 @@ public class EstoqueService {
     private final EstoqueMovimentacaoService movimentacaoService;
     private final ProdutoVariacaoStorageClient produtoVariacaoClient;
     private final ProdutoStorageClient produtoStorageClient;
+    private final EmpresaContext empresaContext;
 
-    public EstoqueService(
-            EstoqueRepository estoqueRepository,
-            LojaRepository lojaRepository,
-            EstoqueValidator validator,
-            EstoqueQueryService queryService,
-            EstoqueMovimentacaoService movimentacaoService,
-            ProdutoVariacaoStorageClient produtoVariacaoClient,
-            ProdutoStorageClient produtoStorageClient
-    ) {
+    public EstoqueService(EstoqueRepository estoqueRepository, LojaRepository lojaRepository, EstoqueValidator validator, EstoqueQueryService queryService, EstoqueMovimentacaoService movimentacaoService, ProdutoVariacaoStorageClient produtoVariacaoClient, ProdutoStorageClient produtoStorageClient, EmpresaContext empresaContext) {
         this.estoqueRepository = estoqueRepository;
         this.lojaRepository = lojaRepository;
         this.validator = validator;
@@ -46,6 +40,7 @@ public class EstoqueService {
         this.movimentacaoService = movimentacaoService;
         this.produtoVariacaoClient = produtoVariacaoClient;
         this.produtoStorageClient = produtoStorageClient;
+        this.empresaContext = empresaContext;
     }
 
     @Transactional
@@ -53,22 +48,13 @@ public class EstoqueService {
 
         validator.validarCriacao(dto);
 
-        var lojaOptional = dto.lojaID() != null
-                ? lojaRepository.findById(dto.lojaID())
-                : lojaRepository.findByNomeLoja(dto.nomeLoja());
+        Long empresaId = empresaContext.getEmpresaId();
 
-        var lojaFinal = lojaOptional.orElseThrow(
-                () -> new ResourceNotFoundException("Loja não encontrada")
-        );
+        var lojaOptional = dto.lojaID() != null ? lojaRepository.findByIdAndEmpresa_Id(dto.lojaID(), empresaId) : lojaRepository.findByNomeLojaIgnoreCaseAndEmpresa_Id(dto.nomeLoja(), empresaId);
 
-        ProdutoVariacaoFiltro filtro = new ProdutoVariacaoFiltro(
-                dto.variacaoId(),
-                null,
-                null,
-                null,
-                null,
-                true
-        );
+        var lojaFinal = lojaOptional.orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
+
+        ProdutoVariacaoFiltro filtro = new ProdutoVariacaoFiltro(dto.variacaoId(), null, null, null, null, true);
 
         var page = produtoVariacaoClient.listar(filtro, PageRequest.of(0, 1));
 
@@ -80,19 +66,9 @@ public class EstoqueService {
 
         validator.validarEstoqueDuplicado(lojaFinal.getId(), variacaoFinal.id());
 
-        ProdutoStorageResponse produto = produtoStorageClient.buscarPorId(
-                variacaoFinal.produtoId()
-        );
+        ProdutoStorageResponse produto = produtoStorageClient.buscarPorId(variacaoFinal.produtoId());
 
-        Estoque estoque = new Estoque(
-                null,
-                lojaFinal,
-                variacaoFinal.id(),
-                dto.quantidade(),
-                dto.precoVenda(),
-                BigDecimal.ZERO,
-                produto.imagemUrl()
-        );
+        Estoque estoque = new Estoque(null, lojaFinal, variacaoFinal.id(), dto.quantidade(), dto.precoVenda(), BigDecimal.ZERO, produto.imagemUrl());
 
         estoqueRepository.save(estoque);
 

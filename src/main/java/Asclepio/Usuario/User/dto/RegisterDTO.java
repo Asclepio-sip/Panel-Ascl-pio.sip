@@ -15,6 +15,7 @@ public record RegisterDTO(
         @NotNull
         UUID roleId,
         String Email,
-        List<UUID> permissionIds
+        List<UUID> permissionIds,
+        Long empresaId
 ) {
 }

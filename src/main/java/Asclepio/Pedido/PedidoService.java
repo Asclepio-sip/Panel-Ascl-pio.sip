@@ -1,10 +1,12 @@
 package Asclepio.Pedido;
 
+import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Estoque.Estoque;
 import Asclepio.Estoque.Repository.EstoqueRepository;
 import Asclepio.ItemPedido.DTO.ItemPedidoAddDTO;
 import Asclepio.Loja.Loja.Loja;
 import Asclepio.Loja.Loja.Repository.LojaRepository;
+import Asclepio.Pedido.Enum.OrigemPedido;
 import Asclepio.Pedido.Enum.StatusDoPedido;
 import Asclepio.Pedido.Pdf.PedidoPdfService;
 import Asclepio.Pedido.Repository.PedidoRepository;
@@ -38,9 +40,23 @@ public class PedidoService {
     private final PedidoCodigoService codigoService;
     private final PedidoQueryService queryService;
 
+    private final EmpresaContext empresaContext;
+
     private final ProdutoVariacaoStorageClient produtoVariacaoClient;
 
-    public PedidoService(PedidoRepository pedidoRepository, LojaRepository lojaRepository, EstoqueRepository estoqueRepository, PedidoPdfService pedidoPdfService, PedidoValidator validator, PedidoEntregaService entregaService, PedidoEstoqueService estoqueService, PedidoCodigoService codigoService, PedidoQueryService queryService, ProdutoVariacaoStorageClient produtoVariacaoClient) {
+    public PedidoService(
+            PedidoRepository pedidoRepository,
+            LojaRepository lojaRepository,
+            EstoqueRepository estoqueRepository,
+            PedidoPdfService pedidoPdfService,
+            PedidoValidator validator,
+            PedidoEntregaService entregaService,
+            PedidoEstoqueService estoqueService,
+            PedidoCodigoService codigoService,
+            PedidoQueryService queryService,
+            ProdutoVariacaoStorageClient produtoVariacaoClient,
+            EmpresaContext empresaContext
+    ) {
         this.pedidoRepository = pedidoRepository;
         this.lojaRepository = lojaRepository;
         this.estoqueRepository = estoqueRepository;
@@ -51,6 +67,7 @@ public class PedidoService {
         this.codigoService = codigoService;
         this.queryService = queryService;
         this.produtoVariacaoClient = produtoVariacaoClient;
+        this.empresaContext = empresaContext;
     }
 
     @Transactional
@@ -58,15 +75,26 @@ public class PedidoService {
 
         validator.validarCriacao(dto);
 
-        Loja loja = lojaRepository.findById(dto.lojaId()).orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
+        Loja loja = lojaRepository.findById(dto.lojaId())
+                .orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
 
-        List<Estoque> estoquesDaLoja = estoqueRepository.findByLoja_Id(loja.getId());
+        List<Estoque> estoquesDaLoja =
+                estoqueRepository.findByLoja_IdAndLoja_Empresa_Id(
+                        loja.getId(),
+                        loja.getEmpresa().getId()
+                );
 
         validator.validarEstoqueDosItens(dto, estoquesDaLoja);
 
-        Map<Long, ProdutoVariacaoResponseDTO> variacoesPorId = dto.itens().stream().collect(Collectors.toMap(ItemPedidoAddDTO::variacaoId, item -> produtoVariacaoClient.buscarPorId(item.variacaoId())));
+        Map<Long, ProdutoVariacaoResponseDTO> variacoesPorId = dto.itens()
+                .stream()
+                .collect(Collectors.toMap(
+                        ItemPedidoAddDTO::variacaoId,
+                        item -> produtoVariacaoClient.buscarPorId(item.variacaoId())
+                ));
 
         Pedido pedido = dto.toEntity(loja, estoquesDaLoja, variacoesPorId);
+
         pedido.calcularSubtotalProdutos();
 
         entregaService.aplicarEntrega(pedido, dto, loja);
@@ -74,10 +102,64 @@ public class PedidoService {
         estoqueService.baixarEstoqueDoPedido(pedido, estoquesDaLoja);
 
         pedido.setCodigoRastreio(codigoService.gerarCodigoRastreioUnico());
+        pedido.setEmpresa(loja.getEmpresa());
+        pedido.setOrigem(OrigemPedido.ONLINE);
 
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
 
-        return new PedidoCriadoResponseDTO(pedidoSalvo.getId(), pedidoSalvo.getCodigoRastreio(), pedidoSalvo.getStatus(), "/pedidos/" + pedidoSalvo.getId() + "/pdf");
+        return new PedidoCriadoResponseDTO(
+                pedidoSalvo.getId(),
+                pedidoSalvo.getCodigoRastreio(),
+                pedidoSalvo.getStatus(),
+                "/pedidos/" + pedidoSalvo.getId() + "/pdf"
+        );
+    }
+
+    @Transactional
+    public PedidoCriadoResponseDTO criarPedidoBalcao(PedidoAddDTO dto) {
+
+        validator.validarCriacao(dto);
+
+        Long empresaId = empresaContext.getEmpresaId();
+
+        Loja loja = lojaRepository.findByIdAndEmpresa_Id(dto.lojaId(), empresaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
+
+        List<Estoque> estoquesDaLoja =
+                estoqueRepository.findByLoja_IdAndLoja_Empresa_Id(loja.getId(), empresaId);
+
+        validator.validarEstoqueDosItens(dto, estoquesDaLoja);
+
+        Map<Long, ProdutoVariacaoResponseDTO> variacoesPorId = dto.itens()
+                .stream()
+                .collect(Collectors.toMap(
+                        ItemPedidoAddDTO::variacaoId,
+                        item -> produtoVariacaoClient.buscarPorId(item.variacaoId())
+                ));
+
+        Pedido pedido = dto.toEntity(loja, estoquesDaLoja, variacoesPorId);
+
+        pedido.setEmpresa(loja.getEmpresa());
+        pedido.setOrigem(OrigemPedido.BALCAO);
+
+        pedido.calcularSubtotalProdutos();
+
+        entregaService.aplicarEntrega(pedido, dto, loja);
+
+        estoqueService.baixarEstoqueDoPedido(pedido, estoquesDaLoja);
+
+        pedido.setCodigoRastreio(codigoService.gerarCodigoRastreioUnico());
+        pedido.setStatus(StatusDoPedido.CONCLUIDO);
+        pedido.setConcluidoEm(LocalDateTime.now());
+
+        Pedido pedidoSalvo = pedidoRepository.save(pedido);
+
+        return new PedidoCriadoResponseDTO(
+                pedidoSalvo.getId(),
+                pedidoSalvo.getCodigoRastreio(),
+                pedidoSalvo.getStatus(),
+                "/pedidos/" + pedidoSalvo.getId() + "/pdf"
+        );
     }
 
     @Transactional
@@ -87,7 +169,9 @@ public class PedidoService {
             throw new BusinessException("Status do pedido é obrigatório");
         }
 
-        Pedido pedido = queryService.buscarPorId(id);
+        Long empresaId = empresaContext.getEmpresaId();
+
+        Pedido pedido = queryService.buscarPorIdDaEmpresa(id, empresaId);
 
         pedido.setStatus(status);
 
@@ -100,7 +184,9 @@ public class PedidoService {
 
     public byte[] imprimirPDF(Long id) {
 
-        Pedido pedido = queryService.buscarPorId(id);
+        Long empresaId = empresaContext.getEmpresaId();
+
+        Pedido pedido = queryService.buscarPorIdDaEmpresa(id, empresaId);
 
         return pedidoPdfService.gerarPdf(pedido);
     }
@@ -122,6 +208,9 @@ public class PedidoService {
             }
         }
 
-        return new PedidoStatusResponseDTO(pedido.getCodigoRastreio(), pedido.getStatus());
+        return new PedidoStatusResponseDTO(
+                pedido.getCodigoRastreio(),
+                pedido.getStatus()
+        );
     }
 }

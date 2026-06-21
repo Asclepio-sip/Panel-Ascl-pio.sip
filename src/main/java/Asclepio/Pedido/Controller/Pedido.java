@@ -52,4 +52,10 @@ public class Pedido implements PedidoApi {
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"pedido-" + id + ".pdf\"").body(pdf);
     }
+
+    @Override
+    public ResponseEntity<PedidoCriadoResponseDTO> criarPedidoBalcao(@RequestBody PedidoAddDTO dto) {
+        PedidoCriadoResponseDTO response = service.criarPedidoBalcao(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 }

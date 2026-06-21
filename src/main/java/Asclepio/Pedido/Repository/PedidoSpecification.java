@@ -67,6 +67,8 @@ public class PedidoSpecification {
                 );
             }
 
+
+
             if (filtro.bairro() != null && !filtro.bairro().isBlank()) {
                 predicates.add(
                         cb.like(
@@ -86,6 +88,14 @@ public class PedidoSpecification {
 
             if (filtro.formaDePagamento() != null) {
                 predicates.add(cb.equal(root.get("formaDePagamento"), filtro.formaDePagamento()));
+            }
+
+            if (filtro.origem() != null) {
+                predicates.add(cb.equal(root.get("origem"), filtro.origem()));
+            }
+
+            if (filtro.freteGratis() != null) {
+                predicates.add(cb.equal(root.get("freteGratis"), filtro.freteGratis()));
             }
 
             if (filtro.freteGratis() != null) {

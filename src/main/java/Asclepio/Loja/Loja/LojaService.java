@@ -1,5 +1,7 @@
 package Asclepio.Loja.Loja;
 
+import Asclepio.Empresa.Empresa;
+import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Loja.Loja.Repository.LojaRepository;
 import Asclepio.Loja.Loja.Repository.LojaSpecification;
 import Asclepio.Loja.Loja.dto.CreateLojaRequest;
@@ -15,9 +17,14 @@ import org.springframework.stereotype.Service;
 public class LojaService {
 
     private final LojaRepository repository;
+    private final EmpresaContext empresaContext;
 
-    public LojaService(LojaRepository repository) {
+    public LojaService(
+            LojaRepository repository,
+            EmpresaContext empresaContext
+    ) {
         this.repository = repository;
+        this.empresaContext = empresaContext;
     }
 
     public LojaResponse criar(CreateLojaRequest request) {
@@ -25,6 +32,11 @@ public class LojaService {
         validarRequest(request);
         validarDuplicidade(null, request);
 
+        Empresa empresa = empresaContext.getEmpresa();
+
+        if (empresa == null) {
+            throw new ResourceNotFoundException("Empresa não encontrada");
+        }
         Loja loja = new Loja(
                 null,
                 request.nomeLoja().trim(),
@@ -33,7 +45,8 @@ public class LojaService {
                 request.telefone().trim(),
                 request.TextoDescricao(),
                 request.tipoAtendimento(),
-                request.imagemUrl()
+                request.imagemUrl(),
+                empresa
         );
 
         loja.configurarFreteGratis(request.valorMinimoFreteGratis());
@@ -44,8 +57,11 @@ public class LojaService {
     }
 
     public Page<LojaResponse> listar(LojaFiltroDTO filtro, Pageable pageable) {
+
+        Long empresaId = empresaContext.getEmpresaId();
+
         return repository
-                .findAll(LojaSpecification.filtrar(filtro), pageable)
+                .findAll(LojaSpecification.filtrar(filtro, empresaId), pageable)
                 .map(LojaResponse::fromEntity);
     }
 
@@ -74,12 +90,20 @@ public class LojaService {
     }
 
     public void deletar(Long id) {
+
         Loja loja = buscarPorId(id);
+
         repository.delete(loja);
     }
 
     private Loja buscarPorId(Long id) {
-        return repository.findById(id)
+
+        if (id == null) {
+            throw new BusinessException("ID da loja é obrigatório");
+        }
+
+        return repository
+                .findByIdAndEmpresa_Id(id, empresaContext.getEmpresaId())
                 .orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
     }
 
@@ -113,7 +137,10 @@ public class LojaService {
 
     private void validarDuplicidade(Long idAtual, CreateLojaRequest request) {
 
-        repository.findByNomeLojaIgnoreCase(request.nomeLoja().trim())
+        Long empresaId = empresaContext.getEmpresaId();
+
+        repository
+                .findByNomeLojaIgnoreCaseAndEmpresa_Id(request.nomeLoja().trim(), empresaId)
                 .ifPresent(loja -> {
                     if (idAtual == null || !loja.getId().equals(idAtual)) {
                         throw new BusinessException("Já existe uma loja com esse nome");
@@ -123,9 +150,8 @@ public class LojaService {
         String cnpj = tratarTexto(request.cnpj());
 
         if (cnpj != null) {
-            repository.findAll().stream()
-                    .filter(loja -> cnpj.equals(loja.getCnpj()))
-                    .findFirst()
+            repository
+                    .findByCnpjAndEmpresa_Id(cnpj, empresaId)
                     .ifPresent(loja -> {
                         if (idAtual == null || !loja.getId().equals(idAtual)) {
                             throw new BusinessException("Já existe uma loja com esse CNPJ");
@@ -135,6 +161,7 @@ public class LojaService {
     }
 
     private String tratarTexto(String valor) {
+
         if (valor == null || valor.isBlank()) {
             return null;
         }

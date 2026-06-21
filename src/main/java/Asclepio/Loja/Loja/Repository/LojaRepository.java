@@ -10,11 +10,10 @@ public interface LojaRepository extends JpaRepository<Loja, Long>, JpaSpecificat
 
     Optional<Loja> findByNomeLoja(String nomeLoja);
 
-    Optional<Loja> findByNomeLojaIgnoreCase(String nomeLoja);
+    Optional<Loja> findByIdAndEmpresa_Id(Long id, Long empresaId);
 
-    Optional<Loja> findByCnpj(String cnpj);
+    Optional<Loja> findByNomeLojaIgnoreCaseAndEmpresa_Id(String nomeLoja, Long empresaId);
 
-    boolean existsByNomeLojaIgnoreCase(String nomeLoja);
+    Optional<Loja> findByCnpjAndEmpresa_Id(String cnpj, Long empresaId);
 
-    boolean existsByCnpj(String cnpj);
 }

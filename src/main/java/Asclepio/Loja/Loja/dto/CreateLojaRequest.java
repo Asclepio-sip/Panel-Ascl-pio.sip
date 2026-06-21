@@ -12,7 +12,7 @@ public record CreateLojaRequest(
         String TextoDescricao,
         String imagemUrl,
         TipoAtendimentoLoja tipoAtendimento,
-        BigDecimal valorMinimoFreteGratis
-
+        BigDecimal valorMinimoFreteGratis,
+        Long empresaId
 ) {
 }

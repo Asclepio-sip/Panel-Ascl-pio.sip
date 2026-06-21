@@ -16,25 +16,30 @@ import org.springframework.web.bind.annotation.*;
 public interface PedidoApi {
 
 
-    @GetMapping(
-            value = "/{id}/pdf",
-            produces = MediaType.APPLICATION_PDF_VALUE
-    )
+    @GetMapping(value = "/{id}/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('VerPedido')")
+    @Operation(summary = "Gerar PDF do pedido", description = "Gera o PDF de um pedido da empresa do usuário autenticado.")
     ResponseEntity<byte[]> imprimirPDF(@PathVariable Long id);
 
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasAuthority('EditarPedido')")
-    public ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusPedidoDTO dto);
+    @Operation(summary = "Atualizar status do pedido", description = "Atualiza o status de um pedido pertencente à empresa do usuário autenticado.")
+    ResponseEntity<Void> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusPedidoDTO dto);
 
-    @Operation(summary = "Criar pedido")
-    @PostMapping("/pedidos")
-    public ResponseEntity<PedidoCriadoResponseDTO> criarPedido(@RequestBody PedidoAddDTO dto);
+
+    @Operation(summary = "Criar pedido online", description = "Cria um pedido online a partir da loja informada. A empresa do pedido é definida automaticamente pela loja.")
+    @PostMapping
+    ResponseEntity<PedidoCriadoResponseDTO> criarPedido(@RequestBody PedidoAddDTO dto);
 
 
     @GetMapping
     @PreAuthorize("hasAuthority('VerPedido')")
     @Operation(summary = "Listar pedidos com filtros", description = """
+            
+               Lista pedidos de forma paginada com filtros opcionais.
+                        Retorna apenas pedidos da empresa do usuário autenticado.
+            
+            
             Lista pedidos de forma paginada com filtros opcionais.
             
             Exemplos:
@@ -61,7 +66,12 @@ public interface PedidoApi {
 
 
     @GetMapping("/status/{codigoRastreio}")
-    public ResponseEntity<PedidoStatusResponseDTO> consultarStatus(@PathVariable String codigoRastreio);
+    @Operation(summary = "Consultar status por código de rastreio", description = "Consulta pública do status do pedido usando o código de rastreio.")
+    ResponseEntity<PedidoStatusResponseDTO> consultarStatus(@PathVariable String codigoRastreio);
 
+    @Operation(summary = "Criar pedido de balcão", description = "Cria um pedido presencial/balcão para a empresa do usuário autenticado.")
+    @PostMapping("/balcao")
+    @PreAuthorize("hasAuthority('CriarPedido')")
+    ResponseEntity<PedidoCriadoResponseDTO> criarPedidoBalcao(@RequestBody PedidoAddDTO dto);
 
 }

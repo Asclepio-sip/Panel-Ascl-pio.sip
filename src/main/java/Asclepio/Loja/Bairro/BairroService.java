@@ -1,5 +1,7 @@
 package Asclepio.Loja.Bairro;
 
+import Asclepio.Empresa.Empresa;
+import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Loja.Bairro.Repository.BairroRepository;
 import Asclepio.Loja.Bairro.Repository.BairroSpecification;
 import Asclepio.Loja.Bairro.dto.BairroFiltroDTO;
@@ -15,39 +17,44 @@ import org.springframework.stereotype.Service;
 public class BairroService {
 
     private final BairroRepository bairroRepository;
+    private final EmpresaContext empresaContext;
 
-    public BairroService(BairroRepository bairroRepository) {
+    public BairroService(BairroRepository bairroRepository, EmpresaContext empresaContext) {
         this.bairroRepository = bairroRepository;
+        this.empresaContext = empresaContext;
     }
 
     public Bairro criar(BairroRequestDTO dto) {
 
         validarNome(dto.nome());
 
+        Long empresaId = empresaContext.getEmpresaId();
+        Empresa empresa = empresaContext.getEmpresa();
+
         String nomeTratado = dto.nome().trim();
 
-        if (bairroRepository.existsByNomeIgnoreCase(nomeTratado)) {
-            throw new BusinessException("Bairro já cadastrado");
+        if (bairroRepository.existsByNomeIgnoreCaseAndEmpresa_Id(nomeTratado, empresaId)) {
+            throw new BusinessException("Bairro já cadastrado nessa empresa");
         }
 
-        Bairro bairro = new Bairro(null, nomeTratado);
+        Bairro bairro = new Bairro(null, nomeTratado, empresa);
 
         return bairroRepository.save(bairro);
     }
 
     public Page<BairroResponseDTO> listar(BairroFiltroDTO filtro, Pageable pageable) {
         return bairroRepository
-                .findAll(BairroSpecification.filtrar(filtro), pageable)
+                .findAll(BairroSpecification.filtrar(filtro, empresaContext.getEmpresaId()), pageable)
                 .map(BairroResponseDTO::fromEntity);
     }
 
     public Bairro buscarPorId(Long id) {
-        return bairroRepository.findById(id)
+        return bairroRepository.findByIdAndEmpresa_Id(id, empresaContext.getEmpresaId())
                 .orElseThrow(() -> new ResourceNotFoundException("Bairro não encontrado"));
     }
 
     public Bairro buscarPorNome(String nome) {
-        return bairroRepository.findByNomeIgnoreCase(nome)
+        return bairroRepository.findByNomeIgnoreCaseAndEmpresa_Id(nome, empresaContext.getEmpresaId())
                 .orElseThrow(() -> new ResourceNotFoundException("Bairro não encontrado"));
     }
 
@@ -57,12 +64,13 @@ public class BairroService {
 
         Bairro bairro = buscarPorId(id);
 
+        Long empresaId = empresaContext.getEmpresaId();
         String nomeTratado = dto.nome().trim();
 
-        bairroRepository.findByNomeIgnoreCase(nomeTratado)
+        bairroRepository.findByNomeIgnoreCaseAndEmpresa_Id(nomeTratado, empresaId)
                 .ifPresent(bairroExistente -> {
                     if (!bairroExistente.getId().equals(id)) {
-                        throw new BusinessException("Já existe outro bairro com esse nome");
+                        throw new BusinessException("Já existe outro bairro com esse nome nessa empresa");
                     }
                 });
 
@@ -72,9 +80,7 @@ public class BairroService {
     }
 
     public void deletar(Long id) {
-
         Bairro bairro = buscarPorId(id);
-
         bairroRepository.delete(bairro);
     }
 
