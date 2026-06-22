@@ -1,5 +1,6 @@
 package Asclepio.Loja.Loja;
 
+import Asclepio.Empresa.Empresa;
 import Asclepio.Loja.Bairro.Enum.TipoAtendimentoLoja;
 import Asclepio.Loja.LojaBairro.LojaBairro;
 import Asclepio.exception.BusinessException;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "TB_LOJA", uniqueConstraints = {@UniqueConstraint(name = "UK_LOJ_NOME", columnNames = "LOJ_NOME"), @UniqueConstraint(name = "UK_LOJ_CNPJ", columnNames = "LOJ_CNPJ")})
+@Table(name = "TB_LOJA", uniqueConstraints = {@UniqueConstraint(name = "UK_LOJ_EMPRESA_NOME", columnNames = {"LOJ_EMPRESA_ID", "LOJ_NOME"}), @UniqueConstraint(name = "UK_LOJ_EMPRESA_CNPJ", columnNames = {"LOJ_EMPRESA_ID", "LOJ_CNPJ"})})
 public class Loja {
 
     @Id
@@ -46,10 +47,14 @@ public class Loja {
     @OneToMany(mappedBy = "loja", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LojaBairro> bairros = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "LOJ_EMPRESA_ID", nullable = false)
+    private Empresa empresa;
+
     protected Loja() {
     }
 
-    public Loja(Long id, String nomeLoja, String cep, String cnpj, String telefone, String textoDescricao, TipoAtendimentoLoja tipoAtendimento, String imagemUrl) {
+    public Loja(Long id, String nomeLoja, String cep, String cnpj, String telefone, String textoDescricao, TipoAtendimentoLoja tipoAtendimento, String imagemUrl, Empresa empresa) {
         this.id = id;
         this.nomeLoja = nomeLoja;
         this.cep = cep;
@@ -58,6 +63,15 @@ public class Loja {
         this.textoDescricao = textoDescricao;
         this.tipoAtendimento = tipoAtendimento;
         this.imagemUrl = imagemUrl;
+        this.empresa = empresa;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 
     public boolean aceitaEntrega() {

@@ -1,5 +1,6 @@
 package Asclepio.Loja.LojaBairro;
 
+import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Loja.Bairro.Bairro;
 import Asclepio.Loja.Bairro.Repository.BairroRepository;
 import Asclepio.Loja.Loja.Loja;
@@ -25,17 +26,14 @@ public class LojaBairroService {
     private final LojaRepository lojaRepository;
     private final BairroRepository bairroRepository;
     private final LojaBairroValidator validator;
+    private final EmpresaContext empresaContext;
 
-    public LojaBairroService(
-            LojaBairroRepository lojaBairroRepository,
-            LojaRepository lojaRepository,
-            BairroRepository bairroRepository,
-            LojaBairroValidator validator
-    ) {
+    public LojaBairroService(LojaBairroRepository lojaBairroRepository, LojaRepository lojaRepository, BairroRepository bairroRepository, LojaBairroValidator validator, EmpresaContext empresaContext) {
         this.lojaBairroRepository = lojaBairroRepository;
         this.lojaRepository = lojaRepository;
         this.bairroRepository = bairroRepository;
         this.validator = validator;
+        this.empresaContext = empresaContext;
     }
 
     @Transactional
@@ -43,20 +41,17 @@ public class LojaBairroService {
 
         validator.validarCriacao(request);
 
+        Long empresaId = empresaContext.getEmpresaId();
+
         Loja loja = buscarLoja(request.lojaId());
 
         Bairro bairro = buscarBairro(request.bairroId());
 
         validator.validarLojaAceitaEntrega(loja);
 
-        validator.validarBairroNaoVinculado(loja.getId(), bairro.getId());
+        validator.validarBairroNaoVinculado(loja.getId(), bairro.getId(), empresaId);
 
-        LojaBairro lojaBairro = new LojaBairro(
-                null,
-                loja,
-                bairro,
-                request.valorFrete()
-        );
+        LojaBairro lojaBairro = new LojaBairro(null, loja, bairro, request.valorFrete());
 
         LojaBairro salvo = lojaBairroRepository.save(lojaBairro);
 
@@ -65,7 +60,13 @@ public class LojaBairroService {
 
     public Page<LojaBairroResponse> listar(LojaBairroFiltroDTO filtro, Pageable pageable) {
         return lojaBairroRepository
-                .findAll(LojaBairroSpecification.filtrar(filtro), pageable)
+                .findAll(
+                        LojaBairroSpecification.filtrar(
+                                filtro,
+                                empresaContext.getEmpresaId()
+                        ),
+                        pageable
+                )
                 .map(LojaBairroResponse::fromEntity);
     }
 
@@ -95,17 +96,15 @@ public class LojaBairroService {
     }
 
     private Loja buscarLoja(Long lojaId) {
-        return lojaRepository.findById(lojaId)
-                .orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
+        return lojaRepository.findByIdAndEmpresa_Id(lojaId, empresaContext.getEmpresaId()).orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
     }
 
+
     private Bairro buscarBairro(Long bairroId) {
-        return bairroRepository.findById(bairroId)
-                .orElseThrow(() -> new ResourceNotFoundException("Bairro não encontrado"));
+        return bairroRepository.findById(bairroId).orElseThrow(() -> new ResourceNotFoundException("Bairro não encontrado"));
     }
 
     private LojaBairro buscarPorId(Long id) {
-        return lojaBairroRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Vínculo entre loja e bairro não encontrado"));
+        return lojaBairroRepository.findByIdAndLoja_Empresa_Id(id, empresaContext.getEmpresaId()).orElseThrow(() -> new ResourceNotFoundException("Vínculo entre loja e bairro não encontrado"));
     }
 }

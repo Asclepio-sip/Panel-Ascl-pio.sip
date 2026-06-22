@@ -14,20 +14,22 @@ public class BairroSpecification {
     private BairroSpecification() {
     }
 
-    public static Specification<Bairro> filtrar(BairroFiltroDTO filtro) {
+    public static Specification<Bairro> filtrar(BairroFiltroDTO filtro, Long empresaId) {
 
         return (root, query, cb) -> {
 
             List<Predicate> predicates = new ArrayList<>();
+
+            predicates.add(
+                    cb.equal(root.get("empresa").get("id"), empresaId)
+            );
 
             if (filtro == null) {
                 return cb.and(predicates.toArray(Predicate[]::new));
             }
 
             if (filtro.id() != null) {
-                predicates.add(
-                        cb.equal(root.get("id"), filtro.id())
-                );
+                predicates.add(cb.equal(root.get("id"), filtro.id()));
             }
 
             if (filtro.nome() != null && !filtro.nome().isBlank()) {

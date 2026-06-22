@@ -27,4 +27,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long>, JpaSpecif
     boolean existsByCodigoRastreio(String codigoRastreio);
 
     Optional<Pedido> findByCodigoRastreio(String codigoRastreio);
+
+    Optional<Pedido> findByIdAndEmpresa_Id(Long id, Long empresaId);
+
 }

@@ -5,6 +5,7 @@ import Asclepio.Pedido.Repository.PedidoRepository;
 import Asclepio.Pedido.Repository.PedidoSpecification;
 import Asclepio.Pedido.dto.ListaDePedidoDTO;
 import Asclepio.Pedido.dto.PedidoFiltro;
+import Asclepio.exception.BusinessException;
 import Asclepio.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,5 +48,15 @@ public class PedidoQueryService {
         LocalDateTime fim = hoje.atTime(23, 59, 59);
 
         return pedidoRepository.findByCriadoEmBetweenOrderByCriadoEmDesc(inicio, fim);
+    }
+
+    public Pedido buscarPorIdDaEmpresa(Long id, Long empresaId) {
+
+        if (id == null) {
+            throw new BusinessException("ID do pedido é obrigatório");
+        }
+
+        return pedidoRepository.findByIdAndEmpresa_Id(id, empresaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
     }
 }

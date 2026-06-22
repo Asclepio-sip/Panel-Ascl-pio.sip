@@ -5,21 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88792f31-c9d2-42fd-9c39-246dd5948413" name="Changes" comment="feat:ajuste na arquitetura">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/HealthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/StorageWakeUpService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/CategoriaStorageClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/CategoriaStorageClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/ProdutoStorageClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/ProdutoStorageClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/ProdutoVariacaoStorageClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ProdutoVariacao/ProdutoVariacaoStorageClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Controller/ControllerUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Controller/ControllerUsuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Categoria/CategoriaStorageClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Categoria/CategoriaStorageClient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/ProdutoVariacao/ProdutoVariacaoStorageClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/ProdutoVariacao/ProdutoVariacaoStorageClient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/service/EstoqueMovimentacaoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/service/EstoqueMovimentacaoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/Enum/TipoMovimentacaoEstoque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/Enum/TipoMovimentacaoEstoque.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +106,7 @@
         <env name="DB_PASSWORD" value="npg_H3yavRi8Xckn" />
         <env name="DB_URL" value="jdbc:postgresql://ep-wild-fog-ach34lki-pooler.sa-east-1.aws.neon.tech/neondb?&amp;sslmode=require&amp;channelBinding=require" />
         <env name="DB_USERNAME" value="neondb_owner" />
-        <env name="STORAGE_SERVICE_URL" value="https://asclepio-storage-service.onrender.com" />
+        <env name="STORAGE_SERVICE_URL" value="http://localhost:8081" />
       </envs>
       <option name="MAIN_CLASS_NAME" value="Asclepio.Asclepio" />
       <module name="Asclepio-painel" />

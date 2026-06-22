@@ -1,5 +1,7 @@
 package Asclepio.Usuario.User;
 
+import Asclepio.Empresa.Empresa;
+import Asclepio.Empresa.EmpresaRepository;
 import Asclepio.Usuario.Permission.Permission;
 import Asclepio.Usuario.Permission.PermissionRepository;
 import Asclepio.Usuario.Role.Role;
@@ -28,17 +30,20 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final PermissionRepository permissionRepository;
+    private final EmpresaRepository empresaRepository;
 
     public UserService(
             UserRepository userRepository,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder,
-            PermissionRepository permissionRepository
+            PermissionRepository permissionRepository,
+            EmpresaRepository empresaRepository
     ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.permissionRepository = permissionRepository;
+        this.empresaRepository = empresaRepository;
     }
 
     public User createUser(RegisterDTO dto) {
@@ -52,6 +57,10 @@ public class UserService {
         Role role = roleRepository.findById(dto.roleId())
                 .orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado"));
 
+        Empresa empresa = empresaRepository.findById(dto.empresaId())
+                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
+
+
         User user = new User();
 
         user.setUsername(dto.login().trim());
@@ -59,6 +68,8 @@ public class UserService {
         user.setEmail(dto.Email());
         user.setRole(role);
         user.setAtivo(true);
+        user.setEmpresa(empresa);
+
 
         return userRepository.save(user);
     }

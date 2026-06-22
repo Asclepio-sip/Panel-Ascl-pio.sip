@@ -1,5 +1,6 @@
 package Asclepio.Usuario.User;
 
+import Asclepio.Empresa.Empresa;
 import Asclepio.Usuario.Permission.Permission;
 import Asclepio.Usuario.Role.Role;
 import jakarta.persistence.*;
@@ -11,13 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "TB_USER", uniqueConstraints = {
-
-        @UniqueConstraint(name = "UK_USER_USERNAME", columnNames = "USR_USERNAME"),
-
-        @UniqueConstraint(name = "UK_USER_EMAIL", columnNames = "USR_EMAIL")}
-
-)
+@Table(name = "TB_USER", uniqueConstraints = {@UniqueConstraint(name = "UK_USER_EMPRESA_USERNAME", columnNames = {"USR_EMPRESA_ID", "USR_USERNAME"}), @UniqueConstraint(name = "UK_USER_EMPRESA_EMAIL", columnNames = {"USR_EMPRESA_ID", "USR_EMAIL"})})
 public class User implements UserDetails {
 
 
@@ -54,6 +49,11 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "USP_PERMISSION_ID", referencedColumnName = "PER_ID"))
     private List<Permission> permissionsExtras = new ArrayList<>();
 
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "USR_EMPRESA_ID", nullable = false)
+    private Empresa empresa;
+
     public User() {
     }
 
@@ -88,6 +88,14 @@ public class User implements UserDetails {
                 .map(SimpleGrantedAuthority::new)
 
                 .collect(Collectors.toList());
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 
     @Override

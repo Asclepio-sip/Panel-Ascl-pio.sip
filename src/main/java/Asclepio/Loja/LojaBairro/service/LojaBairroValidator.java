@@ -52,9 +52,13 @@ public class LojaBairroValidator {
         }
     }
 
-    public void validarBairroNaoVinculado(Long lojaId, Long bairroId) {
+    public void validarBairroNaoVinculado(Long lojaId, Long bairroId, Long empresaId) {
 
-        if (lojaBairroRepository.existsByLoja_IdAndBairro_Id(lojaId, bairroId)) {
+        if (lojaBairroRepository.existsByLoja_IdAndBairro_IdAndLoja_Empresa_Id(
+                lojaId,
+                bairroId,
+                empresaId
+        )) {
             throw new BusinessException("Esse bairro já está vinculado a essa loja");
         }
     }

@@ -14,11 +14,15 @@ public class LojaSpecification {
     private LojaSpecification() {
     }
 
-    public static Specification<Loja> filtrar(LojaFiltroDTO filtro) {
+    public static Specification<Loja> filtrar(LojaFiltroDTO filtro, Long empresaId) {
 
         return (root, query, cb) -> {
 
             List<Predicate> predicates = new ArrayList<>();
+
+            predicates.add(
+                    cb.equal(root.get("empresa").get("id"), empresaId)
+            );
 
             if (filtro == null) {
                 return cb.and(predicates.toArray(Predicate[]::new));

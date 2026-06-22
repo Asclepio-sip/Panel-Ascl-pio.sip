@@ -39,7 +39,7 @@ public class EstoqueMovimentacaoService {
                 null,
                 null,
                 usuarioLogado(),
-                TipoMovimentacaoEstoque.CRIACAO,
+                TipoMovimentacaoEstoque.ENTRADA_NO_ESTOQUE,
                 0,
                 estoque.getQuantidade(),
                 BigDecimal.ZERO,

@@ -1,6 +1,7 @@
 package Asclepio.Pedido.dto;
 
 
+import Asclepio.Pedido.Enum.OrigemPedido;
 import Asclepio.Pedido.Pedido;
 
 import java.math.BigDecimal;
@@ -11,7 +12,8 @@ public record ListaDePedidoDTO (
      String nomeCliente,
      String status,
      LocalDateTime criadoEm,
-     BigDecimal totalFinal
+     BigDecimal totalFinal,
+     OrigemPedido origem
 ){
 
     public static ListaDePedidoDTO fromEntity(Pedido pedido) {
@@ -20,7 +22,8 @@ public record ListaDePedidoDTO (
                 pedido.getNomeCliente(),
                 pedido.getStatus().name(),
                 pedido.getCriadoEm(),
-                pedido.getTotalFinal()
+                pedido.getTotalFinal(),
+                pedido.getOrigem()
         );
     }
 

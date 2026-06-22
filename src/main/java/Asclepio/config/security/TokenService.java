@@ -33,6 +33,7 @@ public class TokenService {
                     .withIssuer("auth-api")
                     .withSubject(user.getUsername())
                     .withClaim("role", user.getRole() != null ? user.getRole().getNome() : null)
+                    .withClaim("empresaId", user.getEmpresa() != null ? user.getEmpresa().getId() : null)
                     .withClaim("permissions", permissions)
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);

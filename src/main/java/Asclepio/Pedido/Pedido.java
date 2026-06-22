@@ -1,5 +1,7 @@
 package Asclepio.Pedido;
 
+import Asclepio.Empresa.Empresa;
+import Asclepio.Pedido.Enum.OrigemPedido;
 import jakarta.persistence.*;
 
 import Asclepio.Pedido.Enum.FormaDePagamento;
@@ -82,48 +84,58 @@ public class Pedido {
     @Column(name = "PED_CONCLUIDO_EM")
     private LocalDateTime concluidoEm;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "PED_EMPRESA_ID", nullable = false)
+    private Empresa empresa;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "PED_ORIGEM", nullable = false, length = 30)
+    private OrigemPedido origem = OrigemPedido.ONLINE;
+
     public Pedido() {
     }
 
-    public Pedido(Long id, Long lojaId, String nomeCliente, String email, String telefone, String endereco, String bairro, String complemento, String observacao, TipoEntrega tipoEntrega, List<ItemPedido> itens, FormaDePagamento formaDePagamento, String codigoRastreio, LocalDateTime concluidoEm) {
+    public Pedido(
+            Long id,
+            Long lojaId,
+            String nomeCliente,
+            String email,
+            String telefone,
+            String endereco,
+            String bairro,
+            String complemento,
+            String observacao,
+            TipoEntrega tipoEntrega,
+            List<ItemPedido> itens,
+            FormaDePagamento formaDePagamento,
+            String codigoRastreio,
+            LocalDateTime concluidoEm,
+            Empresa empresa
+    ) {
 
         if (itens == null || itens.isEmpty()) {
             throw new RuntimeException("Pedido precisa ter itens");
         }
 
         this.id = id;
-
         this.criadoEm = LocalDateTime.now();
-
         this.nomeCliente = nomeCliente;
-
         this.email = email;
-
         this.telefone = telefone;
-
         this.endereco = endereco;
-
         this.bairro = bairro;
-
         this.complemento = complemento;
-
         this.observacao = observacao;
-
         this.tipoEntrega = tipoEntrega;
-
         this.itens = itens;
-
         this.formaDePagamento = formaDePagamento;
-
         this.status = StatusDoPedido.AGUARDANDO;
-
         this.codigoRastreio = codigoRastreio;
-
         this.concluidoEm = concluidoEm;
+        this.empresa = empresa;
 
         calcularTotais();
     }
-
     public void calcularTotais() {
 
         this.totalProdutos = itens.stream().map(ItemPedido::getSubtotal).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -312,5 +324,21 @@ public class Pedido {
 
     public void setConcluidoEm(LocalDateTime concluidoEm) {
         this.concluidoEm = concluidoEm;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    public OrigemPedido getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(OrigemPedido origem) {
+        this.origem = origem;
     }
 }
