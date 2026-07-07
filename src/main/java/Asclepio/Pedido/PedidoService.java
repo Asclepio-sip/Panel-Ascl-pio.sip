@@ -6,14 +6,15 @@ import Asclepio.Estoque.Repository.EstoqueRepository;
 import Asclepio.ItemPedido.DTO.ItemPedidoAddDTO;
 import Asclepio.Loja.Loja.Loja;
 import Asclepio.Loja.Loja.Repository.LojaRepository;
-import Asclepio.Pedido.Enum.OrigemPedido;
 import Asclepio.Pedido.Enum.StatusDoPedido;
+import Asclepio.Pedido.Enum.TipoAtendimentoPedido;
 import Asclepio.Pedido.Pdf.PedidoPdfService;
 import Asclepio.Pedido.Repository.PedidoRepository;
 import Asclepio.Pedido.Service.*;
-import Asclepio.Pedido.dto.PedidoAddDTO;
+import Asclepio.Pedido.dto.pedido.PedidoAddDTO;
 import Asclepio.Pedido.dto.PedidoCriadoResponseDTO;
 import Asclepio.Pedido.dto.PedidoStatusResponseDTO;
+import Asclepio.Pedido.dto.pedido.PedidoBalcaoAddDTO;
 import Asclepio.ProdutoVariacao.ProdutoVariacaoStorageClient;
 import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
 import Asclepio.exception.BusinessException;
@@ -35,7 +36,7 @@ public class PedidoService {
     private final PedidoPdfService pedidoPdfService;
 
     private final PedidoValidator validator;
-    private final PedidoEntregaService entregaService;
+    private final PedidoAtendimentoService atendimentoService;
     private final PedidoEstoqueService estoqueService;
     private final PedidoCodigoService codigoService;
     private final PedidoQueryService queryService;
@@ -50,7 +51,7 @@ public class PedidoService {
             EstoqueRepository estoqueRepository,
             PedidoPdfService pedidoPdfService,
             PedidoValidator validator,
-            PedidoEntregaService entregaService,
+            PedidoAtendimentoService atendimentoService,
             PedidoEstoqueService estoqueService,
             PedidoCodigoService codigoService,
             PedidoQueryService queryService,
@@ -62,7 +63,7 @@ public class PedidoService {
         this.estoqueRepository = estoqueRepository;
         this.pedidoPdfService = pedidoPdfService;
         this.validator = validator;
-        this.entregaService = entregaService;
+        this.atendimentoService = atendimentoService;
         this.estoqueService = estoqueService;
         this.codigoService = codigoService;
         this.queryService = queryService;
@@ -95,15 +96,20 @@ public class PedidoService {
 
         Pedido pedido = dto.toEntity(loja, estoquesDaLoja, variacoesPorId);
 
+        pedido.setEmpresa(loja.getEmpresa());
+
         pedido.calcularSubtotalProdutos();
 
-        entregaService.aplicarEntrega(pedido, dto, loja);
+        atendimentoService.aplicarAtendimento(pedido, dto, loja);
 
         estoqueService.baixarEstoqueDoPedido(pedido, estoquesDaLoja);
 
         pedido.setCodigoRastreio(codigoService.gerarCodigoRastreioUnico());
-        pedido.setEmpresa(loja.getEmpresa());
-        pedido.setOrigem(OrigemPedido.ONLINE);
+
+        pedido.definirStatusInicial();
+
+        System.out.println("Tipo: " + pedido.getTipoAtendimentoPedido());
+        System.out.println("Status: " + pedido.getStatus());
 
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
 
@@ -116,9 +122,9 @@ public class PedidoService {
     }
 
     @Transactional
-    public PedidoCriadoResponseDTO criarPedidoBalcao(PedidoAddDTO dto) {
+    public PedidoCriadoResponseDTO criarPedidoBalcao(PedidoBalcaoAddDTO dto){
 
-        validator.validarCriacao(dto);
+        validator.validarCriacaoBalcao(dto);
 
         Long empresaId = empresaContext.getEmpresaId();
 
@@ -128,7 +134,7 @@ public class PedidoService {
         List<Estoque> estoquesDaLoja =
                 estoqueRepository.findByLoja_IdAndLoja_Empresa_Id(loja.getId(), empresaId);
 
-        validator.validarEstoqueDosItens(dto, estoquesDaLoja);
+        validator.validarEstoqueDosItensBalcao(dto, estoquesDaLoja);
 
         Map<Long, ProdutoVariacaoResponseDTO> variacoesPorId = dto.itens()
                 .stream()
@@ -139,18 +145,21 @@ public class PedidoService {
 
         Pedido pedido = dto.toEntity(loja, estoquesDaLoja, variacoesPorId);
 
+        pedido.setTipoAtendimentoPedido(TipoAtendimentoPedido.BALCAO);
+
         pedido.setEmpresa(loja.getEmpresa());
-        pedido.setOrigem(OrigemPedido.BALCAO);
 
         pedido.calcularSubtotalProdutos();
 
-        entregaService.aplicarEntrega(pedido, dto, loja);
+        atendimentoService.aplicarAtendimento(pedido, loja);
 
         estoqueService.baixarEstoqueDoPedido(pedido, estoquesDaLoja);
 
         pedido.setCodigoRastreio(codigoService.gerarCodigoRastreioUnico());
+
+        pedido.definirStatusInicial();
+
         pedido.setStatus(StatusDoPedido.CONCLUIDO);
-        pedido.setConcluidoEm(LocalDateTime.now());
 
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
 

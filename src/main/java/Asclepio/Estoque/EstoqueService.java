@@ -61,12 +61,25 @@ public class EstoqueService {
         if (page == null || page.content() == null || page.content().isEmpty()) {
             throw new ResourceNotFoundException("Variação não encontrada");
         }
+//        ProdutoVariacaoResponseDTO variacaoFinal = produtoVariacaoClient.buscarPorId(dto.variacaoId());
 
         ProdutoVariacaoResponseDTO variacaoFinal = page.content().get(0);
 
         validator.validarEstoqueDuplicado(lojaFinal.getId(), variacaoFinal.id());
 
         ProdutoStorageResponse produto = produtoStorageClient.buscarPorId(variacaoFinal.produtoId());
+
+        System.out.println("----------------");
+        System.out.println("Produto ID: " + produto.id());
+        System.out.println("Imagem: " + produto.imagemUrl());
+        System.out.println("----------------");
+
+        System.out.println("Loja: " + lojaFinal);
+        System.out.println("Variação ID: " + variacaoFinal.id());
+        System.out.println("Quantidade: " + dto.quantidade());
+        System.out.println("Preço: " + dto.precoVenda());
+        System.out.println("Desconto: " + BigDecimal.ZERO);
+        System.out.println("Imagem: " + produto.imagemUrl());
 
         Estoque estoque = new Estoque(null, lojaFinal, variacaoFinal.id(), dto.quantidade(), dto.precoVenda(), BigDecimal.ZERO, produto.imagemUrl());
 

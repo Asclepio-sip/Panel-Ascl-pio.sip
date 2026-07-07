@@ -1,5 +1,7 @@
 package Asclepio.Pedido.dto;
 
+import Asclepio.Pedido.Enum.StatusDoPedido;
+import Asclepio.Pedido.Enum.TipoAtendimentoPedido;
 import Asclepio.Pedido.Pedido;
 
 import java.math.BigDecimal;
@@ -16,8 +18,10 @@ public record DetalhePedidoDTO(
         String bairro,
         String complemento,
         String observacao,
-        String status,
-        String tipoEntrega,
+
+        StatusDoPedido status,
+        TipoAtendimentoPedido tipoAtendimento,
+
         LocalDateTime criadoEm,
         BigDecimal totalProdutos,
         BigDecimal valorFrete,
@@ -50,8 +54,8 @@ public record DetalhePedidoDTO(
                 pedido.getBairro(),
                 pedido.getComplemento(),
                 pedido.getObservacao(),
-                pedido.getStatus().name(),
-                pedido.getTipoEntrega().name(),
+                pedido.getStatus(),
+                pedido.getTipoAtendimentoPedido(),
                 pedido.getCriadoEm(),
                 pedido.getTotalProdutos(),
                 pedido.getValorFrete(),
@@ -67,7 +71,7 @@ public record DetalhePedidoDTO(
         private Integer quantidade;
         private BigDecimal precoUnitario;
         private BigDecimal subtotal;
-        private String imagemBase64;
+        private String imagemUrl;
         private BigDecimal percentualDesconto;
 
         public ItemDTO(
@@ -75,23 +79,15 @@ public record DetalhePedidoDTO(
                 Integer quantidade,
                 BigDecimal precoUnitario,
                 BigDecimal subtotal,
-                String imagemBase64,
+                String imagemUrl,
                 BigDecimal percentualDesconto
         ) {
             this.nomeProduto = nomeProduto;
             this.quantidade = quantidade;
             this.precoUnitario = precoUnitario;
             this.subtotal = subtotal;
-            this.imagemBase64 = imagemBase64;
+            this.imagemUrl = imagemUrl;
             this.percentualDesconto = percentualDesconto;
-        }
-
-        public BigDecimal getPercentualDesconto() {
-            return percentualDesconto;
-        }
-
-        public String getImagemBase64() {
-            return imagemBase64;
         }
 
         public String getNomeProduto() {
@@ -108,6 +104,14 @@ public record DetalhePedidoDTO(
 
         public BigDecimal getSubtotal() {
             return subtotal;
+        }
+
+        public String getImagemUrl() {
+            return imagemUrl;
+        }
+
+        public BigDecimal getPercentualDesconto() {
+            return percentualDesconto;
         }
     }
 }

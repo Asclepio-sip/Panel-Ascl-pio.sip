@@ -1,6 +1,8 @@
 package Asclepio.Pedido.Controller.api;
 
 import Asclepio.Pedido.dto.*;
+import Asclepio.Pedido.dto.pedido.PedidoAddDTO;
+import Asclepio.Pedido.dto.pedido.PedidoBalcaoAddDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
@@ -72,6 +74,6 @@ public interface PedidoApi {
     @Operation(summary = "Criar pedido de balcão", description = "Cria um pedido presencial/balcão para a empresa do usuário autenticado.")
     @PostMapping("/balcao")
     @PreAuthorize("hasAuthority('CriarPedido')")
-    ResponseEntity<PedidoCriadoResponseDTO> criarPedidoBalcao(@RequestBody PedidoAddDTO dto);
+    ResponseEntity<PedidoCriadoResponseDTO> criarPedidoBalcao(@RequestBody PedidoBalcaoAddDTO dto);
 
 }

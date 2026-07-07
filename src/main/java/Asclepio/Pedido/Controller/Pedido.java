@@ -2,6 +2,8 @@ package Asclepio.Pedido.Controller;
 
 import Asclepio.Pedido.Service.PedidoQueryService;
 import Asclepio.Pedido.dto.*;
+import Asclepio.Pedido.dto.pedido.PedidoAddDTO;
+import Asclepio.Pedido.dto.pedido.PedidoBalcaoAddDTO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.data.domain.Page;
@@ -54,7 +56,7 @@ public class Pedido implements PedidoApi {
     }
 
     @Override
-    public ResponseEntity<PedidoCriadoResponseDTO> criarPedidoBalcao(@RequestBody PedidoAddDTO dto) {
+    public ResponseEntity<PedidoCriadoResponseDTO> criarPedidoBalcao(@RequestBody PedidoBalcaoAddDTO dto) {
         PedidoCriadoResponseDTO response = service.criarPedidoBalcao(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

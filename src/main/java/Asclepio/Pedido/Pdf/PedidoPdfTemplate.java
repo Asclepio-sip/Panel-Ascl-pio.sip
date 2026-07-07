@@ -15,6 +15,10 @@ public class PedidoPdfTemplate {
         NumberFormat moedaBR = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR"));
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm");
 
+        String nomeEmpresa = pedido.getEmpresa() != null
+                ? valorOuTraco(pedido.getEmpresa().getNome())
+                : "Empresa";
+
         String email = valorOuTraco(pedido.getEmail());
         String telefone = valorOuTraco(pedido.getTelefone());
         String endereco = valorOuTraco(pedido.getEndereco());
@@ -134,7 +138,7 @@ public class PedidoPdfTemplate {
                 <body>
 
                 <div class="header">
-                    <div class="logo">PROMO FARMA</div>
+                    <div class="logo">%s</div>
                     <div class="subtitle">Comprovante de Pedido</div>
                 </div>
 
@@ -144,7 +148,7 @@ public class PedidoPdfTemplate {
                     <strong>Data:</strong> %s <br/>
                     <strong>Status:</strong> %s <br/>
                     <strong>Pagamento:</strong> %s <br/>
-                    <strong>Entrega:</strong> %s
+                    <strong>Tipo de atendimento:</strong> %s
                 </div>
 
                 <h2>Cliente</h2>
@@ -190,18 +194,20 @@ public class PedidoPdfTemplate {
                 <div class="box">%s</div>
 
                 <div class="footer">
-                    Promo Farma © 2026 - Documento gerado automaticamente.
+                    %s © 2026 - Documento gerado automaticamente.
                 </div>
 
                 </body>
                 </html>
                 """.formatted(
+                nomeEmpresa,
+
                 pedido.getId(),
                 valorOuTraco(pedido.getCodigoRastreio()),
                 pedido.getCriadoEm().format(fmt),
                 pedido.getStatus(),
                 pedido.getFormaDePagamento(),
-                pedido.getTipoEntrega(),
+                pedido.getTipoAtendimentoPedido(),
 
                 pedido.getNomeCliente(),
                 email,
@@ -216,7 +222,8 @@ public class PedidoPdfTemplate {
                 moedaBR.format(valorSeguro(pedido.getValorFrete())),
                 moedaBR.format(valorSeguro(pedido.getTotalFinal())),
 
-                observacao
+                observacao,
+                nomeEmpresa
         );
     }
 

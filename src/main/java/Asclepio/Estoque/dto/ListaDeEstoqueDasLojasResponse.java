@@ -20,6 +20,7 @@ public record ListaDeEstoqueDasLojasResponse(
         BigDecimal percentualDesconto,
         BigDecimal valorFinal,
         String Variacao,
+        Long VaricaoId,
         String Entregar
 
 ) {
@@ -78,6 +79,7 @@ public record ListaDeEstoqueDasLojasResponse(
 
                 variacao.nomeVariacao(),
 
+                variacao.id(),
                 entregar
         );
     }
