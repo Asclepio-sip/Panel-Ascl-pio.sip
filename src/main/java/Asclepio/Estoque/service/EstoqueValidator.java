@@ -28,7 +28,7 @@ public class EstoqueValidator {
     }
 
     public void validarLojaInformada(EstoqueAddDto dto) {
-        if (dto.lojaID() == null && isBlank(dto.nomeLoja())) {
+        if (dto.lojaID() == null ) {
             throw new BusinessException("Informe lojaID ou nomeLoja");
         }
     }

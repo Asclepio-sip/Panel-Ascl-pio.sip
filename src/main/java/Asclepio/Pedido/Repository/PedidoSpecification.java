@@ -1,9 +1,9 @@
 package Asclepio.Pedido.Repository;
 
-import jakarta.persistence.criteria.Predicate;
-import org.springframework.data.jpa.domain.Specification;
 import Asclepio.Pedido.Pedido;
 import Asclepio.Pedido.dto.PedidoFiltro;
+import jakarta.persistence.criteria.Predicate;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -67,8 +67,6 @@ public class PedidoSpecification {
                 );
             }
 
-
-
             if (filtro.bairro() != null && !filtro.bairro().isBlank()) {
                 predicates.add(
                         cb.like(
@@ -79,27 +77,27 @@ public class PedidoSpecification {
             }
 
             if (filtro.status() != null) {
-                predicates.add(cb.equal(root.get("status"), filtro.status()));
+                predicates.add(
+                        cb.equal(root.get("status"), filtro.status())
+                );
             }
 
-            if (filtro.tipoEntrega() != null) {
-                predicates.add(cb.equal(root.get("tipoEntrega"), filtro.tipoEntrega()));
+            if (filtro.tipoAtendimentoPedido() != null) {
+                predicates.add(
+                        cb.equal(root.get("tipoAtendimentoPedido"), filtro.tipoAtendimentoPedido())
+                );
             }
 
             if (filtro.formaDePagamento() != null) {
-                predicates.add(cb.equal(root.get("formaDePagamento"), filtro.formaDePagamento()));
-            }
-
-            if (filtro.origem() != null) {
-                predicates.add(cb.equal(root.get("origem"), filtro.origem()));
-            }
-
-            if (filtro.freteGratis() != null) {
-                predicates.add(cb.equal(root.get("freteGratis"), filtro.freteGratis()));
+                predicates.add(
+                        cb.equal(root.get("formaDePagamento"), filtro.formaDePagamento())
+                );
             }
 
             if (filtro.freteGratis() != null) {
-                predicates.add(cb.equal(root.get("freteGratis"), filtro.freteGratis()));
+                predicates.add(
+                        cb.equal(root.get("freteGratis"), filtro.freteGratis())
+                );
             }
 
             if (filtro.dataInicio() != null) {

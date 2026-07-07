@@ -1,17 +1,16 @@
 package Asclepio.Pedido;
 
 import Asclepio.Empresa.Empresa;
-import Asclepio.Pedido.Enum.OrigemPedido;
-import jakarta.persistence.*;
-
-import Asclepio.Pedido.Enum.FormaDePagamento;
-import Asclepio.Pedido.Enum.StatusDoPedido;
-import Asclepio.Pedido.Enum.TipoEntrega;
 import Asclepio.ItemPedido.ItemPedido;
 import Asclepio.Loja.Loja.Loja;
+import Asclepio.Pedido.Enum.FormaDePagamento;
+import Asclepio.Pedido.Enum.StatusDoPedido;
+import Asclepio.Pedido.Enum.TipoAtendimentoPedido;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -53,30 +52,26 @@ public class Pedido {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "PED_STATUS", nullable = false, length = 30)
-    private StatusDoPedido status = StatusDoPedido.AGUARDANDO;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "PED_TIPO_ENTREGA", length = 30)
-    private TipoEntrega tipoEntrega;
+    private StatusDoPedido status;
 
     @Column(name = "PED_TOTAL_PRODUTOS", precision = 10, scale = 2)
-    private BigDecimal totalProdutos;
+    private BigDecimal totalProdutos = BigDecimal.ZERO;
 
     @Column(name = "PED_VALOR_FRETE", precision = 10, scale = 2)
-    private BigDecimal valorFrete;
+    private BigDecimal valorFrete = BigDecimal.ZERO;
 
     @Column(name = "PED_TOTAL_FINAL", precision = 10, scale = 2)
-    private BigDecimal totalFinal;
+    private BigDecimal totalFinal = BigDecimal.ZERO;
 
     @Column(name = "PED_FRETE_GRATIS")
-    private Boolean freteGratis;
+    private Boolean freteGratis = false;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "PED_FORMA_PAGAMENTO", length = 30)
     private FormaDePagamento formaDePagamento;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemPedido> itens;
+    private List<ItemPedido> itens = new ArrayList<>();
 
     @Column(name = "PED_CODIGO_RASTREIO", nullable = false, unique = true, length = 40)
     private String codigoRastreio;
@@ -89,85 +84,65 @@ public class Pedido {
     private Empresa empresa;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "PED_ORIGEM", nullable = false, length = 30)
-    private OrigemPedido origem = OrigemPedido.ONLINE;
+    @Column(name = "PED_TIPO_ATENDIMENTO", nullable = false, length = 40)
+    private TipoAtendimentoPedido tipoAtendimentoPedido;
 
     public Pedido() {
     }
 
-    public Pedido(
-            Long id,
-            Long lojaId,
-            String nomeCliente,
-            String email,
-            String telefone,
-            String endereco,
-            String bairro,
-            String complemento,
-            String observacao,
-            TipoEntrega tipoEntrega,
-            List<ItemPedido> itens,
-            FormaDePagamento formaDePagamento,
-            String codigoRastreio,
-            LocalDateTime concluidoEm,
-            Empresa empresa
-    ) {
-
+    public void calcularSubtotalProdutos() {
         if (itens == null || itens.isEmpty()) {
-            throw new RuntimeException("Pedido precisa ter itens");
+            this.totalProdutos = BigDecimal.ZERO;
+            return;
         }
 
-        this.id = id;
-        this.criadoEm = LocalDateTime.now();
-        this.nomeCliente = nomeCliente;
-        this.email = email;
-        this.telefone = telefone;
-        this.endereco = endereco;
-        this.bairro = bairro;
-        this.complemento = complemento;
-        this.observacao = observacao;
-        this.tipoEntrega = tipoEntrega;
-        this.itens = itens;
-        this.formaDePagamento = formaDePagamento;
-        this.status = StatusDoPedido.AGUARDANDO;
-        this.codigoRastreio = codigoRastreio;
-        this.concluidoEm = concluidoEm;
-        this.empresa = empresa;
-
-        calcularTotais();
+        this.totalProdutos = itens.stream()
+                .map(ItemPedido::getSubtotal)
+                .filter(subtotal -> subtotal != null)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-    public void calcularTotais() {
 
-        this.totalProdutos = itens.stream().map(ItemPedido::getSubtotal).reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        this.valorFrete = BigDecimal.ZERO;
-
-        this.totalFinal = totalProdutos;
+    public void definirStatusInicial() {
+        if (tipoAtendimentoPedido == TipoAtendimentoPedido.BALCAO) {
+            status = StatusDoPedido.SEPARACAO;
+        } else {
+            status = StatusDoPedido.AGUARDANDO;
+        }
     }
 
     public void calcularTotalFinal() {
-
+        BigDecimal produtos = totalProdutos != null ? totalProdutos : BigDecimal.ZERO;
         BigDecimal frete = valorFrete != null ? valorFrete : BigDecimal.ZERO;
 
-        this.totalFinal = totalProdutos.add(frete);
+        this.totalFinal = produtos.add(frete);
     }
 
     public void aplicarFrete(BigDecimal frete) {
-
-        this.valorFrete = frete;
-
-        this.totalFinal = totalProdutos.add(frete);
+        this.valorFrete = frete != null ? frete : BigDecimal.ZERO;
+        calcularTotalFinal();
     }
 
-    public void calcularSubtotalProdutos() {
+    public void zerarEntrega() {
+        this.endereco = null;
+        this.bairro = null;
+        this.complemento = null;
+        this.valorFrete = BigDecimal.ZERO;
+        this.freteGratis = false;
+        calcularTotalFinal();
+    }
 
-        this.totalProdutos = itens.stream().map(ItemPedido::getSubtotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+    public void adicionarItem(ItemPedido item) {
+        if (this.itens == null) {
+            this.itens = new ArrayList<>();
+        }
+
+        this.itens.add(item);
     }
 
     public Long getId() {
         return id;
     }
-
 
     public LocalDateTime getCriadoEm() {
         return criadoEm;
@@ -197,16 +172,16 @@ public class Pedido {
         return complemento;
     }
 
+    public Loja getLoja() {
+        return loja;
+    }
+
     public String getObservacao() {
         return observacao;
     }
 
     public StatusDoPedido getStatus() {
         return status;
-    }
-
-    public TipoEntrega getTipoEntrega() {
-        return tipoEntrega;
     }
 
     public BigDecimal getTotalProdutos() {
@@ -233,18 +208,21 @@ public class Pedido {
         return itens;
     }
 
-    public Loja getLoja() {
-        return loja;
+    public String getCodigoRastreio() {
+        return codigoRastreio;
     }
 
-    public void setLoja(Loja loja) {
-        this.loja = loja;
+    public LocalDateTime getConcluidoEm() {
+        return concluidoEm;
     }
 
-    public void setStatus(StatusDoPedido status) {
-        this.status = status;
+    public Empresa getEmpresa() {
+        return empresa;
     }
 
+    public TipoAtendimentoPedido getTipoAtendimentoPedido() {
+        return tipoAtendimentoPedido;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -278,12 +256,16 @@ public class Pedido {
         this.complemento = complemento;
     }
 
+    public void setLoja(Loja loja) {
+        this.loja = loja;
+    }
+
     public void setObservacao(String observacao) {
         this.observacao = observacao;
     }
 
-    public void setTipoEntrega(TipoEntrega tipoEntrega) {
-        this.tipoEntrega = tipoEntrega;
+    public void setStatus(StatusDoPedido status) {
+        this.status = status;
     }
 
     public void setTotalProdutos(BigDecimal totalProdutos) {
@@ -307,38 +289,22 @@ public class Pedido {
     }
 
     public void setItens(List<ItemPedido> itens) {
-        this.itens = itens;
-    }
-
-    public String getCodigoRastreio() {
-        return codigoRastreio;
+        this.itens = itens != null ? itens : new ArrayList<>();
     }
 
     public void setCodigoRastreio(String codigoRastreio) {
         this.codigoRastreio = codigoRastreio;
     }
 
-    public LocalDateTime getConcluidoEm() {
-        return concluidoEm;
-    }
-
     public void setConcluidoEm(LocalDateTime concluidoEm) {
         this.concluidoEm = concluidoEm;
-    }
-
-    public Empresa getEmpresa() {
-        return empresa;
     }
 
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
 
-    public OrigemPedido getOrigem() {
-        return origem;
-    }
-
-    public void setOrigem(OrigemPedido origem) {
-        this.origem = origem;
+    public void setTipoAtendimentoPedido(TipoAtendimentoPedido tipoAtendimentoPedido) {
+        this.tipoAtendimentoPedido = tipoAtendimentoPedido;
     }
 }

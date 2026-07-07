@@ -35,13 +35,7 @@ public class ProdutoStorageClient {
         this.restTemplate = restTemplate;
     }
 
-    public ProdutoStorageResponse criarProduto(
-            String nome,
-            String descricao,
-            String marca,
-            Long categoriaId,
-            MultipartFile imagem
-    ) {
+    public ProdutoStorageResponse criarProduto(String nome, String descricao, String marca, Long categoriaId, MultipartFile imagem) {
         String url = storageServiceUrl + "/produtos";
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
@@ -57,61 +51,42 @@ public class ProdutoStorageClient {
         HttpHeaders headers = criarHeadersComToken();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        HttpEntity<MultiValueMap<String, Object>> request =
-                new HttpEntity<>(body, headers);
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
 
         try {
-            ResponseEntity<ProdutoStorageResponse> response =
-                    restTemplate.postForEntity(
-                            url,
-                            request,
-                            ProdutoStorageResponse.class
-                    );
+            ResponseEntity<ProdutoStorageResponse> response = restTemplate.postForEntity(url, request, ProdutoStorageResponse.class);
 
             return response.getBody();
 
-        } catch (HttpClientErrorException | HttpServerErrorException ex) {
-            throw new ApiExternaException(
-                    ex.getStatusCode().value(),
-                    extrairMensagem(ex.getResponseBodyAsString())
-            );
+        }catch (HttpClientErrorException | HttpServerErrorException ex) {
+
+            System.out.println("STATUS: " + ex.getStatusCode());
+            System.out.println("BODY:");
+            System.out.println(ex.getResponseBodyAsString());
+
+            throw ex;
         }
     }
 
-    public PageResponse<ProdutoStorageResponse> listarProdutos(
-            String nome,
-            Long categoriaId,
-            String nomeCategoria,
-            Pageable pageable
-    ) {
-        String url = UriComponentsBuilder
-                .fromHttpUrl(storageServiceUrl + "/produtos")
-                .queryParam("nome", nome)
-                .queryParam("categoriaId", categoriaId)
-                .queryParam("nomeCategoria", nomeCategoria)
-                .queryParam("page", pageable.getPageNumber())
-                .queryParam("size", pageable.getPageSize())
-                .toUriString();
+    public PageResponse<ProdutoStorageResponse> listarProdutos(String nome, Long categoriaId, String nomeCategoria, Pageable pageable) {
+        String url = UriComponentsBuilder.fromHttpUrl(storageServiceUrl + "/produtos").queryParam("nome", nome).queryParam("categoriaId", categoriaId).queryParam("nomeCategoria", nomeCategoria).queryParam("page", pageable.getPageNumber()).queryParam("size", pageable.getPageSize()).toUriString();
 
         HttpHeaders headers = criarHeadersComToken();
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
         try {
-            ResponseEntity<PageResponse<ProdutoStorageResponse>> response =
-                    restTemplate.exchange(
-                            url,
-                            HttpMethod.GET,
-                            request,
-                            new ParameterizedTypeReference<PageResponse<ProdutoStorageResponse>>() {}
-                    );
+            ResponseEntity<PageResponse<ProdutoStorageResponse>> response = restTemplate.exchange(url, HttpMethod.GET, request, new ParameterizedTypeReference<PageResponse<ProdutoStorageResponse>>() {
+            });
 
             return response.getBody();
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
-            throw new ApiExternaException(
-                    ex.getStatusCode().value(),
-                    extrairMensagem(ex.getResponseBodyAsString())
-            );
+
+            System.out.println("STATUS: " + ex.getStatusCode());
+            System.out.println("BODY:");
+            System.out.println(ex.getResponseBodyAsString());
+
+            throw ex;
         }
     }
 
@@ -122,80 +97,60 @@ public class ProdutoStorageClient {
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
         try {
-            restTemplate.exchange(
-                    url,
-                    HttpMethod.DELETE,
-                    request,
-                    Void.class
-            );
+            restTemplate.exchange(url, HttpMethod.DELETE, request, Void.class);
 
-        } catch (HttpClientErrorException | HttpServerErrorException ex) {
-            throw new ApiExternaException(
-                    ex.getStatusCode().value(),
-                    extrairMensagem(ex.getResponseBodyAsString())
-            );
+        }catch (HttpClientErrorException | HttpServerErrorException ex) {
+
+            System.out.println("STATUS: " + ex.getStatusCode());
+            System.out.println("BODY:");
+            System.out.println(ex.getResponseBodyAsString());
+
+            throw ex;
         }
     }
 
-    public ProdutoStorageResponse atualizarProduto(
-            Long id,
-            ProdutoUpdateDto dto
-    ) {
+    public ProdutoStorageResponse atualizarProduto(Long id, ProdutoUpdateDto dto) {
         String url = storageServiceUrl + "/produtos/" + id;
 
         HttpHeaders headers = criarHeadersComToken();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<ProdutoUpdateDto> request =
-                new HttpEntity<>(dto, headers);
+        HttpEntity<ProdutoUpdateDto> request = new HttpEntity<>(dto, headers);
 
         try {
-            ResponseEntity<ProdutoStorageResponse> response =
-                    restTemplate.exchange(
-                            url,
-                            HttpMethod.PATCH,
-                            request,
-                            ProdutoStorageResponse.class
-                    );
+            ResponseEntity<ProdutoStorageResponse> response = restTemplate.exchange(url, HttpMethod.PATCH, request, ProdutoStorageResponse.class);
 
             return response.getBody();
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
-            throw new ApiExternaException(
-                    ex.getStatusCode().value(),
-                    extrairMensagem(ex.getResponseBodyAsString())
-            );
+
+            System.out.println("STATUS: " + ex.getStatusCode());
+            System.out.println("BODY:");
+            System.out.println(ex.getResponseBodyAsString());
+
+            throw ex;
         }
     }
 
     public ProdutoStorageResponse buscarPorId(Long id) {
 
-        String url = UriComponentsBuilder
-                .fromHttpUrl(storageServiceUrl + "/produtos")
-                .queryParam("id", id)
-                .queryParam("page", 0)
-                .queryParam("size", 1)
-                .toUriString();
+        String url = storageServiceUrl + "/produtos/" + id;
 
         HttpHeaders headers = criarHeadersComToken();
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
         try {
-            ResponseEntity<PageResponse<ProdutoStorageResponse>> response =
-                    restTemplate.exchange(
-                            url,
-                            HttpMethod.GET,
-                            request,
-                            new ParameterizedTypeReference<PageResponse<ProdutoStorageResponse>>() {}
-                    );
+            ResponseEntity<ProdutoStorageResponse> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    request,
+                    ProdutoStorageResponse.class
+            );
 
-            PageResponse<ProdutoStorageResponse> page = response.getBody();
+            return response.getBody();
 
-            if (page == null || page.content() == null || page.content().isEmpty()) {
-                throw new ResourceNotFoundException("Produto não encontrado com id: " + id);
-            }
-
-            return page.content().get(0);
+        } catch (HttpClientErrorException.NotFound ex) {
+            throw new ResourceNotFoundException("Produto não encontrado com id: " + id);
 
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
             throw new ApiExternaException(
@@ -208,8 +163,7 @@ public class ProdutoStorageClient {
     private HttpHeaders criarHeadersComToken() {
         HttpHeaders headers = new HttpHeaders();
 
-        ServletRequestAttributes attributes =
-                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
         if (attributes != null) {
             HttpServletRequest request = attributes.getRequest();
