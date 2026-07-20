@@ -128,8 +128,10 @@ public class PedidoService {
 
         Long empresaId = empresaContext.getEmpresaId();
 
-        Loja loja = lojaRepository.findByIdAndEmpresa_Id(dto.lojaId(), empresaId)
-                .orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
+        Loja loja = lojaRepository
+                .findByIdAndEmpresa_Id(dto.lojaId(), empresaId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Loja não encontrada"));
 
         List<Estoque> estoquesDaLoja =
                 estoqueRepository.findByLoja_IdAndLoja_Empresa_Id(loja.getId(), empresaId);

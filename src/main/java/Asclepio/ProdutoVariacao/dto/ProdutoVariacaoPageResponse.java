@@ -1,6 +1,4 @@
-package Asclepio.ProdutoVariacao;
-
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
+package Asclepio.ProdutoVariacao.dto;
 
 import java.util.List;
 

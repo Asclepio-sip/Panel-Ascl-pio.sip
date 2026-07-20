@@ -43,4 +43,16 @@ public class EstoqueQueryService {
             return ListaDeEstoqueDasLojasResponse.fromDomain(estoque, variacao);
         });
     }
+
+    public Estoque buscarPorId(Long id, Long empresaId) {
+        return estoqueRepository
+                .findByIdAndLoja_Empresa_Id(id, empresaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Estoque não encontrado"));
+    }
+
+    public Estoque buscarPorLojaEVariacao(Long lojaId, Long variacaoId, Long empresaId) {
+        return estoqueRepository
+                .findByLoja_IdAndLoja_Empresa_IdAndVariacaoId(lojaId, empresaId, variacaoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Estoque não encontrado"));
+    }
 }

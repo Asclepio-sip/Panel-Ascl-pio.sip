@@ -1,5 +1,6 @@
 package Asclepio.Pedido.Service;
 
+import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Pedido.Pedido;
 import Asclepio.Pedido.Repository.PedidoRepository;
 import Asclepio.Pedido.Repository.PedidoSpecification;
@@ -20,24 +21,26 @@ public class PedidoQueryService {
 
     private final PedidoRepository pedidoRepository;
 
-    public PedidoQueryService(PedidoRepository pedidoRepository) {
+    private final EmpresaContext empresaContext;
+
+    public PedidoQueryService(PedidoRepository pedidoRepository, EmpresaContext empresaContext) {
         this.pedidoRepository = pedidoRepository;
+        this.empresaContext = empresaContext;
     }
 
     public Pedido buscarPorId(Long id) {
-        return pedidoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
+        return pedidoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
     }
 
     public Pedido buscarPorCodigoRastreio(String codigoRastreio) {
-        return pedidoRepository.findByCodigoRastreio(codigoRastreio)
-                .orElseThrow(() -> new ResourceNotFoundException("Código de rastreio inválido"));
+        return pedidoRepository.findByCodigoRastreio(codigoRastreio).orElseThrow(() -> new ResourceNotFoundException("Código de rastreio inválido"));
     }
 
     public Page<ListaDePedidoDTO> listarComFiltro(PedidoFiltro filtro, Pageable pageable) {
-        return pedidoRepository
-                .findAll(PedidoSpecification.filtrar(filtro), pageable)
-                .map(ListaDePedidoDTO::fromEntity);
+
+        Long empresaId = empresaContext.getEmpresaId();
+
+        return pedidoRepository.findAll(PedidoSpecification.filtrar(filtro, empresaId), pageable).map(ListaDePedidoDTO::fromEntity);
     }
 
     public List<Pedido> listarPedidosDoDia() {
@@ -56,7 +59,6 @@ public class PedidoQueryService {
             throw new BusinessException("ID do pedido é obrigatório");
         }
 
-        return pedidoRepository.findByIdAndEmpresa_Id(id, empresaId)
-                .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
+        return pedidoRepository.findByIdAndEmpresa_Id(id, empresaId).orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
     }
 }

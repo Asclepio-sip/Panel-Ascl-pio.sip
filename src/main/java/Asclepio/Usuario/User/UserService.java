@@ -1,24 +1,23 @@
 package Asclepio.Usuario.User;
 
 import Asclepio.Empresa.Empresa;
-import Asclepio.Empresa.EmpresaRepository;
+import Asclepio.Empresa.EmpresaService;
 import Asclepio.Usuario.Permission.Permission;
 import Asclepio.Usuario.Permission.PermissionRepository;
 import Asclepio.Usuario.Role.Role;
 import Asclepio.Usuario.Role.RoleRepository;
 import Asclepio.Usuario.User.Repository.UserRepository;
 import Asclepio.Usuario.User.Repository.UserSpecification;
-import Asclepio.Usuario.User.dto.RegisterDTO;
-import Asclepio.Usuario.User.dto.ResponseListaDeUserDTO;
-import Asclepio.Usuario.User.dto.UpdateUserDTO;
-import Asclepio.Usuario.User.dto.UserFiltroDTO;
+import Asclepio.Usuario.User.dto.*;
 import Asclepio.exception.BusinessException;
 import Asclepio.exception.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import Asclepio.Usuario.Role.ServiceRole;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,22 +29,29 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final PermissionRepository permissionRepository;
-    private final EmpresaRepository empresaRepository;
+    private final EmpresaService empresaService;
+    private final UserValidationService validationService;
+    private final ServiceRole serviceRole;
+
 
     public UserService(
             UserRepository userRepository,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder,
             PermissionRepository permissionRepository,
-            EmpresaRepository empresaRepository
+            EmpresaService empresaService,
+            UserValidationService validationService,
+            ServiceRole serviceRole
     ) {
+
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.permissionRepository = permissionRepository;
-        this.empresaRepository = empresaRepository;
+        this.empresaService = empresaService;
+        this.validationService = validationService;
+        this.serviceRole = serviceRole;
     }
-
     public User createUser(RegisterDTO dto) {
 
         validarCriacao(dto);
@@ -54,11 +60,7 @@ public class UserService {
             throw new BusinessException("Usuário já existe");
         }
 
-        Role role = roleRepository.findById(dto.roleId())
-                .orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado"));
-
-        Empresa empresa = empresaRepository.findById(dto.empresaId())
-                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
+        Role role = roleRepository.findById(dto.roleId()).orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado"));
 
 
         User user = new User();
@@ -68,7 +70,6 @@ public class UserService {
         user.setEmail(dto.Email());
         user.setRole(role);
         user.setAtivo(true);
-        user.setEmpresa(empresa);
 
 
         return userRepository.save(user);
@@ -78,9 +79,7 @@ public class UserService {
 
         Specification<User> specification = UserSpecification.filtrar(filtro);
 
-        return userRepository
-                .findAll(specification, pageable)
-                .map(ResponseListaDeUserDTO::fromEntity);
+        return userRepository.findAll(specification, pageable).map(ResponseListaDeUserDTO::fromEntity);
     }
 
     public User findById(UUID id) {
@@ -89,8 +88,7 @@ public class UserService {
             throw new BusinessException("ID do usuário é obrigatório");
         }
 
-        return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
     }
 
     public void updateUser(UUID id, UpdateUserDTO dto) {
@@ -105,12 +103,11 @@ public class UserService {
 
             String loginTratado = dto.login().trim();
 
-            userRepository.findByUsername(loginTratado)
-                    .ifPresent(usuarioExistente -> {
-                        if (!usuarioExistente.getId().equals(id)) {
-                            throw new BusinessException("Já existe outro usuário com esse login");
-                        }
-                    });
+            userRepository.findByUsername(loginTratado).ifPresent(usuarioExistente -> {
+                if (!usuarioExistente.getId().equals(id)) {
+                    throw new BusinessException("Já existe outro usuário com esse login");
+                }
+            });
 
             user.setUsername(loginTratado);
         }
@@ -120,15 +117,13 @@ public class UserService {
         }
 
         if (dto.roleId() != null) {
-            Role role = roleRepository.findById(dto.roleId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado"));
+            Role role = roleRepository.findById(dto.roleId()).orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado"));
 
             user.setRole(role);
         }
 
         if (dto.permissionIds() != null) {
-            List<Permission> permissionsExtras =
-                    permissionRepository.findAllById(dto.permissionIds());
+            List<Permission> permissionsExtras = permissionRepository.findAllById(dto.permissionIds());
 
             if (permissionsExtras.size() != dto.permissionIds().size()) {
                 throw new ResourceNotFoundException("Uma ou mais permissões não foram encontradas");
@@ -157,5 +152,35 @@ public class UserService {
         if (dto.roleId() == null) {
             throw new BusinessException("Cargo é obrigatório");
         }
+    }
+
+    @Transactional
+    public User criarConta(RequestCriarContaDTO dto) {
+
+        validationService.validarCriacaoConta(dto);
+        validationService.validarLogin(dto.login());
+        validationService.validarEmail(dto.email());
+
+        Empresa empresa = empresaService.criarEmpresaCadastro(
+                dto.nomeEmpresa().trim()
+        );
+
+        // Cria todos os cargos da empresa
+        serviceRole.criarRolesPadrao(empresa);
+
+        // Recupera o SuperAdministrador recém-criado
+        serviceRole.criarRolesPadrao(empresa);
+
+        Role role = serviceRole.buscarSuperAdministrador(empresa);
+
+        User user = new User();
+        user.setUsername(dto.login().trim());
+        user.setEmail(dto.email().trim());
+        user.setPassword(passwordEncoder.encode(dto.password()));
+        user.setEmpresa(empresa);
+        user.setRole(role);
+        user.setAtivo(true);
+
+        return userRepository.save(user);
     }
 }

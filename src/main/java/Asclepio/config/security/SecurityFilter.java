@@ -37,11 +37,15 @@ public class SecurityFilter extends OncePerRequestFilter {
                 var login = tokenService.validateToken(token);
 
                 if (login != null) {
+
                     UserDetails user = userRepository
                             .findByUsername(login)
+                            .map(UsuarioAutenticado::new)
                             .orElse(null);
 
+
                     if (user != null) {
+
                         var authentication =
                                 new UsernamePasswordAuthenticationToken(
                                         user,
@@ -49,9 +53,13 @@ public class SecurityFilter extends OncePerRequestFilter {
                                         user.getAuthorities()
                                 );
 
-                        SecurityContextHolder.getContext()
+
+                        SecurityContextHolder
+                                .getContext()
                                 .setAuthentication(authentication);
                     }
+
+
                 }
             } catch (Exception e) {
                 SecurityContextHolder.clearContext();

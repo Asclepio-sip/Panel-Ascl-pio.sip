@@ -28,6 +28,10 @@ public interface UserAPI {
     @PreAuthorize("hasAuthority('CriarUser')")
     public ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid RegisterDTO dto);
 
+
+    @PostMapping("/CriarConta")
+    public ResponseEntity<LoginResponseDTO> CriarConta(@RequestBody @Valid RequestCriarContaDTO dto);
+
     @Operation(summary = "Listar usuários", description = """
             Lista os usuários do sistema com paginação e filtros opcionais.
             

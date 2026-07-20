@@ -1,10 +1,10 @@
 package Asclepio.config.security;
 
+import Asclepio.Usuario.User.Repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import Asclepio.Usuario.User.Repository.UserRepository;
 
 @Service
 public class AuthorizationService implements UserDetailsService {
@@ -20,10 +20,8 @@ public class AuthorizationService implements UserDetailsService {
             throws UsernameNotFoundException {
 
         return userRepository.findByUsername(username)
+                .map(UsuarioAutenticado::new)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException(
-                                "Usuário não encontrado"
-                        )
-                );
+                        new UsernameNotFoundException("Usuário não encontrado"));
     }
 }
