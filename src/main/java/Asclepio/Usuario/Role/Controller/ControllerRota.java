@@ -8,16 +8,18 @@ import Asclepio.Usuario.Role.ServiceRole;
 
 import java.util.List;
 
+
 @RestController
 public class ControllerRota implements RoleApi {
 
-    private ServiceRole  serviceRole;
+    private final ServiceRole serviceRole;
 
     public ControllerRota(ServiceRole serviceRole) {
         this.serviceRole = serviceRole;
     }
 
-    public ResponseEntity<List<Role>> listaDeRole(){
-        return ResponseEntity.ok( serviceRole.listaDeRole());
+    @Override
+    public ResponseEntity<List<Role>> listaDeRole() {
+        return ResponseEntity.ok(serviceRole.listaDeRole());
     }
 }

@@ -1,10 +1,9 @@
 package Asclepio.ProdutoVariacao.controller;
 
-import Asclepio.ProdutoVariacao.ProdutoVariacaoPageResponse;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoPageResponse;
 import Asclepio.ProdutoVariacao.ProdutoVariacaoService;
 import Asclepio.ProdutoVariacao.controller.api.ProdutoVariacaoApi;
 import Asclepio.ProdutoVariacao.dto.*;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

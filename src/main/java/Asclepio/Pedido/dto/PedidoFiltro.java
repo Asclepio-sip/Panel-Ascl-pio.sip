@@ -18,6 +18,8 @@ public record PedidoFiltro(
         FormaDePagamento formaDePagamento,
         Boolean freteGratis,
         LocalDate dataInicio,
-        LocalDate dataFim
+        LocalDate dataFim,
+        Boolean somenteHoje
+
 ) {
 }

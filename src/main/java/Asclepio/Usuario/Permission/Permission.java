@@ -5,16 +5,9 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(
-        name = "TB_PERMISSION",
+@Table(name = "TB_PERMISSION",
 
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "UK_PERMISSION_NOME",
-                        columnNames = "PER_NOME"
-                )
-        }
-)
+        uniqueConstraints = {@UniqueConstraint(name = "UK_PERMISSION_NOME", columnNames = "PER_NOME")})
 public class Permission {
 
     @Id
@@ -22,28 +15,16 @@ public class Permission {
     @Column(name = "PER_ID", nullable = false)
     private UUID id;
 
-    @Column(
-            name = "PER_NOME",
-            nullable = false,
-            length = 100
-    )
+    @Column(name = "PER_NOME", nullable = false, length = 100)
     private String nome;
 
-    @Column(
-            name = "PER_DESCRICAO",
-            nullable = false,
-            length = 255
-    )
+    @Column(name = "PER_DESCRICAO", nullable = false, length = 255)
     private String descricao;
 
     public Permission() {
     }
 
-    public Permission(
-            UUID id,
-            String nome,
-            String descricao
-    ) {
+    public Permission(UUID id, String nome, String descricao) {
 
         alterarNome(nome);
 
@@ -60,9 +41,7 @@ public class Permission {
 
         if (nome == null || nome.isBlank()) {
 
-            throw new IllegalArgumentException(
-                    "Nome da permissão é obrigatório"
-            );
+            throw new IllegalArgumentException("Nome da permissão é obrigatório");
         }
 
         this.nome = nome.trim();
@@ -72,9 +51,7 @@ public class Permission {
 
         if (descricao == null || descricao.isBlank()) {
 
-            throw new IllegalArgumentException(
-                    "Descrição da permissão é obrigatória"
-            );
+            throw new IllegalArgumentException("Descrição da permissão é obrigatória");
         }
 
         this.descricao = descricao.trim();
@@ -119,14 +96,11 @@ public class Permission {
     @Override
     public boolean equals(Object o) {
 
-        if (this == o)
-            return true;
+        if (this == o) return true;
 
-        if (!(o instanceof Permission other))
-            return false;
+        if (!(o instanceof Permission other)) return false;
 
-        return id != null
-                && id.equals(other.id);
+        return id != null && id.equals(other.id);
     }
 
     @Override

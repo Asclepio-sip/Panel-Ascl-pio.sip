@@ -56,6 +56,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/pedidos/status/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/pedidos/pedidos").permitAll()
                         .requestMatchers(HttpMethod.POST, "/products").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/user/CriarConta").permitAll()
 
 
 

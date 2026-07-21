@@ -1,5 +1,6 @@
 package Asclepio.Estoque.service;
 
+import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Estoque.Estoque;
 import Asclepio.Estoque.Repository.EstoqueRepository;
 import Asclepio.Estoque.Repository.EstoqueSpecification;
@@ -18,29 +19,27 @@ public class EstoqueQueryService {
 
     private final EstoqueRepository estoqueRepository;
     private final ProdutoVariacaoStorageClient produtoVariacaoClient;
+    private final EmpresaContext empresaContext;
 
-    public EstoqueQueryService(EstoqueRepository estoqueRepository, ProdutoVariacaoStorageClient produtoVariacaoClient) {
+    public EstoqueQueryService(EstoqueRepository estoqueRepository, ProdutoVariacaoStorageClient produtoVariacaoClient, EmpresaContext empresaContext) {
         this.estoqueRepository = estoqueRepository;
         this.produtoVariacaoClient = produtoVariacaoClient;
-    }
-
-    public Estoque buscarPorId(Long id) {
-        return estoqueRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Estoque não encontrado"));
-    }
-
-    public Estoque buscarPorLojaEVariacao(Long lojaId, Long variacaoId) {
-        return estoqueRepository.findByLoja_IdAndVariacaoId(lojaId, variacaoId).orElseThrow(() -> new ResourceNotFoundException("Estoque não encontrado"));
-    }
-
-    public List<Estoque> buscarPorLoja(Long lojaId) {
-        return estoqueRepository.findByLoja_Id(lojaId);
+        this.empresaContext = empresaContext;
     }
 
     public Page<ListaDeEstoqueDasLojasResponse> listarTodos(EstoqueFiltro filtro, Pageable pageable) {
-        return estoqueRepository.findAll(EstoqueSpecification.filtrar(filtro), pageable).map(estoque -> {
+        return estoqueRepository.findAll(EstoqueSpecification.filtrar(filtro, empresaContext.getEmpresaId()), pageable).map(estoque -> {
             var variacao = produtoVariacaoClient.buscarPorId(estoque.getVariacaoId());
 
             return ListaDeEstoqueDasLojasResponse.fromDomain(estoque, variacao);
         });
+    }
+
+    public Estoque buscarPorId(Long id, Long empresaId) {
+        return estoqueRepository.findByIdAndLoja_Empresa_Id(id, empresaId).orElseThrow(() -> new ResourceNotFoundException("Estoque não encontrado"));
+    }
+
+    public Estoque buscarPorLojaEVariacao(Long lojaId, Long variacaoId, Long empresaId) {
+        return estoqueRepository.findByLoja_IdAndLoja_Empresa_IdAndVariacaoId(lojaId, empresaId, variacaoId).orElseThrow(() -> new ResourceNotFoundException("Estoque não encontrado"));
     }
 }

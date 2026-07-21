@@ -5,49 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="88792f31-c9d2-42fd-9c39-246dd5948413" name="Changes" comment="feat:ajuste na arquitetura">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Enum/TipoAtendimentoPedido.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoAtendimentoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/dto/pedido/PedidoBalcaoAddDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/EstoqueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/EstoqueService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/dto/ListaDeEstoqueDasLojasResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/dto/ListaDeEstoqueDasLojasResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/service/EstoqueValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/service/EstoqueValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Controller/Pedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Controller/Pedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Controller/api/PedidoApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Controller/api/PedidoApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Enum/TipoEntrega.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Pdf/PedidoPdfTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Pdf/PedidoPdfTemplate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Pedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Pedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/PedidoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/PedidoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Repository/PedidoSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Repository/PedidoSpecification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoEntregaService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Service/PedidoValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/dto/DetalhePedidoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/dto/DetalhePedidoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/dto/ListaDePedidoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/dto/ListaDePedidoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/dto/PedidoAddDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/dto/pedido/PedidoAddDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/dto/PedidoFiltro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/dto/PedidoFiltro.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/ProdutoStorageClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/ProdutoStorageClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Estoque/EstoqueService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Estoque/EstoqueService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Estoque/service/EstoqueMovimentacaoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Estoque/service/EstoqueMovimentacaoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Estoque/service/EstoqueValidator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Estoque/service/EstoqueValidator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/MovimentacaoEstoque/Enum/TipoMovimentacaoEstoque.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/MovimentacaoEstoque/Enum/TipoMovimentacaoEstoque.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/Enum/TipoEntrega.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/Pdf/PedidoPdfTemplate.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/Pdf/PedidoPdfTemplate.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/Pedido.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/Pedido.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/PedidoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/PedidoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/Repository/PedidoSpecification.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/Repository/PedidoSpecification.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/Service/PedidoEntregaService$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/Service/PedidoEntregaService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/Service/PedidoValidator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/Service/PedidoValidator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/DetalhePedidoDTO$ItemDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/DetalhePedidoDTO$ItemDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/DetalhePedidoDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/DetalhePedidoDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/ListaDePedidoDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/ListaDePedidoDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/PedidoAddDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/PedidoAddDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/PedidoFiltro.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/PedidoFiltro.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/Repository/EstoqueSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/Repository/EstoqueSpecification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/service/EstoqueQueryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/service/EstoqueQueryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/MovimentacaoEstoqueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/MovimentacaoEstoqueService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/Repository/MovimentacaoEstoqueSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/Repository/MovimentacaoEstoqueSpecification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Role/RoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Role/RoleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Repository/UserSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Repository/UserSpecification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Estoque/service/EstoqueQueryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Estoque/service/EstoqueQueryService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/Role/RoleRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/Role/RoleRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/Repository/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/Repository/UserRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/UserService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,8 +30,8 @@
         <option value="package-info" />
         <option value="Record" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -95,6 +65,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -103,27 +76,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Asclepio.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ProjetoBaseDeTelasELoginApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.Projeto-farmacia_back [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projeto_base_de_telas_e_login [clean...].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/movimentacao__estoque&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Asclepio.executor": "Run",
+    "Application.ProjetoBaseDeTelasELoginApplication.executor": "Run",
+    "Maven.Projeto-farmacia_back [clean,install].executor": "Run",
+    "Maven.projeto_base_de_telas_e_login [clean...].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "feat/movimentacao__estoque",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\DEV\Projeto-SAAS\java\PromoFarma\projeto_base_de_telas_e_login\src\main\java\projeto_base_de_telas_e_login\adapter\out\persistence" />
@@ -192,6 +172,14 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-63390994e64e-intellij.indexing.shared.core-IU-262.8665.258" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.8665.258" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="88792f31-c9d2-42fd-9c39-246dd5948413" name="Changes" comment="" />
@@ -218,6 +206,9 @@
     </task>
     <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat:ajuste nos dtos" />

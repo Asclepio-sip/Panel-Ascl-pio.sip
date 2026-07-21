@@ -1,5 +1,6 @@
 package Asclepio.Empresa;
 
+import Asclepio.config.security.UsuarioAutenticado;
 import Asclepio.Usuario.User.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -7,35 +8,51 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmpresaContext {
 
-    public User getUsuario() {
 
-        var auth = SecurityContextHolder.getContext().getAuthentication();
+    public UsuarioAutenticado getUsuarioAutenticado() {
 
-        if (auth == null || !(auth.getPrincipal() instanceof User user)) {
+        var auth = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+
+        if (auth == null || !(auth.getPrincipal() instanceof UsuarioAutenticado usuario)) {
+
             throw new IllegalStateException("Usuário não autenticado");
         }
 
-        return user;
+
+        return usuario;
     }
+
+
+    public User getUsuario() {
+
+        return getUsuarioAutenticado().getUser();
+    }
+
 
     public Long getEmpresaId() {
 
-        Empresa empresa = getUsuario().getEmpresa();
+        Empresa empresa = getEmpresa();
 
-        if (empresa == null) {
-            throw new IllegalStateException("Usuário sem empresa vinculada");
-        }
 
         return empresa.getId();
     }
+
 
     public Empresa getEmpresa() {
 
         Empresa empresa = getUsuario().getEmpresa();
 
+
         if (empresa == null) {
-            throw new IllegalStateException("Usuário sem empresa vinculada");
+
+            throw new IllegalStateException(
+                    "Usuário sem empresa selecionada"
+            );
         }
+
 
         return empresa;
     }

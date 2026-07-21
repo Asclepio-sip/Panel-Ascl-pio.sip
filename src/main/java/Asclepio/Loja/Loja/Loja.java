@@ -3,6 +3,7 @@ package Asclepio.Loja.Loja;
 import Asclepio.Empresa.Empresa;
 import Asclepio.Loja.Bairro.Enum.TipoAtendimentoLoja;
 import Asclepio.Loja.LojaBairro.LojaBairro;
+import Asclepio.UserLoja.UserLoja;
 import Asclepio.exception.BusinessException;
 import jakarta.persistence.*;
 
@@ -50,6 +51,9 @@ public class Loja {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "LOJ_EMPRESA_ID", nullable = false)
     private Empresa empresa;
+
+    @OneToMany(mappedBy = "loja", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserLoja> usuarios = new ArrayList<>();
 
     protected Loja() {
     }

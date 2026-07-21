@@ -3,51 +3,77 @@ package Asclepio.Empresa;
 import Asclepio.Empresa.dto.EmpresaFiltroDTO;
 import Asclepio.Empresa.dto.EmpresaRequest;
 import Asclepio.Empresa.dto.EmpresaResponse;
+import Asclepio.Usuario.User.User;
 import Asclepio.exception.BusinessException;
 import Asclepio.exception.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import Asclepio.config.security.UsuarioAutenticado;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Service
 public class EmpresaService {
 
     private final EmpresaRepository repository;
 
-
     public EmpresaService(EmpresaRepository repository) {
         this.repository = repository;
     }
 
+    private User getUsuarioLogado() {
+
+        UsuarioAutenticado usuario =
+                (UsuarioAutenticado) SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getPrincipal();
+
+        return usuario.getUser();
+    }
+
     public Page<EmpresaResponse> listar(EmpresaFiltroDTO filtro, Pageable pageable) {
-        return repository
-                .findAll(EmpresaSpecification.filtrar(filtro), pageable)
-                .map(EmpresaResponse::fromEntity);
+
+        User usuario = getUsuarioLogado();
+
+        return repository.findAll(
+                EmpresaSpecification.filtrar(filtro)
+                        .and((root, query, cb) ->
+                                cb.equal(
+                                        root.get("id"),
+                                        usuario.getEmpresa().getId()
+                                )
+                        ),
+                pageable
+        ).map(EmpresaResponse::fromEntity);
     }
 
     public Empresa buscarPorId(Long id) {
+
         if (id == null) {
             throw new BusinessException("ID da empresa é obrigatório");
         }
 
         return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Empresa não encontrada"));
     }
 
     public EmpresaResponse buscarResponsePorId(Long id) {
+
         return EmpresaResponse.fromEntity(buscarPorId(id));
     }
 
     public EmpresaResponse criar(EmpresaRequest request) {
+
         validarRequest(request);
         validarDuplicidade(null, request);
 
-        Empresa empresa = new Empresa(
-                null,
-                request.nome().trim(),
-                tratarTexto(request.cnpj())
-        );
+        Empresa empresa = new Empresa();
 
+        empresa.setNome(request.nome().trim());
+        empresa.setCnpj(tratarTexto(request.cnpj()));
         empresa.setAtiva(request.ativa() != null ? request.ativa() : true);
 
         Empresa salva = repository.save(empresa);
@@ -56,6 +82,7 @@ public class EmpresaService {
     }
 
     public EmpresaResponse editar(Long id, EmpresaRequest request) {
+
         validarRequest(request);
 
         Empresa empresa = buscarPorId(id);
@@ -79,6 +106,21 @@ public class EmpresaService {
         repository.delete(empresa);
     }
 
+    @Transactional
+    public Empresa criarEmpresaCadastro(String nomeEmpresa) {
+
+        if (nomeEmpresa == null || nomeEmpresa.isBlank()) {
+            throw new BusinessException("Nome da empresa é obrigatório");
+        }
+
+        Empresa empresa = new Empresa();
+
+        empresa.setNome(nomeEmpresa.trim());
+        empresa.setAtiva(true);
+
+        return repository.save(empresa);
+    }
+
     private void validarRequest(EmpresaRequest request) {
         if (request == null) {
             throw new BusinessException("Dados da empresa são obrigatórios");
@@ -92,21 +134,21 @@ public class EmpresaService {
     private void validarDuplicidade(Long idAtual, EmpresaRequest request) {
         String cnpj = tratarTexto(request.cnpj());
 
-        if (cnpj != null) {
-            repository.findByCnpj(cnpj)
-                    .ifPresent(empresa -> {
-                        if (idAtual == null || !empresa.getId().equals(idAtual)) {
-                            throw new BusinessException("Já existe uma empresa com esse CNPJ");
-                        }
-                    });
+        if (cnpj == null) {
+            return;
         }
+        repository.findByCnpj(cnpj).ifPresent(empresa -> {
+
+            if (idAtual == null || !empresa.getId().equals(idAtual)) {
+                throw new BusinessException("Já existe uma empresa com esse CNPJ");
+            }
+        });
     }
 
     private String tratarTexto(String valor) {
         if (valor == null || valor.isBlank()) {
             return null;
         }
-
         return valor.trim();
     }
 }

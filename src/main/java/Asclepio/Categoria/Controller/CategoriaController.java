@@ -27,7 +27,11 @@ public class CategoriaController implements CategoriaApi {
 
     @Override
     public ResponseEntity<CategoriaResponse> criar(CriarCategoria dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoriaService.criar(dto));
+
+        System.out.println("ENTROU NO CRIAR CATEGORIA");
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(categoriaService.criar(dto));
     }
 
     @Override

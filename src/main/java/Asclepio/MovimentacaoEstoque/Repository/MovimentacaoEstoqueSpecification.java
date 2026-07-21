@@ -16,11 +16,23 @@ public class MovimentacaoEstoqueSpecification {
     }
 
     public static Specification<MovimentacaoEstoque> filtrar(
-            MovimentacaoEstoqueFiltro filtro
+            MovimentacaoEstoqueFiltro filtro,
+            Long empresaId
     ) {
         return (root, query, cb) -> {
 
             List<Predicate> predicates = new ArrayList<>();
+
+            predicates.add(
+                    cb.equal(
+                            root.get("estoque")
+                                    .get("loja")
+                                    .get("empresa")
+                                    .get("id"),
+                            empresaId
+                    )
+            );
+
 
             if (filtro == null) {
                 return cb.and(predicates.toArray(Predicate[]::new));

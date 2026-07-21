@@ -2,6 +2,7 @@ package Asclepio.config.bootstrap;
 
 import Asclepio.Empresa.Empresa;
 import Asclepio.Empresa.EmpresaRepository;
+import Asclepio.Usuario.Role.ServiceRole;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,25 +23,28 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmpresaRepository empresaRepository;
+    private final ServiceRole serviceRole;
+
 
     public DataInitializer(
             PermissionRepository permissionRepository,
             RoleRepository roleRepository,
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            EmpresaRepository empresaRepository
+            EmpresaRepository empresaRepository,
+            ServiceRole serviceRole
     ) {
         this.permissionRepository = permissionRepository;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.empresaRepository = empresaRepository;
+        this.serviceRole = serviceRole;
     }
 
     @Override
     public void run(String... args) {
         criarPermissoes();
-        criarRoles();
         criarAdmin();
     }
 
@@ -116,154 +120,42 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
-    private void criarRoles() {
 
-        Role superAdmin = roleRepository.findByNome("SuperAdministrador").orElse(new Role());
-
-        superAdmin.setNome("SuperAdministrador");
-        superAdmin.setDescricao("Administrador total");
-        superAdmin.setPermissions(permissionRepository.findAll());
-
-        roleRepository.save(superAdmin);
-
-        Role gerente = roleRepository.findByNome("Gerente").orElse(new Role());
-
-        gerente.setNome("Gerente");
-        gerente.setDescricao("Gerente da farmácia");
-
-        gerente.setPermissions(permissionRepository.findByNomeIn(List.of(
-                "VerProduto", "CriarProduto", "EditarProduto", "ExcluirProduto",
-
-                "VerEstoque", "CriarEstoque", "EditarEstoque", "ExcluirEstoque", "PromocaoEstoque",
-
-                "VerPedido", "CriarPedido", "EditarPedido", "ExcluirPedido",
-
-                "VerUsuario", "CriarUsuario", "EditarUsuario", "ExcluirUsuario",
-
-                "VerCategoria", "CriarCategoria", "EditarCategoria", "ExcluirCategoria",
-
-                "VerBairro", "CriarBairro", "EditarBairro", "ExcluirBairro",
-
-                "VerLojaBairro", "CriarLojaBairro", "EditarLojaBairro", "ExcluirLojaBairro",
-
-                "VerEmpresa", "CriarEmpresa", "EditarEmpresa", "ExcluirEmpresa",
-
-                "VerPermissoes",
-                "VerProdutoVariacao",
-                "CriarProdutoVariacao",
-                "EditarProdutoVariacao",
-                "ExcluirProdutoVariacao",
-                "VerLoja"
-        )));
-
-        roleRepository.save(gerente);
-
-        Role atendente = roleRepository.findByNome("Atendente").orElse(new Role());
-
-        atendente.setNome("Atendente");
-        atendente.setDescricao("Atendente da farmácia");
-
-        atendente.setPermissions(permissionRepository.findByNomeIn(List.of(
-                "VerProduto",
-                "VerEstoque",
-                "VerPedido",
-                "CriarPedido",
-                "EditarPedido",
-                "VerProdutoVariacao",
-                "VerCategoria"
-        )));
-
-        roleRepository.save(atendente);
-
-        Role repositor = roleRepository.findByNome("Repositor").orElse(new Role());
-
-        repositor.setNome("Repositor");
-        repositor.setDescricao("Repositor / controle de estoque");
-
-        repositor.setPermissions(permissionRepository.findByNomeIn(List.of(
-                "VerProduto",
-                "VerEstoque",
-                "CriarEstoque",
-                "EditarEstoque",
-                "VerCategoria",
-                "VerProdutoVariacao"
-        )));
-
-        roleRepository.save(repositor);
-
-        Role caixa = roleRepository.findByNome("Caixa").orElse(new Role());
-
-        caixa.setNome("Caixa");
-        caixa.setDescricao("Operador de caixa");
-
-        caixa.setPermissions(permissionRepository.findByNomeIn(List.of(
-                "VerProduto",
-                "VerEstoque",
-                "VerPedido",
-                "CriarPedido",
-                "VerProdutoVariacao",
-                "EditarPedido"
-        )));
-
-        roleRepository.save(caixa);
-
-        Role farmaceutico = roleRepository.findByNome("Farmaceutico").orElse(new Role());
-
-        farmaceutico.setNome("Farmaceutico");
-        farmaceutico.setDescricao("Farmacêutico responsável");
-
-        farmaceutico.setPermissions(permissionRepository.findByNomeIn(List.of(
-                "VerProduto",
-                "VerEstoque",
-                "EditarEstoque",
-                "VerPedido",
-                "EditarPedido",
-                "VerProdutoVariacao",
-                "VerCategoria"
-        )));
-
-        roleRepository.save(farmaceutico);
-
-
-        Role generico = roleRepository.findByNome("Generico")
-                .orElse(new Role());
-
-        generico.setNome("Generico");
-        generico.setDescricao("Usuário sem permissões");
-
-        generico.setPermissions(List.of());
-
-        roleRepository.save(generico);
-    }
 
     private void criarAdmin() {
 
-        if (userRepository.findByUsername("suporte1").isEmpty()) {
 
-            Role role = roleRepository.findByNome("SuperAdministrador")
-                    .orElseThrow();
-
-            Empresa empresa = empresaRepository.findById(1L)
-                    .orElseGet(() -> empresaRepository.save(
-                            new Empresa(
-                                    null,
-                                    "Empresa Suporte",
-                                    "00000000000000"
-                            )
-                    ));
-
-            User user = new User();
-
-            user.setUsername("suporte1");
-            user.setPassword(passwordEncoder.encode("123"));
-            user.setEmail("suporte@email.com");
-            user.setAtivo(true);
-            user.setRole(role);
-            user.setEmpresa(empresa);
-
-            userRepository.save(user);
-
-            System.out.println("Usuário administrador criado!");
+        if(userRepository.findByUsername("suporte1").isPresent()){
+            return;
         }
+        Empresa empresa = new Empresa();
+        empresa.setNome("Empresa Suporte");
+        empresa.setCnpj("00000000000000");
+        empresa.setAtiva(true);
+
+        empresa = empresaRepository.save(empresa);
+
+        serviceRole.criarRolesPadrao(empresa);
+
+        Role role = serviceRole.buscarSuperAdministrador(empresa);
+        User user = new User();
+
+        user.setUsername("suporte1");
+
+        user.setPassword(
+                passwordEncoder.encode("123")
+        );
+
+        user.setEmail("suporte@email.com");
+        user.setAtivo(true);
+        user.setEmpresa(empresa);
+        user.setRole(role);
+        userRepository.save(user);
+
+
+        System.out.println(
+                "Usuário administrador criado!"
+        );
+
     }
 }

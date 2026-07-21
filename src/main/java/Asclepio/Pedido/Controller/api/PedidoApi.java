@@ -36,34 +36,54 @@ public interface PedidoApi {
 
     @GetMapping
     @PreAuthorize("hasAuthority('VerPedido')")
-    @Operation(summary = "Listar pedidos com filtros", description = """
-            
-               Lista pedidos de forma paginada com filtros opcionais.
-                        Retorna apenas pedidos da empresa do usuário autenticado.
-            
-            
-            Lista pedidos de forma paginada com filtros opcionais.
-            
-            Exemplos:
-            
-            /pedidos?page=0&size=10&sort=criadoEm,desc
-            
-            /pedidos?lojaId=1
-            
-            /pedidos?nomeCliente=mateus
-            
-            /pedidos?telefone=81999999999
-            
-            /pedidos?status=AGUARDANDO
-            
-            /pedidos?tipoEntrega=ENTREGA
-            
-            /pedidos?formaDePagamento=PIX
-            
-            /pedidos?dataInicio=2026-06-01&dataFim=2026-06-13
-            
-            /pedidos?bairro=Centro&freteGratis=true
-            """)
+    @Operation(
+            summary = "Listar pedidos",
+            description = """
+
+Lista os pedidos da empresa do usuário autenticado de forma paginada.
+
+A empresa é identificada automaticamente pelo token JWT, portanto não é necessário informar empresaId.
+
+Filtros disponíveis:
+
+• lojaId
+• nomeLoja
+• nomeCliente
+• telefone
+• email
+• bairro
+• status
+• tipoAtendimentoPedido
+• formaDePagamento
+• freteGratis
+• dataInicio
+• dataFim
+• somenteHoje
+
+Exemplos:
+
+/pedidos?page=0&size=10&sort=criadoEm,desc
+
+/pedidos?lojaId=1
+
+/pedidos?nomeCliente=Mateus
+
+/pedidos?status=AGUARDANDO
+
+/pedidos?tipoAtendimentoPedido=ENTREGA_PROPRIA
+
+/pedidos?formaDePagamento=PIX
+
+/pedidos?bairro=Centro
+
+/pedidos?freteGratis=true
+
+/pedidos?somenteHoje=true
+
+/pedidos?dataInicio=2026-06-01&dataFim=2026-06-30
+
+"""
+    )
     ResponseEntity<Page<ListaDePedidoDTO>> listar(@ParameterObject PedidoFiltro filtro, @ParameterObject Pageable pageable);
 
 
