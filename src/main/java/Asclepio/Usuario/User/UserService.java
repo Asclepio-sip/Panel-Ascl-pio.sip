@@ -1,6 +1,7 @@
 package Asclepio.Usuario.User;
 
 import Asclepio.Empresa.Empresa;
+import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Empresa.EmpresaService;
 import Asclepio.Usuario.Permission.Permission;
 import Asclepio.Usuario.Permission.PermissionRepository;
@@ -32,18 +33,9 @@ public class UserService {
     private final EmpresaService empresaService;
     private final UserValidationService validationService;
     private final ServiceRole serviceRole;
+    private final EmpresaContext empresaContext;
 
-
-    public UserService(
-            UserRepository userRepository,
-            RoleRepository roleRepository,
-            PasswordEncoder passwordEncoder,
-            PermissionRepository permissionRepository,
-            EmpresaService empresaService,
-            UserValidationService validationService,
-            ServiceRole serviceRole
-    ) {
-
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PermissionRepository permissionRepository, EmpresaService empresaService, UserValidationService validationService, ServiceRole serviceRole, EmpresaContext empresaContext) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -51,17 +43,22 @@ public class UserService {
         this.empresaService = empresaService;
         this.validationService = validationService;
         this.serviceRole = serviceRole;
+        this.empresaContext = empresaContext;
     }
+
     public User createUser(RegisterDTO dto) {
 
         validarCriacao(dto);
 
-        if (userRepository.findByUsername(dto.login().trim()).isPresent()) {
+        Long empresaId = empresaContext.getEmpresaId();
+
+        if (userRepository.findByUsernameAndEmpresa_Id(dto.login().trim(), empresaId).isPresent()) {
+
             throw new BusinessException("Usuário já existe");
         }
+        Empresa empresa = empresaService.buscarPorId(empresaId);
 
-        Role role = roleRepository.findById(dto.roleId()).orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado"));
-
+        Role role = roleRepository.findByIdAndEmpresa_Id(dto.roleId(), empresaId).orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado"));
 
         User user = new User();
 
@@ -69,15 +66,17 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(dto.password()));
         user.setEmail(dto.Email());
         user.setRole(role);
+        user.setEmpresa(empresa);
         user.setAtivo(true);
-
 
         return userRepository.save(user);
     }
 
     public Page<ResponseListaDeUserDTO> lista(UserFiltroDTO filtro, Pageable pageable) {
 
-        Specification<User> specification = UserSpecification.filtrar(filtro);
+        Long empresaId = empresaContext.getEmpresaId();
+
+        Specification<User> specification = UserSpecification.filtrar(filtro, empresaId);
 
         return userRepository.findAll(specification, pageable).map(ResponseListaDeUserDTO::fromEntity);
     }
@@ -88,7 +87,9 @@ public class UserService {
             throw new BusinessException("ID do usuário é obrigatório");
         }
 
-        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        Long empresaId = empresaContext.getEmpresaId();
+
+        return userRepository.findByIdAndEmpresa_Id(id, empresaId).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
     }
 
     public void updateUser(UUID id, UpdateUserDTO dto) {
@@ -117,8 +118,9 @@ public class UserService {
         }
 
         if (dto.roleId() != null) {
-            Role role = roleRepository.findById(dto.roleId()).orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado"));
+            Long empresaId = empresaContext.getEmpresaId();
 
+            Role role = roleRepository.findByIdAndEmpresa_Id(dto.roleId(), empresaId).orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado"));
             user.setRole(role);
         }
 
@@ -161,9 +163,7 @@ public class UserService {
         validationService.validarLogin(dto.login());
         validationService.validarEmail(dto.email());
 
-        Empresa empresa = empresaService.criarEmpresaCadastro(
-                dto.nomeEmpresa().trim()
-        );
+        Empresa empresa = empresaService.criarEmpresaCadastro(dto.nomeEmpresa().trim());
 
         // Cria todos os cargos da empresa
         serviceRole.criarRolesPadrao(empresa);
