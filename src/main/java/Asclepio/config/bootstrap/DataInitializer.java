@@ -112,6 +112,8 @@ public class DataInitializer implements CommandLineRunner {
 
         criarPermission("VerRole", "Ver Role");
 
+        criarPermission("VerMovimentacaoEstoque", "Ver VerMovimentacaoEstoque");
+
     }
 
     private void criarPermission(String nome, String descricao) {

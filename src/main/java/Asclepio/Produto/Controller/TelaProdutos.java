@@ -1,5 +1,10 @@
 package Asclepio.Produto.Controller;
 
+import Asclepio.Categoria.CategoriaService;
+import Asclepio.Categoria.dto.CategoriaFiltro;
+import Asclepio.Categoria.dto.CategoriaPageResponse;
+import Asclepio.Categoria.dto.CategoriaResponse;
+import Asclepio.Categoria.dto.CriarCategoria;
 import Asclepio.Produto.*;
 import Asclepio.Produto.dto.PageResponse;
 import Asclepio.Produto.dto.ProdutoStorageResponse;
@@ -17,11 +22,13 @@ public class TelaProdutos implements ProdutoApi {
 
     private final ProdutoService produtoService;
     private final ProdutoStorageClient produtoStorageClient;
+    private final CategoriaService categoriaService;
 
 
-    public TelaProdutos(ProdutoService produtoService, ProdutoStorageClient produtoStorageClient) {
+    public TelaProdutos(ProdutoService produtoService, ProdutoStorageClient produtoStorageClient, CategoriaService categoriaService) {
         this.produtoService = produtoService;
         this.produtoStorageClient = produtoStorageClient;
+        this.categoriaService = categoriaService;
     }
 
     @Override
@@ -48,5 +55,16 @@ public class TelaProdutos implements ProdutoApi {
     public ResponseEntity<Void> deletar(Long id) {
         produtoService.deletarComStorage(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<CategoriaPageResponse> listar(CategoriaFiltro filtro, Pageable pageable) {
+        return ResponseEntity.ok(categoriaService.listar(filtro, pageable));
+    }
+
+    @Override
+    public ResponseEntity<CategoriaResponse> criar(CriarCategoria dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(categoriaService.criar(dto));
     }
 }

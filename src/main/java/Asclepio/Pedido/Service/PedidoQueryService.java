@@ -4,6 +4,7 @@ import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Pedido.Pedido;
 import Asclepio.Pedido.Repository.PedidoRepository;
 import Asclepio.Pedido.Repository.PedidoSpecification;
+import Asclepio.Pedido.dto.DetalhePedidoDTO;
 import Asclepio.Pedido.dto.ListaDePedidoDTO;
 import Asclepio.Pedido.dto.PedidoFiltro;
 import Asclepio.exception.BusinessException;
@@ -60,5 +61,12 @@ public class PedidoQueryService {
         }
 
         return pedidoRepository.findByIdAndEmpresa_Id(id, empresaId).orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
+    }
+
+    public DetalhePedidoDTO buscarDetalhes(Long id) {
+
+        Long empresaId = empresaContext.getEmpresaId();
+        Pedido pedido = buscarPorIdDaEmpresa(id, empresaId);
+        return DetalhePedidoDTO.fromEntity(pedido);
     }
 }

@@ -1,5 +1,11 @@
 package Asclepio.Pedido.Controller;
 
+import Asclepio.Estoque.dto.EstoqueFiltro;
+import Asclepio.Estoque.dto.ListaDeEstoqueDasLojasResponse;
+import Asclepio.Estoque.service.EstoqueQueryService;
+import Asclepio.Loja.Loja.LojaService;
+import Asclepio.Loja.Loja.dto.LojaFiltroDTO;
+import Asclepio.Loja.Loja.dto.LojaResponse;
 import Asclepio.Pedido.Service.PedidoQueryService;
 import Asclepio.Pedido.dto.*;
 import Asclepio.Pedido.dto.pedido.PedidoAddDTO;
@@ -22,10 +28,15 @@ public class Pedido implements PedidoApi {
 
     private final PedidoService service;
     private final PedidoQueryService pedidoQueryService;
+    private final LojaService lojaService;
 
-    public Pedido(PedidoService service, PedidoQueryService pedidoQueryService) {
+    private final EstoqueQueryService estoqueQueryService;
+
+    public Pedido(PedidoService service, PedidoQueryService pedidoQueryService,LojaService lojaService, EstoqueQueryService estoqueQueryService) {
         this.service = service;
         this.pedidoQueryService = pedidoQueryService;
+        this.lojaService = lojaService;
+        this.estoqueQueryService = estoqueQueryService;
     }
 
     @Override
@@ -59,5 +70,23 @@ public class Pedido implements PedidoApi {
     public ResponseEntity<PedidoCriadoResponseDTO> criarPedidoBalcao(@RequestBody PedidoBalcaoAddDTO dto) {
         PedidoCriadoResponseDTO response = service.criarPedidoBalcao(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @Override
+    public ResponseEntity<Page<LojaResponse>> listar(LojaFiltroDTO filtro, Pageable pageable) {
+        return ResponseEntity.ok(lojaService.listar(filtro, pageable));
+    }
+
+    @Override
+    public ResponseEntity<Page<ListaDeEstoqueDasLojasResponse>> lista(EstoqueFiltro filtro, Pageable pageable) {
+        return ResponseEntity.ok(estoqueQueryService.listarTodos(filtro, pageable));
+    }
+
+    @Override
+    public ResponseEntity<DetalhePedidoDTO> buscarPorId(Long id) {
+
+        return ResponseEntity.ok(
+                pedidoQueryService.buscarDetalhes(id)
+        );
     }
 }

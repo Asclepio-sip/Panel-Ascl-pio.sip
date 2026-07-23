@@ -1,5 +1,9 @@
 package Asclepio.Produto.Controller.api;
 
+import Asclepio.Categoria.dto.CategoriaFiltro;
+import Asclepio.Categoria.dto.CategoriaPageResponse;
+import Asclepio.Categoria.dto.CategoriaResponse;
+import Asclepio.Categoria.dto.CriarCategoria;
 import Asclepio.Produto.dto.PageResponse;
 import Asclepio.Produto.dto.ProdutoStorageResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -64,4 +68,19 @@ public interface ProdutoApi {
     @Operation(summary = "Deletar produto")
     @PreAuthorize("hasAuthority('ExcluirProduto')")
     ResponseEntity<Void> deletar(@PathVariable Long id);
+
+    @GetMapping("/categorias")
+    @Operation(summary = "Listar categorias com filtros")
+    @PreAuthorize("hasAuthority('CriarProduto')")
+    ResponseEntity<CategoriaPageResponse> listar(@ParameterObject CategoriaFiltro filtro, @ParameterObject Pageable pageable);
+
+
+    @PostMapping("/categorias")
+    @Operation(summary = "Criar categoria ou subcategoria")
+    @PreAuthorize("hasAuthority('CriarCategoria')")
+    ResponseEntity<CategoriaResponse> criar(
+            @RequestBody CriarCategoria dto
+    );
+
+
 }

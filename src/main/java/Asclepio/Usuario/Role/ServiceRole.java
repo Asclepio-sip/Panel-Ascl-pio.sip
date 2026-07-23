@@ -3,6 +3,7 @@ package Asclepio.Usuario.Role;
 import Asclepio.Empresa.Empresa;
 import Asclepio.Usuario.Permission.PermissionRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,7 +60,7 @@ public class ServiceRole {
                         "EditarProdutoVariacao",
                         "ExcluirProdutoVariacao",
 
-                        "VerLoja"
+                        "VerLoja",    "VerMovimentacaoEstoque"
                 ))
         );
 
