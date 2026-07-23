@@ -2,6 +2,7 @@ package Asclepio.Usuario.Role;
 
 import Asclepio.Empresa.Empresa;
 import Asclepio.Usuario.Permission.PermissionRepository;
+import Asclepio.Usuario.Role.dto.RoleResponseDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,9 @@ public class ServiceRole {
                 "Gerente",
                 "Gerente da farmácia",
                 permissionRepository.findByNomeIn(List.of(
+
+                        "VerUsuario", "CriarUsuario", "EditarUsuario", "ExcluirUsuario",
+
                         "VerProduto", "CriarProduto", "EditarProduto", "ExcluirProduto",
 
                         "VerEstoque", "CriarEstoque", "EditarEstoque", "ExcluirEstoque", "PromocaoEstoque",
@@ -153,8 +157,11 @@ public class ServiceRole {
                 });
     }
 
-    public List<Role> listaDeRole() {
-        return roleRepository.findAll();
+    public List<RoleResponseDTO> listaDeRole() {
+        return roleRepository.findAll()
+                .stream()
+                .map(RoleResponseDTO::from)
+                .toList();
     }
 
     public Role buscarSuperAdministrador(Empresa empresa) {

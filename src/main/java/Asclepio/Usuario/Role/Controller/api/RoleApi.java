@@ -1,5 +1,6 @@
 package Asclepio.Usuario.Role.Controller.api;
 
+import Asclepio.Usuario.Role.dto.RoleResponseDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,5 +16,5 @@ public interface RoleApi {
 
     @GetMapping
     @PreAuthorize("hasAuthority('VerRole')")
-    ResponseEntity<List<Role>> listaDeRole();
+    ResponseEntity<List<RoleResponseDTO>> listaDeRole() ;
 }
