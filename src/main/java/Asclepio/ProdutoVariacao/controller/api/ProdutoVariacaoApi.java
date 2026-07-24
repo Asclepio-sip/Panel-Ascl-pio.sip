@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public interface ProdutoVariacaoApi {
 
     @GetMapping
-    @PreAuthorize("hasAuthority('VerProdutoVariacao')")
+    @PreAuthorize("hasAuthority('VerProdutoVariacao') or hasAuthority('CriarProdutoVariacao') ")
     ResponseEntity<ProdutoVariacaoPageResponse> listar(
             @ParameterObject ProdutoVariacaoFiltro filtro,
             @ParameterObject Pageable pageable
@@ -33,7 +33,7 @@ public interface ProdutoVariacaoApi {
     );
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('EditarProdutoVariacao')")
+    @PreAuthorize("hasAuthority('EditarProdutoVariacao') or hasAuthority('CriarProdutoVariacao') ")
     ResponseEntity<ProdutoVariacaoResponseDTO> atualizar(
             @PathVariable Long id,
             @RequestBody ProdutoVariacaoUpdateDTO dto

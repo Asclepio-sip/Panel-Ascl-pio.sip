@@ -12,7 +12,9 @@ import Asclepio.exception.ResourceNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
+import Asclepio.config.security.UsuarioAutenticado;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import java.math.BigDecimal;
 
 @Service
@@ -180,18 +182,18 @@ public class EstoqueMovimentacaoService {
 
     private User usuarioLogado() {
 
-        var authentication = SecurityContextHolder
+        Authentication authentication = SecurityContextHolder
                 .getContext()
                 .getAuthentication();
 
-        if (authentication == null || authentication.getPrincipal() == null) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return null;
         }
 
         Object principal = authentication.getPrincipal();
 
-        if (principal instanceof User user) {
-            return user;
+        if (principal instanceof UsuarioAutenticado usuarioAutenticado) {
+            return usuarioAutenticado.getUser();
         }
 
         return null;

@@ -79,6 +79,9 @@ public class Pedido implements PedidoApi {
 
     @Override
     public ResponseEntity<Page<ListaDeEstoqueDasLojasResponse>> lista(EstoqueFiltro filtro, Pageable pageable) {
+        System.out.println("ENTROU NO MÉTODO");
+
+
         return ResponseEntity.ok(estoqueQueryService.listarTodos(filtro, pageable));
     }
 

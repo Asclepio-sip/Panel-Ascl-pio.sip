@@ -3,6 +3,9 @@ package Asclepio.Estoque.controller.api;
 import Asclepio.Estoque.dto.*;
 import Asclepio.Loja.Loja.dto.LojaFiltroDTO;
 import Asclepio.Loja.Loja.dto.LojaResponse;
+import Asclepio.Produto.dto.PageResponse;
+import Asclepio.Produto.dto.ProdutoFiltro;
+import Asclepio.Produto.dto.ProdutoStorageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -58,6 +61,43 @@ public interface EstoqueApi {
     ResponseEntity<Void> deletar(@PathVariable Long id);
 
 
+
+
+    @Operation(summary = "Listar produtos", description = """
+            Lista os produtos com paginação e filtros opcionais.
+            
+            Filtros disponíveis:
+            - nome: filtra pelo nome do produto
+            - categoriaId: filtra pelo ID da categoria
+            - nomeCategoria: filtra pelo nome da categoria
+            
+            Exemplos:
+            
+            Listar todos:
+            /produtos?page=0&size=10
+            
+            Buscar por nome:
+            /produtos?nome=dipirona&page=0&size=10
+            
+            Buscar por categoria:
+            /produtos?categoriaId=1&page=0&size=10
+            
+            Buscar por nome da categoria:
+            /produtos?nomeCategoria=medicamento&page=0&size=10
+            
+            Buscar por nome e categoria:
+            /produtos?nome=dipirona&categoriaId=1&page=0&size=10
+            
+            Ordenar por nome:
+            /produtos?page=0&size=10&sort=name,asc
+            """)
+    @GetMapping("/Produtos")
+    @PreAuthorize("hasAuthority('CriarEstoque')")
+    ResponseEntity<PageResponse<ProdutoStorageResponse>> listar(@ParameterObject ProdutoFiltro filtro, @ParameterObject Pageable pageable);
+
+
+
+
     //===========================================================atualiza estoque ================================
 
 
@@ -98,7 +138,7 @@ public interface EstoqueApi {
 
 
     @GetMapping("/loja")
-    @PreAuthorize("hasAuthority('EditarEstoque')")
+    @PreAuthorize("hasAuthority('EditarEstoque') or hasAuthority('CriarEstoque')")
     @Operation(summary = "Listar lojas com filtros", description = """
             Lista lojas de forma paginada.
             

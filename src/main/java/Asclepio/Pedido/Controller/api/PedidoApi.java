@@ -156,7 +156,7 @@ Exemplos:
                 """
     )
     @GetMapping("/estoque")
-    @PreAuthorize("hasAuthority('CriarPedido')")
+    @PreAuthorize("hasAuthority('VerPedido')")
     ResponseEntity<Page<ListaDeEstoqueDasLojasResponse>> lista(
             @ParameterObject EstoqueFiltro filtro,
             @ParameterObject Pageable pageable

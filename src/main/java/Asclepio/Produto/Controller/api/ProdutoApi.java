@@ -77,7 +77,7 @@ public interface ProdutoApi {
 
     @PostMapping("/categorias")
     @Operation(summary = "Criar categoria ou subcategoria")
-    @PreAuthorize("hasAuthority('CriarCategoria')")
+    @PreAuthorize("hasAuthority('CriarProduto')")
     ResponseEntity<CategoriaResponse> criar(
             @RequestBody CriarCategoria dto
     );
