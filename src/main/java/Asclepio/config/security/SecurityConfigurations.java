@@ -109,7 +109,9 @@ public class SecurityConfigurations {
         configuration.setAllowedOrigins(
                 java.util.List.of("http://localhost:4200",
                         "https://customer-ascl-pio-sip.vercel.app",
-                        "https://administration-ascl-pio-sip.vercel.app"
+                        "https://administration-ascl-pio-sip.vercel.app",
+                        "https://administration-ascl-pio-jlb0ylz07-mateusss-projects.vercel.app/"
+
 
                 ));
 
