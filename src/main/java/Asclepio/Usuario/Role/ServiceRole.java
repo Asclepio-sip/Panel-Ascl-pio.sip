@@ -2,7 +2,9 @@ package Asclepio.Usuario.Role;
 
 import Asclepio.Empresa.Empresa;
 import Asclepio.Usuario.Permission.PermissionRepository;
+import Asclepio.Usuario.Role.dto.RoleResponseDTO;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +28,8 @@ public class ServiceRole {
 
         criarRole(
                 empresa,
-                "SuperAdministrador",
-                "Administrador principal da empresa",
+                "Gerente",
+                "Administrador da empresa",
                 permissionRepository.findAll()
         );
 
@@ -36,6 +38,9 @@ public class ServiceRole {
                 "Gerente",
                 "Gerente da farmácia",
                 permissionRepository.findByNomeIn(List.of(
+
+                        "VerUsuario", "CriarUsuario", "EditarUsuario", "ExcluirUsuario",
+
                         "VerProduto", "CriarProduto", "EditarProduto", "ExcluirProduto",
 
                         "VerEstoque", "CriarEstoque", "EditarEstoque", "ExcluirEstoque", "PromocaoEstoque",
@@ -59,7 +64,7 @@ public class ServiceRole {
                         "EditarProdutoVariacao",
                         "ExcluirProdutoVariacao",
 
-                        "VerLoja"
+                        "VerLoja",    "VerMovimentacaoEstoque"
                 ))
         );
 
@@ -84,11 +89,17 @@ public class ServiceRole {
                 "Repositor / controle de estoque",
                 permissionRepository.findByNomeIn(List.of(
                         "VerProduto",
+                        "CriarProduto",
                         "VerEstoque",
                         "CriarEstoque",
                         "EditarEstoque",
                         "VerCategoria",
-                        "VerProdutoVariacao"
+                        "CriarCategoria",
+                        "VerProdutoVariacao",
+                        "VerMovimentacaoEstoque",
+                        "CriarProdutoVariacao",
+                        "EditarCategoria",
+                        "EditarProdutoVariacao"
                 ))
         );
 
@@ -97,27 +108,8 @@ public class ServiceRole {
                 "Caixa",
                 "Operador de caixa",
                 permissionRepository.findByNomeIn(List.of(
-                        "VerProduto",
-                        "VerEstoque",
-                        "VerPedido",
                         "CriarPedido",
-                        "VerProdutoVariacao",
-                        "EditarPedido"
-                ))
-        );
-
-        criarRole(
-                empresa,
-                "Farmaceutico",
-                "Farmacêutico responsável",
-                permissionRepository.findByNomeIn(List.of(
-                        "VerProduto",
-                        "VerEstoque",
-                        "EditarEstoque",
-                        "VerPedido",
-                        "EditarPedido",
-                        "VerProdutoVariacao",
-                        "VerCategoria"
+                        "VerPedido"
                 ))
         );
 
@@ -152,16 +144,19 @@ public class ServiceRole {
                 });
     }
 
-    public List<Role> listaDeRole() {
-        return roleRepository.findAll();
+    public List<RoleResponseDTO> listaDeRole() {
+        return roleRepository.findAll()
+                .stream()
+                .map(RoleResponseDTO::from)
+                .toList();
     }
 
     public Role buscarSuperAdministrador(Empresa empresa) {
 
         return roleRepository
-                .findByNomeAndEmpresa("SuperAdministrador", empresa)
+                .findByNomeAndEmpresa("Gerente", empresa)
                 .orElseThrow(() ->
-                        new RuntimeException("SuperAdministrador não encontrado"));
+                        new RuntimeException("Administrador não encontrado"));
     }
 
 }

@@ -1,5 +1,6 @@
 package Asclepio.Usuario.Role.Controller;
 
+import Asclepio.Usuario.Role.dto.RoleResponseDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import Asclepio.Usuario.Role.Controller.api.RoleApi;
@@ -19,7 +20,7 @@ public class ControllerRota implements RoleApi {
     }
 
     @Override
-    public ResponseEntity<List<Role>> listaDeRole() {
+    public ResponseEntity<List<RoleResponseDTO>> listaDeRole() {
         return ResponseEntity.ok(serviceRole.listaDeRole());
     }
 }

@@ -59,7 +59,6 @@ public class DataInitializer implements CommandLineRunner {
         criarPermission("CriarEstoque", "Criar estoque");
         criarPermission("EditarEstoque", "Editar estoque");
         criarPermission("ExcluirEstoque", "Excluir estoque");
-        criarPermission("PromocaoEstoque", "Criar promoção no estoque");
 
         criarPermission("VerLoja", "Ver loja");
         criarPermission("CriarLoja", "Criar loja");
@@ -111,6 +110,8 @@ public class DataInitializer implements CommandLineRunner {
         criarPermission("VerPermissoes", "Ver permissões");
 
         criarPermission("VerRole", "Ver Role");
+
+        criarPermission("VerMovimentacaoEstoque", "Ver VerMovimentacaoEstoque");
 
     }
 

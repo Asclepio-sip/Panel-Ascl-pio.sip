@@ -60,19 +60,24 @@ public record PedidoBalcaoAddDTO(
                                 throw new RuntimeException("Dados da variação não encontrados");
                             }
 
+
+                            System.out.println("Imagem: " + variacao.imagemUrl());
+
+
                             return new ItemPedido(
                                     null,
                                     variacao.id(),
                                     variacao.produtoId(),
                                     variacao.nomeProduto(),
                                     variacao.nomeVariacao(),
-                                    null,
+                                    variacao.imagemUrl(),
                                     null,
                                     estoque.getPrecoVenda(),
                                     itemDto.quantidade(),
                                     pedido,
                                     estoque.getPercentualDesconto()
                             );
+
                         })
                         .toList()
         );

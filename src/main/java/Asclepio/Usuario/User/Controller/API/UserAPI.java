@@ -20,17 +20,15 @@ import java.util.UUID;
 @Tag(name = "user", description = "Gerenciamento de user")
 public interface UserAPI {
 
-
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data);
+    ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data);
 
     @PostMapping
     @PreAuthorize("hasAuthority('CriarUser')")
-    public ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid RegisterDTO dto);
-
+    ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid RegisterDTO dto);
 
     @PostMapping("/CriarConta")
-    public ResponseEntity<LoginResponseDTO> CriarConta(@RequestBody @Valid RequestCriarContaDTO dto);
+    ResponseEntity<LoginResponseDTO> CriarConta(@RequestBody @Valid RequestCriarContaDTO dto);
 
     @Operation(summary = "Listar usuários", description = """
             Lista os usuários do sistema com paginação e filtros opcionais.
