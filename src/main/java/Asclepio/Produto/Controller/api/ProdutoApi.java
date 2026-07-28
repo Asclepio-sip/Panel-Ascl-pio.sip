@@ -1,5 +1,7 @@
 package Asclepio.Produto.Controller.api;
 
+import Asclepio.CadastroProduto.dto.CadastroProdutoCompletoDTO;
+import Asclepio.CadastroProduto.dto.CadastroProdutoCompletoResponse;
 import Asclepio.Categoria.dto.CategoriaFiltro;
 import Asclepio.Categoria.dto.CategoriaPageResponse;
 import Asclepio.Categoria.dto.CategoriaResponse;
@@ -8,6 +10,7 @@ import Asclepio.Produto.dto.PageResponse;
 import Asclepio.Produto.dto.ProdutoStorageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -83,4 +86,11 @@ public interface ProdutoApi {
     );
 
 
+
+    @PostMapping(value = "/criar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('CriarProduto')")
+    @Operation(summary = "Cadastrar produto completo")
+    ResponseEntity<CadastroProdutoCompletoResponse> cadastrar(
+            @ModelAttribute @Valid CadastroProdutoCompletoDTO dto
+    );
 }

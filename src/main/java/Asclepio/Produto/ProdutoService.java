@@ -33,9 +33,7 @@ public class ProdutoService {
             throw new BusinessException("Nome do produto é obrigatório");
         }
 
-        if (categoriaId == null) {
-            throw new BusinessException("Categoria é obrigatória");
-        }
+
 
         return produtoStorageClient.criarProduto(
                 nome,

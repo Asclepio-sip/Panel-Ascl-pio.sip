@@ -1,5 +1,8 @@
 package Asclepio.Produto.Controller;
 
+import Asclepio.CadastroProduto.CadastroProdutoService.CadastroProdutoService;
+import Asclepio.CadastroProduto.dto.CadastroProdutoCompletoDTO;
+import Asclepio.CadastroProduto.dto.CadastroProdutoCompletoResponse;
 import Asclepio.Categoria.CategoriaService;
 import Asclepio.Categoria.dto.CategoriaFiltro;
 import Asclepio.Categoria.dto.CategoriaPageResponse;
@@ -23,12 +26,15 @@ public class TelaProdutos implements ProdutoApi {
     private final ProdutoService produtoService;
     private final ProdutoStorageClient produtoStorageClient;
     private final CategoriaService categoriaService;
+    private final CadastroProdutoService cadastroProdutoService;
 
 
-    public TelaProdutos(ProdutoService produtoService, ProdutoStorageClient produtoStorageClient, CategoriaService categoriaService) {
+    public TelaProdutos(ProdutoService produtoService, ProdutoStorageClient produtoStorageClient, CategoriaService categoriaService,CadastroProdutoService cadastroProdutoService) {
         this.produtoService = produtoService;
         this.produtoStorageClient = produtoStorageClient;
         this.categoriaService = categoriaService;
+        this.cadastroProdutoService = cadastroProdutoService;
+
     }
 
     @Override
@@ -66,5 +72,14 @@ public class TelaProdutos implements ProdutoApi {
     public ResponseEntity<CategoriaResponse> criar(CriarCategoria dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(categoriaService.criar(dto));
+    }
+
+    @Override
+    public ResponseEntity<CadastroProdutoCompletoResponse> cadastrar(CadastroProdutoCompletoDTO dto) {
+
+        CadastroProdutoCompletoResponse response =
+                cadastroProdutoService.cadastrar(dto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

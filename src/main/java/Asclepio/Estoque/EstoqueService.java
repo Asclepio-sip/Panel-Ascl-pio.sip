@@ -1,5 +1,6 @@
 package Asclepio.Estoque;
 
+import Asclepio.CadastroProduto.dto.CadastroEstoqueDTO;
 import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Estoque.Repository.EstoqueRepository;
 import Asclepio.Estoque.dto.EstoqueAddDto;
@@ -135,4 +136,56 @@ public class EstoqueService {
 
         movimentacaoService.registrarPromocao(estoque, descontoAntes, observacao);
     }
-}
+
+
+    @Transactional
+    public Estoque criar(CadastroEstoqueDTO dto) {
+
+        Long empresaId = empresaContext.getEmpresaId();
+
+        validator.validarQuantidade(dto.quantidade());
+        validator.validarPreco(dto.precoVenda());
+
+        var loja = lojaRepository
+                .findByIdAndEmpresa_Id(dto.lojaId(), empresaId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Loja não encontrada"));
+
+        ProdutoVariacaoFiltro filtro = new ProdutoVariacaoFiltro(
+                dto.variacaoId(),
+                null,
+                null,
+                null,
+                null,
+                true
+        );
+
+        var page = produtoVariacaoClient.listar(filtro, PageRequest.of(0, 1));
+
+        if (page == null || page.content() == null || page.content().isEmpty()) {
+            throw new ResourceNotFoundException("Variação não encontrada");
+        }
+
+        ProdutoVariacaoResponseDTO variacao = page.content().get(0);
+
+        validator.validarEstoqueDuplicado(loja.getId(), variacao.id());
+
+        ProdutoStorageResponse produto =
+                produtoStorageClient.buscarPorId(variacao.produtoId());
+
+        Estoque estoque = new Estoque(
+                null,
+                loja,
+                variacao.id(),
+                dto.quantidade(),
+                dto.precoVenda(),
+                BigDecimal.ZERO,
+                produto.imagemUrl()
+        );
+
+        Estoque estoqueSalvo = estoqueRepository.save(estoque);
+
+        movimentacaoService.registrarCriacao(estoqueSalvo);
+
+        return estoqueSalvo;
+    }}
