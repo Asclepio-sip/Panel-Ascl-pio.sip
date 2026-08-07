@@ -4,6 +4,7 @@ import Asclepio.Categoria.dto.CategoriaFiltro;
 import Asclepio.Categoria.dto.CategoriaPageResponse;
 import Asclepio.Categoria.dto.CategoriaResponse;
 import Asclepio.Categoria.dto.CriarCategoria;
+import Asclepio.Produto.dto.ProdutoFiltro;
 import Asclepio.exception.BusinessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

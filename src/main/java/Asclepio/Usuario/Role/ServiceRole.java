@@ -113,12 +113,6 @@ public class ServiceRole {
                 ))
         );
 
-        criarRole(
-                empresa,
-                "Generico",
-                "Usuário sem permissões",
-                List.of()
-        );
     }
 
     @Transactional
@@ -144,8 +138,11 @@ public class ServiceRole {
                 });
     }
 
-    public List<RoleResponseDTO> listaDeRole() {
-        return roleRepository.findAll()
+
+    public List<RoleResponseDTO> listaDeRole(Long empresaId) {
+
+        return roleRepository
+                .findAllByEmpresa_Id(empresaId)
                 .stream()
                 .map(RoleResponseDTO::from)
                 .toList();

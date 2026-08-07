@@ -1,22 +1,28 @@
-
-
 package Asclepio.config.security;
 
-import Asclepio.Usuario.Permission.Permission;
 import Asclepio.Usuario.User.User;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class UsuarioAutenticado implements UserDetails {
 
     private final User user;
+    private final Long empresaId;
+    private final Long lojaId;
+    private final Collection<? extends GrantedAuthority> authorities;
 
-    public UsuarioAutenticado(User user) {
+    public UsuarioAutenticado(
+            User user,
+            Long empresaId,
+            Long lojaId,
+            Collection<? extends GrantedAuthority> authorities
+    ) {
         this.user = user;
+        this.empresaId = empresaId;
+        this.lojaId = lojaId;
+        this.authorities = authorities;
     }
 
     public User getUser() {
@@ -24,17 +30,16 @@ public class UsuarioAutenticado implements UserDetails {
     }
 
     public Long getEmpresaId() {
-        return user.getEmpresa() != null
-                ? user.getEmpresa().getId()
-                : null;
+        return empresaId;
     }
 
-
+    public Long getLojaId() {
+        return lojaId;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        return user.getAuthorities();
+        return authorities;
     }
 
     @Override
@@ -49,25 +54,21 @@ public class UsuarioAutenticado implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return user.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return user.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return user.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return user.isEnabled();
+        return user.getAtivo();
     }
-
-
 }
-
-

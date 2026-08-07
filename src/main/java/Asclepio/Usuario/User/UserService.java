@@ -3,19 +3,32 @@ package Asclepio.Usuario.User;
 import Asclepio.Empresa.Empresa;
 import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Empresa.EmpresaService;
+import Asclepio.Loja.FormaPagamento.LojaFormaPagamento;
+import Asclepio.Loja.FormaPagamento.LojaFormaPagamentoRepository;
+import Asclepio.Loja.Loja.Loja;
+import Asclepio.Loja.Loja.Repository.LojaRepository;
+import Asclepio.Pedido.Enum.FormaDePagamento;
+import Asclepio.UserLoja.UserLoja;
+import Asclepio.UserLoja.UserLojaRepository;
+import Asclepio.UserLoja.UsuarioLojaDTO;
 import Asclepio.Usuario.Permission.Permission;
 import Asclepio.Usuario.Permission.PermissionRepository;
 import Asclepio.Usuario.Role.Role;
 import Asclepio.Usuario.Role.RoleRepository;
+import Asclepio.Usuario.StorageWakeUpService;
 import Asclepio.Usuario.User.Repository.UserRepository;
 import Asclepio.Usuario.User.Repository.UserSpecification;
 import Asclepio.Usuario.User.dto.*;
+import Asclepio.config.security.TokenService;
+import Asclepio.config.security.UsuarioAutenticado;
 import Asclepio.exception.BusinessException;
 import Asclepio.exception.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import Asclepio.Usuario.Role.ServiceRole;
@@ -34,8 +47,17 @@ public class UserService {
     private final UserValidationService validationService;
     private final ServiceRole serviceRole;
     private final EmpresaContext empresaContext;
+    private final LojaRepository lojaRepository;
+    private final UserLojaRepository userLojaRepository;
+    private final TokenService tokenService;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PermissionRepository permissionRepository, EmpresaService empresaService, UserValidationService validationService, ServiceRole serviceRole, EmpresaContext empresaContext) {
+    private final AuthenticationManager authenticationManager;
+    private final StorageWakeUpService storageWakeUpService;
+
+    private final LojaFormaPagamentoRepository lojaFormaPagamentoRepository;
+
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PermissionRepository permissionRepository, EmpresaService empresaService, UserValidationService validationService, ServiceRole serviceRole, EmpresaContext empresaContext, LojaRepository lojaRepository, UserLojaRepository userLojaRepository, TokenService tokenService, AuthenticationManager authenticationManager, StorageWakeUpService storageWakeUpService,LojaFormaPagamentoRepository lojaFormaPagamentoRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -44,6 +66,12 @@ public class UserService {
         this.validationService = validationService;
         this.serviceRole = serviceRole;
         this.empresaContext = empresaContext;
+        this.lojaRepository = lojaRepository;
+        this.userLojaRepository = userLojaRepository;
+        this.tokenService = tokenService;
+        this.authenticationManager = authenticationManager;
+        this.storageWakeUpService = storageWakeUpService;
+        this.lojaFormaPagamentoRepository = lojaFormaPagamentoRepository;
     }
 
     public User createUser(RegisterDTO dto) {
@@ -52,24 +80,51 @@ public class UserService {
 
         Long empresaId = empresaContext.getEmpresaId();
 
-        if (userRepository.findByUsernameAndEmpresa_Id(dto.login().trim(), empresaId).isPresent()) {
+        User usuarioExistente = userRepository.findByUsername(dto.login().trim()).orElse(null);
 
-            throw new BusinessException("Usuário já existe");
+        if (usuarioExistente != null && userLojaRepository.existsByUser_IdAndLoja_Empresa_Id(usuarioExistente.getId(), empresaId)) {
+
+            throw new BusinessException("Usuário já existe.");
         }
-        Empresa empresa = empresaService.buscarPorId(empresaId);
 
-        Role role = roleRepository.findByIdAndEmpresa_Id(dto.roleId(), empresaId).orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado"));
+        User user;
 
-        User user = new User();
+        if (usuarioExistente == null) {
 
-        user.setUsername(dto.login().trim());
-        user.setPassword(passwordEncoder.encode(dto.password()));
-        user.setEmail(dto.Email());
-        user.setRole(role);
-        user.setEmpresa(empresa);
-        user.setAtivo(true);
+            user = new User();
+            user.setUsername(dto.login().trim());
+            user.setPassword(passwordEncoder.encode(dto.password()));
+            user.setEmail(dto.email().trim());
+            user.setAtivo(true);
 
-        return userRepository.save(user);
+            user = userRepository.save(user);
+
+        } else {
+
+            user = usuarioExistente;
+        }
+
+        for (UsuarioLojaDTO dtoLoja : dto.lojas()) {
+
+            Loja loja = lojaRepository.findByIdAndEmpresa_Id(dtoLoja.lojaId(), empresaId).orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada."));
+
+            Role role = roleRepository.findByIdAndEmpresa_Id(dtoLoja.roleId(), empresaId).orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado."));
+
+            boolean jaPossuiAcesso = userLojaRepository.findByUser_IdAndLoja_Id(user.getId(), loja.getId()).isPresent();
+
+            if (jaPossuiAcesso) {
+                continue;
+            }
+
+            UserLoja userLoja = new UserLoja();
+            userLoja.setUser(user);
+            userLoja.setLoja(loja);
+            userLoja.setRole(role);
+
+            userLojaRepository.save(userLoja);
+        }
+
+        return user;
     }
 
     public Page<ResponseListaDeUserDTO> lista(UserFiltroDTO filtro, Pageable pageable) {
@@ -84,12 +139,20 @@ public class UserService {
     public User findById(UUID id) {
 
         if (id == null) {
-            throw new BusinessException("ID do usuário é obrigatório");
+            throw new BusinessException("ID obrigatório");
         }
+
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
         Long empresaId = empresaContext.getEmpresaId();
 
-        return userRepository.findByIdAndEmpresa_Id(id, empresaId).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        boolean pertenceEmpresa = userLojaRepository.existsByUser_IdAndLoja_Empresa_Id(id, empresaId);
+
+        if (!pertenceEmpresa) {
+            throw new ResourceNotFoundException("Usuário não encontrado");
+        }
+
+        return user;
     }
 
     public void updateUser(UUID id, UpdateUserDTO dto) {
@@ -121,7 +184,6 @@ public class UserService {
             Long empresaId = empresaContext.getEmpresaId();
 
             Role role = roleRepository.findByIdAndEmpresa_Id(dto.roleId(), empresaId).orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado"));
-            user.setRole(role);
         }
 
         if (dto.permissionIds() != null) {
@@ -151,11 +213,8 @@ public class UserService {
             throw new BusinessException("Senha é obrigatória");
         }
 
-        if (dto.roleId() == null) {
-            throw new BusinessException("Cargo é obrigatório");
-        }
-    }
 
+    }
     @Transactional
     public User criarConta(RequestCriarContaDTO dto) {
 
@@ -163,24 +222,120 @@ public class UserService {
         validationService.validarLogin(dto.login());
         validationService.validarEmail(dto.email());
 
-        Empresa empresa = empresaService.criarEmpresaCadastro(dto.nomeEmpresa().trim());
+        Empresa empresa = empresaService.criarEmpresaCadastro(
+                dto.nomeEmpresa().trim()
+        );
 
-        // Cria todos os cargos da empresa
-        serviceRole.criarRolesPadrao(empresa);
 
-        // Recupera o SuperAdministrador recém-criado
         serviceRole.criarRolesPadrao(empresa);
 
         Role role = serviceRole.buscarSuperAdministrador(empresa);
 
         User user = new User();
+
         user.setUsername(dto.login().trim());
         user.setEmail(dto.email().trim());
         user.setPassword(passwordEncoder.encode(dto.password()));
-        user.setEmpresa(empresa);
-        user.setRole(role);
         user.setAtivo(true);
 
-        return userRepository.save(user);
+        user = userRepository.save(user);
+
+        Loja loja = new Loja();
+
+        loja.setNomeLoja(dto.nomeLoja().trim());
+        loja.setEmpresa(empresa);
+
+        loja.setCep(dto.cep().trim());
+
+        if (dto.cnpj() != null && !dto.cnpj().isBlank()) {
+            loja.setCnpj(dto.cnpj().trim());
+        }
+
+        loja.setTelefone(dto.telefone().trim());
+
+        if (dto.textoDescricao() != null) {
+            loja.setTextoDescricao(dto.textoDescricao().trim());
+        }
+
+        loja.setTipoAtendimento(dto.tipoAtendimento());
+
+        loja = lojaRepository.save(loja);
+
+
+        // ==========================================
+        // 5. VINCULA USUÁRIO À LOJA
+        // ==========================================
+
+        UserLoja userLoja = new UserLoja();
+
+        userLoja.setUser(user);
+        userLoja.setLoja(loja);
+        userLoja.setRole(role);
+
+        userLojaRepository.save(userLoja);
+
+
+        for (FormaDePagamento formaPagamento : FormaDePagamento.values()) {
+
+            LojaFormaPagamento forma = new LojaFormaPagamento();
+
+            forma.setLoja(loja);
+            forma.setFormaPagamento(formaPagamento);
+
+            boolean ativa = dto.formasPagamento()
+                    .contains(formaPagamento);
+
+            forma.setAtivo(ativa);
+
+            lojaFormaPagamentoRepository.save(forma);
+        }
+
+
+
+        return user;
+    }
+
+    public LoginResponseDTO escolherLoja(User user, Long lojaId) {
+
+        UserLoja userLoja = userLojaRepository.findByUser_IdAndLoja_Id(user.getId(), lojaId).orElseThrow(() -> new BusinessException("Usuário não possui acesso a esta loja."));
+
+        List<String> permissoes = userLoja.getRole().getPermissions().stream().map(Permission::getNome).toList();
+
+        String token = tokenService.generateToken(user, userLoja.getLoja().getEmpresa().getId(), userLoja.getLoja().getId(), permissoes);
+
+        return new LoginResponseDTO(token, false, List.of());
+    }
+
+
+    public LoginResponseDTO login(AuthenticationDTO data) {
+
+        var authToken = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+
+        var auth = authenticationManager.authenticate(authToken);
+
+        var usuarioAutenticado = (UsuarioAutenticado) auth.getPrincipal();
+
+        List<UserLoja> lojas = userLojaRepository.findAllByUser(usuarioAutenticado.getUser());
+
+        if (lojas.isEmpty()) {
+            throw new BusinessException("Usuário não possui acesso a nenhuma loja.");
+        }
+
+        if (lojas.size() == 1) {
+
+            UserLoja userLoja = lojas.get(0);
+
+            List<String> permissoes = userLoja.getRole().getPermissions().stream().map(Permission::getNome).toList();
+
+            String token = tokenService.generateToken(usuarioAutenticado.getUser(), userLoja.getLoja().getEmpresa().getId(), userLoja.getLoja().getId(), permissoes);
+
+            storageWakeUpService.acordarStorage();
+
+            return new LoginResponseDTO(token, false, List.of());
+        }
+
+        List<LojaLoginDTO> resposta = lojas.stream().map(userLoja -> new LojaLoginDTO(userLoja.getLoja().getId(), userLoja.getLoja().getNomeLoja())).toList();
+
+        return new LoginResponseDTO(null, true, resposta);
     }
 }

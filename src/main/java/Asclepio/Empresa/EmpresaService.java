@@ -3,47 +3,37 @@ package Asclepio.Empresa;
 import Asclepio.Empresa.dto.EmpresaFiltroDTO;
 import Asclepio.Empresa.dto.EmpresaRequest;
 import Asclepio.Empresa.dto.EmpresaResponse;
-import Asclepio.Usuario.User.User;
 import Asclepio.exception.BusinessException;
 import Asclepio.exception.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import Asclepio.config.security.UsuarioAutenticado;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @Service
 public class EmpresaService {
 
     private final EmpresaRepository repository;
 
-    public EmpresaService(EmpresaRepository repository) {
+    private final EmpresaContext empresaContext;
+
+    public EmpresaService(
+            EmpresaRepository repository,
+            EmpresaContext empresaContext
+    ) {
         this.repository = repository;
+        this.empresaContext = empresaContext;
     }
 
-    private User getUsuarioLogado() {
-
-        UsuarioAutenticado usuario =
-                (UsuarioAutenticado) SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getPrincipal();
-
-        return usuario.getUser();
-    }
 
     public Page<EmpresaResponse> listar(EmpresaFiltroDTO filtro, Pageable pageable) {
 
-        User usuario = getUsuarioLogado();
+        Long empresaId = empresaContext.getEmpresaId();
 
         return repository.findAll(
                 EmpresaSpecification.filtrar(filtro)
                         .and((root, query, cb) ->
-                                cb.equal(
-                                        root.get("id"),
-                                        usuario.getEmpresa().getId()
-                                )
+                                cb.equal(root.get("id"), empresaId)
                         ),
                 pageable
         ).map(EmpresaResponse::fromEntity);

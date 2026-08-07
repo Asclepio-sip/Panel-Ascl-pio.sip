@@ -1,59 +1,42 @@
 package Asclepio.Empresa;
 
 import Asclepio.config.security.UsuarioAutenticado;
-import Asclepio.Usuario.User.User;
+import Asclepio.exception.ResourceNotFoundException;
+import com.auth0.jwt.JWT;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EmpresaContext {
 
+    private final EmpresaRepository empresaRepository;
 
-    public UsuarioAutenticado getUsuarioAutenticado() {
-
-        var auth = SecurityContextHolder
-                .getContext()
-                .getAuthentication();
-
-
-        if (auth == null || !(auth.getPrincipal() instanceof UsuarioAutenticado usuario)) {
-
-            throw new IllegalStateException("Usuário não autenticado");
-        }
-
-
-        return usuario;
+    public EmpresaContext(EmpresaRepository empresaRepository) {
+        this.empresaRepository = empresaRepository;
     }
 
+    private UsuarioAutenticado usuario() {
 
-    public User getUsuario() {
-
-        return getUsuarioAutenticado().getUser();
+        return (UsuarioAutenticado)
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getPrincipal();
     }
-
 
     public Long getEmpresaId() {
-
-        Empresa empresa = getEmpresa();
-
-
-        return empresa.getId();
+        return usuario().getEmpresaId();
     }
 
+    public Long getLojaId() {
+        return usuario().getLojaId();
+    }
 
     public Empresa getEmpresa() {
 
-        Empresa empresa = getUsuario().getEmpresa();
-
-
-        if (empresa == null) {
-
-            throw new IllegalStateException(
-                    "Usuário sem empresa selecionada"
-            );
-        }
-
-
-        return empresa;
+        return empresaRepository
+                .findById(getEmpresaId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Empresa não encontrada"));
     }
 }

@@ -1,9 +1,11 @@
 package Asclepio.Empresa;
 
+import Asclepio.ClienteEmpresa.ClienteEmpresa;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "TB_EMPRESA",
@@ -36,4 +38,7 @@ public class Empresa {
 
     @Column(name = "EMP_CRIADO_EM", nullable = false)
     private LocalDateTime criadoEm = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "empresa")
+    private List<ClienteEmpresa> clientes;
 }

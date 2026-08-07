@@ -2,6 +2,7 @@ package Asclepio.Usuario.User.Controller.API;
 
 
 import Asclepio.Usuario.User.dto.*;
+import Asclepio.config.security.UsuarioAutenticado;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -17,58 +19,65 @@ import java.util.UUID;
 
 
 @RequestMapping("/user")
-@Tag(name = "user", description = "Gerenciamento de user")
+@Tag(name = "Usuários", description = "Gerenciamento de usuários e autenticação")
 public interface UserAPI {
 
+    @Operation(summary = "Login", description = """
+            Autentica o usuário.
+            
+            Comportamento:
+            
+            • Se o usuário possuir acesso a apenas uma loja, o token JWT é retornado imediatamente.
+            
+            • Se possuir acesso a mais de uma loja, será retornada a lista de lojas disponíveis para que o cliente escolha em qual deseja entrar.
+            """)
     @PostMapping("/login")
     ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data);
 
+
+    @Operation(summary = "Selecionar loja", description = """
+            Seleciona a loja que será utilizada na sessão.
+            
+            Este endpoint deve ser chamado apenas quando o login retornar
+            que o usuário possui acesso a mais de uma loja.
+            
+            Após selecionar a loja é gerado o JWT definitivo contendo:
+            
+            • empresaId
+            • lojaId
+            • permissões da role naquela loja
+            """)
+    @PostMapping("/escolher-loja")
+    ResponseEntity<LoginResponseDTO> escolherLoja(@RequestBody @Valid EscolherLojaDTO dto, @AuthenticationPrincipal UsuarioAutenticado usuario);
+
+    @Operation(summary = "Cadastrar usuário")
     @PostMapping
     @PreAuthorize("hasAuthority('CriarUser')")
     ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid RegisterDTO dto);
 
+
+    @Operation(summary = "Criar empresa e usuário administrador")
     @PostMapping("/CriarConta")
     ResponseEntity<LoginResponseDTO> CriarConta(@RequestBody @Valid RequestCriarContaDTO dto);
 
+
     @Operation(summary = "Listar usuários", description = """
-            Lista os usuários do sistema com paginação e filtros opcionais.
+            Lista os usuários da empresa utilizando paginação e filtros.
             
             Filtros disponíveis:
             
-            • login -> filtra pelo nome de usuário.
-            • ativo -> filtra usuários ativos ou inativos.
-            • roleId -> filtra pelo ID do cargo (UUID).
-            • nomeRole -> filtra pelo nome do cargo.
-            
-            Exemplos:
-            
-            Listar todos:
-            GET /user?page=0&size=10
-            
-            Buscar por login:
-            GET /user?login=mateus&page=0&size=10
-            
-            Buscar apenas usuários ativos:
-            GET /user?ativo=true&page=0&size=10
-            
-            Buscar usuários com cargo ADMIN:
-            GET /user?nomeRole=ADMIN&page=0&size=10
-            
-            Buscar por ID do cargo:
-            GET /user?roleId=3fa85f64-5717-4562-b3fc-2c963f66afa6&page=0&size=10
-            
-            Combinar filtros:
-            GET /user?login=mat&ativo=true&nomeRole=ADMIN&page=0&size=10
-            
-            Ordenar:
-            GET /user?page=0&size=10&sort=username,asc
-            GET /user?page=0&size=10&sort=username,desc
+            • login
+            • ativo
+            • roleId
+            • nomeRole
             """)
     @GetMapping
     @PreAuthorize("hasAuthority('VerUser')")
     ResponseEntity<Page<ResponseListaDeUserDTO>> listarUsuarios(@ParameterObject UserFiltroDTO filtro, @ParameterObject Pageable pageable);
 
-    @PutMapping("{id}")
+
+    @Operation(summary = "Atualizar usuário")
+    @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('EditarUser')")
-    public ResponseEntity<Void> atualizarUsuario(@PathVariable UUID id, @RequestBody @Valid UpdateUserDTO dto);
+    ResponseEntity<Void> atualizarUsuario(@PathVariable UUID id, @RequestBody @Valid UpdateUserDTO dto);
 }

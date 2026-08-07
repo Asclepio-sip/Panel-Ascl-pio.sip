@@ -30,11 +30,10 @@ public class EstoqueQueryService {
     public Page<ListaDeEstoqueDasLojasResponse> listarTodos(EstoqueFiltro filtro, Pageable pageable) {
         return estoqueRepository.findAll(EstoqueSpecification.filtrar(filtro, empresaContext.getEmpresaId()), pageable).map(estoque -> {
 
-            System.out.println("Antes do Feign");
 
             var variacao = produtoVariacaoClient.buscarPorId(estoque.getVariacaoId());
 
-            System.out.println("Depois do Feign");
+
 
             return ListaDeEstoqueDasLojasResponse.fromDomain(estoque, variacao);
         });

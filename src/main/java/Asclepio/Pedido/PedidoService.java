@@ -1,9 +1,13 @@
 package Asclepio.Pedido;
 
+import Asclepio.ClienteEmpresa.ClienteEmpresa;
+import Asclepio.ClienteEmpresa.ClienteEmpresaRepository;
+import Asclepio.ClienteEmpresa.ClienteEmpresaService;
 import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Estoque.Estoque;
 import Asclepio.Estoque.Repository.EstoqueRepository;
 import Asclepio.ItemPedido.DTO.ItemPedidoAddDTO;
+import Asclepio.Loja.FormaPagamento.LojaFormaPagamentoService;
 import Asclepio.Loja.Loja.Loja;
 import Asclepio.Loja.Loja.Repository.LojaRepository;
 import Asclepio.Pedido.Enum.StatusDoPedido;
@@ -45,6 +49,10 @@ public class PedidoService {
 
     private final ProdutoVariacaoStorageClient produtoVariacaoClient;
 
+    private final ClienteEmpresaRepository clienteEmpresaRepository;
+
+    private final LojaFormaPagamentoService formaPagamentoService;
+
     public PedidoService(
             PedidoRepository pedidoRepository,
             LojaRepository lojaRepository,
@@ -56,7 +64,9 @@ public class PedidoService {
             PedidoCodigoService codigoService,
             PedidoQueryService queryService,
             ProdutoVariacaoStorageClient produtoVariacaoClient,
-            EmpresaContext empresaContext
+            EmpresaContext empresaContext,
+            ClienteEmpresaRepository clienteEmpresaRepository,
+            LojaFormaPagamentoService formaPagamentoService
     ) {
         this.pedidoRepository = pedidoRepository;
         this.lojaRepository = lojaRepository;
@@ -69,6 +79,8 @@ public class PedidoService {
         this.queryService = queryService;
         this.produtoVariacaoClient = produtoVariacaoClient;
         this.empresaContext = empresaContext;
+        this.clienteEmpresaRepository =clienteEmpresaRepository;
+        this.formaPagamentoService = formaPagamentoService;
     }
 
     @Transactional
@@ -78,6 +90,11 @@ public class PedidoService {
 
         Loja loja = lojaRepository.findById(dto.lojaId())
                 .orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
+
+        formaPagamentoService.validarFormaPagamento(
+                loja,
+                dto.formaDePagamento()
+        );
 
         List<Estoque> estoquesDaLoja =
                 estoqueRepository.findByLoja_IdAndLoja_Empresa_Id(
@@ -133,6 +150,11 @@ public class PedidoService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Loja não encontrada"));
 
+        formaPagamentoService.validarFormaPagamento(
+                loja,
+                dto.formaDePagamento()
+        );
+
         List<Estoque> estoquesDaLoja =
                 estoqueRepository.findByLoja_IdAndLoja_Empresa_Id(loja.getId(), empresaId);
 
@@ -152,6 +174,21 @@ public class PedidoService {
         pedido.setEmpresa(loja.getEmpresa());
 
         pedido.calcularSubtotalProdutos();
+
+        if (dto.clienteId() != null) {
+
+            ClienteEmpresa cliente = clienteEmpresaRepository
+                    .findByIdAndEmpresa_Id(dto.clienteId(), empresaId)
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException("Cliente não encontrado."));
+
+            pedido.setCliente(cliente);
+
+            // Snapshot dos dados
+            pedido.setNomeCliente(cliente.getNome());
+            pedido.setEmail(cliente.getEmail());
+            pedido.setTelefone(cliente.getNumero());
+        }
 
         atendimentoService.aplicarAtendimento(pedido, loja);
 

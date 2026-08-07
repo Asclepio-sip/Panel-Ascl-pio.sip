@@ -9,4 +9,7 @@ import java.util.Optional;
 public interface EmpresaRepository extends JpaRepository<Empresa, Long>, JpaSpecificationExecutor<Empresa> {
 
     Optional<Empresa> findByCnpj(String cnpj);
+
+    Optional<Empresa> findByNome(String nome);
+
 }

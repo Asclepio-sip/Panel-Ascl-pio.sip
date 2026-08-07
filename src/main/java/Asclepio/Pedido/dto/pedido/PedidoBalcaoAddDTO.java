@@ -12,13 +12,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public record PedidoBalcaoAddDTO(
 
         Long lojaId,
         String nomeCliente,
         String email,
-
+        String telefone,
+        UUID clienteId,
         List<ItemPedidoAddDTO> itens,
 
         FormaDePagamento formaDePagamento
@@ -37,7 +39,7 @@ public record PedidoBalcaoAddDTO(
 
         pedido.setNomeCliente(nomeCliente);
         pedido.setEmail(email);
-
+        pedido.setTelefone(telefone);
         pedido.setFormaDePagamento(formaDePagamento);
 
         pedido.setCriadoEm(LocalDateTime.now());

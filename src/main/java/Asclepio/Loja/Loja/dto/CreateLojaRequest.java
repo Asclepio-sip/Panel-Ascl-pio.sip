@@ -14,5 +14,6 @@ public record CreateLojaRequest(
         TipoAtendimentoLoja tipoAtendimento,
         BigDecimal valorMinimoFreteGratis,
         Long empresaId
+
 ) {
 }

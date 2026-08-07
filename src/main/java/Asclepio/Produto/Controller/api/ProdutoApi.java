@@ -7,7 +7,9 @@ import Asclepio.Categoria.dto.CategoriaPageResponse;
 import Asclepio.Categoria.dto.CategoriaResponse;
 import Asclepio.Categoria.dto.CriarCategoria;
 import Asclepio.Produto.dto.PageResponse;
+import Asclepio.Produto.dto.ProdutoFiltro;
 import Asclepio.Produto.dto.ProdutoStorageResponse;
+import Asclepio.Produto.dto.ProdutoUpdateDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -17,8 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import Asclepio.Produto.dto.ProdutoFiltro;
-import Asclepio.Produto.dto.ProdutoUpdateDto;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequestMapping("/products")
@@ -72,25 +72,20 @@ public interface ProdutoApi {
     @PreAuthorize("hasAuthority('ExcluirProduto')")
     ResponseEntity<Void> deletar(@PathVariable Long id);
 
-    @GetMapping("/categorias")
-    @Operation(summary = "Listar categorias com filtros")
-    @PreAuthorize("hasAuthority('CriarProduto')")
-    ResponseEntity<CategoriaPageResponse> listar(@ParameterObject CategoriaFiltro filtro, @ParameterObject Pageable pageable);
-
-
     @PostMapping("/categorias")
     @Operation(summary = "Criar categoria ou subcategoria")
     @PreAuthorize("hasAuthority('CriarProduto')")
-    ResponseEntity<CategoriaResponse> criar(
-            @RequestBody CriarCategoria dto
-    );
+    ResponseEntity<CategoriaResponse> criar(@RequestBody CriarCategoria dto);
 
+
+    @GetMapping("/categorias")
+    @Operation(summary = "Listar categorias com filtros")
+    @PreAuthorize("hasAuthority('VerCategoria')")
+    ResponseEntity<CategoriaPageResponse> listar(@ParameterObject CategoriaFiltro filtro, @ParameterObject Pageable pageable);
 
 
     @PostMapping(value = "/criar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('CriarProduto')")
     @Operation(summary = "Cadastrar produto completo")
-    ResponseEntity<CadastroProdutoCompletoResponse> cadastrar(
-            @ModelAttribute @Valid CadastroProdutoCompletoDTO dto
-    );
+    ResponseEntity<CadastroProdutoCompletoResponse> cadastrar(@ModelAttribute @Valid CadastroProdutoCompletoDTO dto);
 }

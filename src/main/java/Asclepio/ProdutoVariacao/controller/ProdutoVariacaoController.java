@@ -53,13 +53,18 @@ public class ProdutoVariacaoController implements ProdutoVariacaoApi {
     }
 
     @Override
+    public ResponseEntity<CategoriaPageResponse> listar(CategoriaFiltro filtro, Pageable pageable) {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<PageResponse<ProdutoStorageResponse>> listar(ProdutoFiltro filtro, Pageable pageable) {
         return ResponseEntity.ok(produtoService.listarTodosStorage(filtro, pageable));
     }
 
-
-    @Override
-    public ResponseEntity<CategoriaPageResponse> listar(CategoriaFiltro filtro, Pageable pageable) {
-        return ResponseEntity.ok(categoriaService.listar(filtro, pageable));
-    }
+//
+//    @Override
+//    public ResponseEntity<CategoriaPageResponse> listar(CategoriaFiltro filtro, Pageable pageable) {
+//        return ResponseEntity.ok(categoriaService.listar(filtro, pageable));
+//    }
 }

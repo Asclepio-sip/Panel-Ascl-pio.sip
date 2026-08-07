@@ -1,12 +1,16 @@
 package Asclepio.Loja.Loja;
 
 import Asclepio.Empresa.Empresa;
+import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Empresa.EmpresaRepository;
+import Asclepio.Loja.FormaPagamento.LojaFormaPagamento;
+import Asclepio.Loja.FormaPagamento.LojaFormaPagamentoRepository;
 import Asclepio.Loja.Loja.Repository.LojaRepository;
 import Asclepio.Loja.Loja.Repository.LojaSpecification;
 import Asclepio.Loja.Loja.dto.CreateLojaRequest;
 import Asclepio.Loja.Loja.dto.LojaFiltroDTO;
 import Asclepio.Loja.Loja.dto.LojaResponse;
+import Asclepio.Pedido.Enum.FormaDePagamento;
 import Asclepio.Usuario.User.User;
 import Asclepio.config.security.UsuarioAutenticado;
 import Asclepio.exception.BusinessException;
@@ -21,13 +25,19 @@ public class LojaService {
 
     private final LojaRepository repository;
     private final EmpresaRepository empresaRepository;
+    private final LojaFormaPagamentoRepository formaPagamentoRepository;
+    private final EmpresaContext empresaContext;
 
     public LojaService(
             LojaRepository repository,
-            EmpresaRepository empresaRepository
+            EmpresaRepository empresaRepository,
+            LojaFormaPagamentoRepository formaPagamentoRepository,
+            EmpresaContext empresaContext
     ) {
         this.repository = repository;
         this.empresaRepository = empresaRepository;
+        this.formaPagamentoRepository = formaPagamentoRepository;
+        this.empresaContext = empresaContext;
     }
 
     public LojaResponse criar(CreateLojaRequest request) {
@@ -48,11 +58,30 @@ public class LojaService {
                 request.tipoAtendimento(),
                 request.imagemUrl(),
                 empresa
+
         );
 
         loja.configurarFreteGratis(request.valorMinimoFreteGratis());
 
+        Loja lojaSalva = repository.save(loja);
+
+        criarFormasPagamentoPadrao(lojaSalva);
+
         return LojaResponse.fromEntity(repository.save(loja));
+    }
+
+    private void criarFormasPagamentoPadrao(Loja loja) {
+
+        for (FormaDePagamento forma : FormaDePagamento.values()) {
+
+            LojaFormaPagamento item = new LojaFormaPagamento();
+
+            item.setLoja(loja);
+            item.setFormaPagamento(forma);
+            item.setAtivo(true);
+
+            formaPagamentoRepository.save(item);
+        }
     }
 
     public Page<LojaResponse> listar(LojaFiltroDTO filtro, Pageable pageable) {
@@ -170,23 +199,11 @@ public class LojaService {
 
     private Empresa getEmpresaAtual() {
 
-        UsuarioAutenticado autenticado =
-                (UsuarioAutenticado) SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getPrincipal();
+        Long empresaId = empresaContext.getEmpresaId();
 
-        User usuario = autenticado.getUser();
-
-
-        if (usuario.getEmpresa() == null) {
-            throw new ResourceNotFoundException(
-                    "Usuário não possui empresa vinculada"
-            );
-        }
-
-
-        return usuario.getEmpresa();
+        return empresaRepository.findById(empresaId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Empresa não encontrada"));
     }
 
     private String tratarTexto(String valor) {

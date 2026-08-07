@@ -1,6 +1,7 @@
 package Asclepio.Usuario.User;
 
 import Asclepio.Empresa.Empresa;
+import Asclepio.UserLoja.UserLoja;
 import Asclepio.Usuario.Permission.Permission;
 import Asclepio.Usuario.Role.Role;
 import jakarta.persistence.*;
@@ -49,10 +50,6 @@ public class User implements UserDetails {
     @Column(name = "USR_ATIVO", nullable = false)
     private Boolean ativo = true;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "USR_ROLE_ID", nullable = false)
-    private Role role;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "TB_USER_PERMISSION",
@@ -61,9 +58,11 @@ public class User implements UserDetails {
     )
     private List<Permission> permissionsExtras = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USR_EMPRESA_ID")
-    private Empresa empresa;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserLoja> userLojas = new ArrayList<>();
+
+
 
     // ==========================
     // USER DETAILS
@@ -72,19 +71,9 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        Set<String> permissoes = new HashSet<>();
-
-        if (role != null) {
-            role.getPermissions()
-                    .forEach(permission -> permissoes.add(permission.getNome()));
-        }
-
-        permissionsExtras.forEach(permission ->
-                permissoes.add(permission.getNome()));
-
-        return permissoes.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        return permissionsExtras.stream()
+                .map(p -> new SimpleGrantedAuthority(p.getNome()))
+                .toList();
     }
 
     @Override
@@ -141,5 +130,7 @@ public class User implements UserDetails {
     public void setEmail(String email) {
         this.email = email != null ? email.trim() : null;
     }
+
+
 
 }
