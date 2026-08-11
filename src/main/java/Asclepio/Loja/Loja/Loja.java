@@ -205,6 +205,8 @@ public class Loja {
         this.valorMinimoFreteGratis = valorMinimoFreteGratis;
     }
 
+
+
     public void setBairros(List<LojaBairro> bairros) {
         this.bairros = bairros;
     }

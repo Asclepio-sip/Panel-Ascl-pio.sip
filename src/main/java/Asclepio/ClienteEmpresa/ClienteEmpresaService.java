@@ -1,16 +1,17 @@
 package Asclepio.ClienteEmpresa;
 
 import Asclepio.ClienteEmpresa.dto.ClienteEmpresaCreateDTO;
+import Asclepio.ClienteEmpresa.dto.ClienteEmpresaFiltro;
 import Asclepio.ClienteEmpresa.dto.ClienteEmpresaResponseDTO;
 import Asclepio.ClienteEmpresa.dto.ClienteEmpresaUpdateDTO;
-import Asclepio.Empresa.Empresa;
 import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Empresa.EmpresaRepository;
 import Asclepio.exception.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,11 +36,9 @@ public class ClienteEmpresaService {
 
         Long empresaId = empresaContext.getEmpresaId();
 
-        Empresa empresa = empresaRepository.findById(empresaId)
-                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
+        var empresa = empresaRepository.getReferenceById(empresaId);
 
         ClienteEmpresa cliente = new ClienteEmpresa();
-
         cliente.setNome(dto.nome());
         cliente.setNumero(dto.numero());
         cliente.setEmail(dto.email());
@@ -47,27 +46,16 @@ public class ClienteEmpresaService {
 
         repository.save(cliente);
 
-        return new ClienteEmpresaResponseDTO(
-                cliente.getId(),
-                cliente.getNome(),
-                cliente.getNumero(),
-                cliente.getEmail()
-        );
+        return toResponse(cliente);
     }
 
-    public List<ClienteEmpresaResponseDTO> listar() {
+    public Page<ClienteEmpresaResponseDTO> listar(ClienteEmpresaFiltro filtro, Pageable pageable) {
 
         Long empresaId = empresaContext.getEmpresaId();
 
-        return repository.findAllByEmpresa_IdOrderByNomeAsc(empresaId)
-                .stream()
-                .map(c -> new ClienteEmpresaResponseDTO(
-                        c.getId(),
-                        c.getNome(),
-                        c.getNumero(),
-                        c.getEmail()
-                ))
-                .toList();
+        return repository
+                .findAll(ClienteEmpresaSpecification.filtrar(filtro, empresaId), pageable)
+                .map(this::toResponse);
     }
 
     @Transactional
@@ -85,6 +73,10 @@ public class ClienteEmpresaService {
 
         repository.save(cliente);
 
+        return toResponse(cliente);
+    }
+
+    private ClienteEmpresaResponseDTO toResponse(ClienteEmpresa cliente) {
         return new ClienteEmpresaResponseDTO(
                 cliente.getId(),
                 cliente.getNome(),

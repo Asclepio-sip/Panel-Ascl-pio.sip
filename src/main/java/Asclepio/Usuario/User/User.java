@@ -5,11 +5,6 @@ import Asclepio.UserLoja.UserLoja;
 import Asclepio.Usuario.Permission.Permission;
 import Asclepio.Usuario.Role.Role;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,21 +20,19 @@ import java.util.stream.Collectors;
                 @UniqueConstraint(name = "UK_USER_EMAIL", columnNames = "USR_EMAIL")
         }
 )
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString(exclude = {"role", "empresa", "permissionsExtras"})
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "USR_ID")
-    @EqualsAndHashCode.Include
     private UUID id;
 
     @Column(name = "USR_USERNAME", nullable = false, length = 100)
     private String username;
+
+    @Column(name = "USR_NOME", length = 150)
+    private String nome;
 
     @Column(name = "USR_PASSWORD", nullable = false)
     private String password;
@@ -49,6 +42,7 @@ public class User implements UserDetails {
 
     @Column(name = "USR_ATIVO", nullable = false)
     private Boolean ativo = true;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -63,11 +57,9 @@ public class User implements UserDetails {
     private List<UserLoja> userLojas = new ArrayList<>();
 
 
-
-    // ==========================
-    // USER DETAILS
-    // ==========================
-
+    public void setNome(String nome) {
+        this.nome = nome != null ? nome.trim() : null;
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
@@ -131,6 +123,71 @@ public class User implements UserDetails {
         this.email = email != null ? email.trim() : null;
     }
 
+    public User() {
+    }
 
+    public User(UUID id, String username, String nome, String password, String email, Boolean ativo, List<Permission> permissionsExtras, List<UserLoja> userLojas) {
+        this.id = id;
+        this.username = username;
+        this.nome = nome;
+        this.password = password;
+        this.email = email;
+        this.ativo = ativo;
+        this.permissionsExtras = permissionsExtras;
+        this.userLojas = userLojas;
+    }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public List<Permission> getPermissionsExtras() {
+        return permissionsExtras;
+    }
+
+    public void setPermissionsExtras(List<Permission> permissionsExtras) {
+        this.permissionsExtras = permissionsExtras;
+    }
+
+    public List<UserLoja> getUserLojas() {
+        return userLojas;
+    }
+
+    public void setUserLojas(List<UserLoja> userLojas) {
+        this.userLojas = userLojas;
+    }
 }

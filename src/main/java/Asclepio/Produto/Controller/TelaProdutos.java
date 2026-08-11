@@ -61,6 +61,12 @@ public class TelaProdutos implements ProdutoApi {
     }
 
     @Override
+    public ResponseEntity<ProdutoStorageResponse> atualizarImagem(Long id, MultipartFile imagem) {
+        ProdutoStorageResponse produto = produtoService.atualizarImagemComStorage(id, imagem);
+        return ResponseEntity.ok(produto);
+    }
+
+    @Override
     public ResponseEntity<ProdutoStorageResponse> criar(
             String nome,
             String descricao,

@@ -24,9 +24,6 @@ public class UserValidationService {
             throw new BusinessException("Nome da empresa é obrigatório.");
         }
 
-        if (dto.login() == null || dto.login().isBlank()) {
-            throw new BusinessException("Login é obrigatório.");
-        }
 
         if (dto.email() == null || dto.email().isBlank()) {
             throw new BusinessException("E-mail é obrigatório.");
@@ -37,12 +34,6 @@ public class UserValidationService {
         }
     }
 
-    public void validarLogin(String login) {
-
-        if (userRepository.findByUsername(login.trim()).isPresent()) {
-            throw new BusinessException("Login já cadastrado.");
-        }
-    }
 
     public void validarEmail(String email) {
 

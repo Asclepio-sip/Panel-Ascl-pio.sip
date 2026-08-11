@@ -11,7 +11,7 @@ public record RequestCriarContaDTO(
 
         // Usuário
         @NotBlank
-        String login,
+        String nome,
 
         @NotBlank
         String password,

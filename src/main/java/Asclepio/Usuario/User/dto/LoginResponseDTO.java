@@ -8,6 +8,8 @@ public record LoginResponseDTO(
 
         boolean escolherLoja,
 
-        List<LojaLoginDTO> lojas
+        List<LojaLoginDTO> lojas,
+
+        String lojaNome
 
 ) {}

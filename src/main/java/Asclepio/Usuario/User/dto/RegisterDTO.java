@@ -1,27 +1,20 @@
 package Asclepio.Usuario.User.dto;
 
-
 import Asclepio.UserLoja.UsuarioLojaDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
 
 import java.util.List;
-import java.util.UUID;
 
 public record RegisterDTO(
-
         @NotBlank
-        String login,
-
+        String nome,
         @NotBlank
         String password,
-
+        @NotBlank
         String email,
-
-        List<UUID> permissionIds,
-
-        @NotEmpty
+        @NotEmpty(message = "É necessário informar ao menos uma loja.")
+        @Valid
         List<UsuarioLojaDTO> lojas
-
 ) {}

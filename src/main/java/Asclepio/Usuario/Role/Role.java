@@ -3,7 +3,6 @@ package Asclepio.Usuario.Role;
 import Asclepio.Empresa.Empresa;
 import Asclepio.Usuario.Permission.Permission;
 import jakarta.persistence.*;
-import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +18,7 @@ import java.util.UUID;
                 )
         }
 )
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+
 public class Role {
 
     @Id
@@ -51,7 +46,6 @@ public class Role {
             joinColumns = @JoinColumn(name = "ROP_ROLE_ID"),
             inverseJoinColumns = @JoinColumn(name = "ROP_PERMISSION_ID")
     )
-    @Builder.Default
     private List<Permission> permissions = new ArrayList<>();
 
 
@@ -135,4 +129,54 @@ public class Role {
         return getClass().hashCode();
     }
 
+    public Role() {
+    }
+
+    public Role(UUID id, String nome, String descricao, Empresa empresa, List<Permission> permissions) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.empresa = empresa;
+        this.permissions = permissions;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
 }

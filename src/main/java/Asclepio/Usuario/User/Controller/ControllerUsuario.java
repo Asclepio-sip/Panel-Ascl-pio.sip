@@ -1,10 +1,15 @@
 package Asclepio.Usuario.User.Controller;
 
+import Asclepio.ClienteEmpresa.ClienteEmpresa;
 import Asclepio.UserLoja.UserLoja;
 import Asclepio.UserLoja.UserLojaRepository;
 import Asclepio.Usuario.StorageWakeUpService;
+import Asclepio.Usuario.User.User;
 import Asclepio.Usuario.User.dto.*;
 import Asclepio.exception.BusinessException;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +43,9 @@ public class ControllerUsuario implements UserAPI {
         this.userLojaRepository = userLojaRepository;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id")
+    private ClienteEmpresa cliente;
     @Override
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
 
@@ -46,11 +54,9 @@ public class ControllerUsuario implements UserAPI {
     }
 
     @Override
-    public ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid RegisterDTO dto) {
-
-        userService.createUser(dto);
-
-        return ResponseEntity.ok().build();
+    public ResponseEntity<CriarUsuarioResponseDTO> register(@RequestBody @Valid RegisterDTO dto) {
+        User user = userService.createUser(dto);
+        return ResponseEntity.ok(new CriarUsuarioResponseDTO(user.getUsername(), user.getEmail()));
     }
 
     @Override

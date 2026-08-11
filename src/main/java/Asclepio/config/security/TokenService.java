@@ -26,47 +26,50 @@ public class TokenService {
             User user,
             Long empresaId,
             Long lojaId,
-            List<String> permissions
+            List<String> permissions,
+            boolean gerente
     ) {
-
         try {
-
             Algorithm algorithm = Algorithm.HMAC256(secret);
-
             return JWT.create()
                     .withIssuer("auth-api")
                     .withSubject(user.getUsername())
+                    .withClaim("tipo", "FULL")
                     .withClaim("empresaId", empresaId)
                     .withClaim("lojaId", lojaId)
                     .withClaim("permissions", permissions)
+                    .withClaim("gerente", gerente)
+                    .withClaim("nome", user.getNome())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
-
         } catch (JWTCreationException e) {
             throw new RuntimeException("Erro ao gerar token", e);
-        }
-    }
-
-    public String validateToken(String token) {
-
-        try {
-
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-
-            return JWT.require(algorithm)
-                    .withIssuer("auth-api")
-                    .build()
-                    .verify(token)
-                    .getSubject();
-
-        } catch (Exception e) {
-            return null;
         }
     }
 
     private Instant genExpirationDate() {
         return LocalDateTime.now()
                 .plusHours(2)
+                .toInstant(ZoneOffset.of("-03:00"));
+    }
+
+    public String generateTempToken(User user) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            return JWT.create()
+                    .withIssuer("auth-api")
+                    .withSubject(user.getUsername())
+                    .withClaim("tipo", "TEMP")
+                    .withExpiresAt(genExpirationDateTemp())
+                    .sign(algorithm);
+        } catch (JWTCreationException e) {
+            throw new RuntimeException("Erro ao gerar token temporário", e);
+        }
+    }
+
+    private Instant genExpirationDateTemp() {
+        return LocalDateTime.now()
+                .plusMinutes(5) // token curto, só pra escolher a loja
                 .toInstant(ZoneOffset.of("-03:00"));
     }
 
@@ -79,4 +82,6 @@ public class TokenService {
                 .build()
                 .verify(token);
     }
+
+
 }

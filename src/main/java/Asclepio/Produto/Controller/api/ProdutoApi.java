@@ -88,4 +88,9 @@ public interface ProdutoApi {
     @PreAuthorize("hasAuthority('CriarProduto')")
     @Operation(summary = "Cadastrar produto completo")
     ResponseEntity<CadastroProdutoCompletoResponse> cadastrar(@ModelAttribute @Valid CadastroProdutoCompletoDTO dto);
+
+    @PatchMapping(value = "/{id}/imagem", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Atualizar imagem do produto")
+    @PreAuthorize("hasAuthority('EditarProduto')")
+    ResponseEntity<ProdutoStorageResponse> atualizarImagem(@PathVariable Long id, @RequestParam MultipartFile imagem);
 }

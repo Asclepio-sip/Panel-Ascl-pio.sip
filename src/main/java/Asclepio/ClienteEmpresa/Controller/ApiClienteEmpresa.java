@@ -1,13 +1,16 @@
 package Asclepio.ClienteEmpresa.Controller;
 
 import Asclepio.ClienteEmpresa.dto.ClienteEmpresaCreateDTO;
+import Asclepio.ClienteEmpresa.dto.ClienteEmpresaFiltro;
 import Asclepio.ClienteEmpresa.dto.ClienteEmpresaResponseDTO;
 import Asclepio.ClienteEmpresa.dto.ClienteEmpresaUpdateDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/cliente-empresa")
@@ -19,9 +22,20 @@ public interface ApiClienteEmpresa {
             @RequestBody @Valid ClienteEmpresaCreateDTO dto
     );
 
-    @Operation(summary = "Listar clientes da empresa")
+    @Operation(summary = "Listar clientes da empresa", description = """
+            Lista os clientes da empresa com paginação e filtros opcionais.
+            
+            Filtros disponíveis:
+            
+            • nome
+            • numero
+            • email
+            """)
     @GetMapping
-    List<ClienteEmpresaResponseDTO> listar();
+    Page<ClienteEmpresaResponseDTO> listar(
+            @ParameterObject ClienteEmpresaFiltro filtro,
+            @ParameterObject Pageable pageable
+    );
 
     @Operation(summary = "Atualizar cliente")
     @PutMapping("/{id}")

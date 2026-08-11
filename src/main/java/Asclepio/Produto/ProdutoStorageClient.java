@@ -68,6 +68,34 @@ public class ProdutoStorageClient {
         }
     }
 
+    public ProdutoStorageResponse atualizarImagem(Long id, MultipartFile imagem) {
+
+        String url = storageServiceUrl + "/produtos/" + id + "/imagem";
+
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("imagem", imagem.getResource());
+
+        HttpHeaders headers = criarHeadersComToken();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
+
+        try {
+            ResponseEntity<ProdutoStorageResponse> response =
+                    restTemplate.exchange(url, HttpMethod.PATCH, request, ProdutoStorageResponse.class);
+
+            return response.getBody();
+
+        } catch (HttpClientErrorException | HttpServerErrorException ex) {
+
+            System.out.println("STATUS: " + ex.getStatusCode());
+            System.out.println("BODY:");
+            System.out.println(ex.getResponseBodyAsString());
+
+            throw ex;
+        }
+    }
+
     public PageResponse<ProdutoStorageResponse> listarProdutos(String nome, Long categoriaId, String nomeCategoria, Pageable pageable) {
         String url = UriComponentsBuilder.fromHttpUrl(storageServiceUrl + "/produtos").queryParam("nome", nome).queryParam("categoriaId", categoriaId).queryParam("nomeCategoria", nomeCategoria).queryParam("page", pageable.getPageNumber()).queryParam("size", pageable.getPageSize()).toUriString();
 

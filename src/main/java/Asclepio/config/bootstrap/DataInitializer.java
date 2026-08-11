@@ -143,61 +143,46 @@ public class DataInitializer implements CommandLineRunner {
         Empresa empresa = empresaRepository
                 .findByNome("Empresa Suporte")
                 .orElseGet(() -> {
-
                     Empresa nova = new Empresa();
-
                     nova.setNome("Empresa Suporte");
                     nova.setCnpj("00000000000000");
                     nova.setAtiva(true);
-
                     return empresaRepository.save(nova);
                 });
 
-
         serviceRole.criarRolesPadrao(empresa);
-
 
         Role role = serviceRole.buscarSuperAdministrador(empresa);
 
+        String emailSuporte = "suporte@email.com";
 
         User user = userRepository
-                .findByUsername("suporte1")
+                .findByUsername(emailSuporte)
                 .orElseGet(() -> {
-
                     User novo = new User();
-
-                    novo.setUsername("suporte1");
-                    novo.setPassword(
-                            passwordEncoder.encode("123")
-                    );
-                    novo.setEmail("suporte@email.com");
+                    novo.setUsername(emailSuporte);       // login = e-mail
+                    novo.setNome("Suporte");               // nome de exibição
+                    novo.setPassword(passwordEncoder.encode("123"));
+                    novo.setEmail(emailSuporte);
                     novo.setAtivo(true);
-
                     return userRepository.save(novo);
                 });
-
-
 
         Loja loja = lojaRepository
                 .findByNomeLoja("Loja Suporte")
                 .orElseGet(() -> {
-
                     Loja nova = new Loja();
-
                     nova.setNomeLoja("Loja Suporte");
                     nova.setEmpresa(empresa);
-
                     nova.setCep("00000000");
                     nova.setCnpj("00000000000000");
                     nova.setTelefone("0000000000");
                     nova.setTextoDescricao("Loja de suporte do sistema");
                     nova.setTipoAtendimento(TipoAtendimentoLoja.RETIRADA);
-
                     return lojaRepository.save(nova);
                 });
 
         criarFormasPagamento(loja);
-
 
         boolean possuiAcesso =
                 userLojaRepository
@@ -206,17 +191,13 @@ public class DataInitializer implements CommandLineRunner {
                                 loja.getId()
                         );
 
-
-        if(!possuiAcesso){
-
+        if (!possuiAcesso) {
             UserLoja userLoja = new UserLoja();
-
             userLoja.setUser(user);
             userLoja.setLoja(loja);
             userLoja.setRole(role);
             userLojaRepository.save(userLoja);
         }
-
 
         System.out.println("Admin suporte criado/validado");
     }

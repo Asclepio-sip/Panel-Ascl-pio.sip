@@ -319,4 +319,6 @@ public class Pedido {
     public void setTipoAtendimentoPedido(TipoAtendimentoPedido tipoAtendimentoPedido) {
         this.tipoAtendimentoPedido = tipoAtendimentoPedido;
     }
+
+
 }

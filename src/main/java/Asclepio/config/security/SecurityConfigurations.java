@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -22,13 +21,16 @@ public class SecurityConfigurations {
 
     private final SecurityFilter securityFilter;
     private final AuthorizationService authorizationService;
+    private final PasswordEncoder passwordEncoder;
 
     public SecurityConfigurations(
             SecurityFilter securityFilter,
-            AuthorizationService authorizationService
+            AuthorizationService authorizationService,
+            PasswordEncoder passwordEncoder
     ) {
         this.securityFilter = securityFilter;
         this.authorizationService = authorizationService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Bean
@@ -81,7 +83,7 @@ public class SecurityConfigurations {
         );
 
         provider.setPasswordEncoder(
-                passwordEncoder()
+                passwordEncoder
         );
 
         return provider;
@@ -95,11 +97,6 @@ public class SecurityConfigurations {
         return config.getAuthenticationManager();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
@@ -127,5 +124,3 @@ public class SecurityConfigurations {
         return source;
     }
 }
-
-

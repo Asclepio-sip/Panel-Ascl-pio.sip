@@ -97,7 +97,7 @@ public class PedidoService {
         );
 
         List<Estoque> estoquesDaLoja =
-                estoqueRepository.findByLoja_IdAndLoja_Empresa_Id(
+                 estoqueRepository.findByLoja_IdAndLoja_Empresa_Id(
                         loja.getId(),
                         loja.getEmpresa().getId()
                 );

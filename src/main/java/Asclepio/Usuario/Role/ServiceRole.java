@@ -33,40 +33,6 @@ public class ServiceRole {
                 permissionRepository.findAll()
         );
 
-        criarRole(
-                empresa,
-                "Gerente",
-                "Gerente da farmácia",
-                permissionRepository.findByNomeIn(List.of(
-
-                        "VerUsuario", "CriarUsuario", "EditarUsuario", "ExcluirUsuario",
-
-                        "VerProduto", "CriarProduto", "EditarProduto", "ExcluirProduto",
-
-                        "VerEstoque", "CriarEstoque", "EditarEstoque", "ExcluirEstoque", "PromocaoEstoque",
-
-                        "VerPedido", "CriarPedido", "EditarPedido", "ExcluirPedido",
-
-                        "VerUsuario", "CriarUsuario", "EditarUsuario", "ExcluirUsuario",
-
-                        "VerCategoria", "CriarCategoria", "EditarCategoria", "ExcluirCategoria",
-
-                        "VerBairro", "CriarBairro", "EditarBairro", "ExcluirBairro",
-
-                        "VerLojaBairro", "CriarLojaBairro", "EditarLojaBairro", "ExcluirLojaBairro",
-
-                        "VerEmpresa", "CriarEmpresa", "EditarEmpresa", "ExcluirEmpresa",
-
-                        "VerPermissoes",
-
-                        "VerProdutoVariacao",
-                        "CriarProdutoVariacao",
-                        "EditarProdutoVariacao",
-                        "ExcluirProdutoVariacao",
-
-                        "VerLoja",    "VerMovimentacaoEstoque"
-                ))
-        );
 
         criarRole(
                 empresa,
