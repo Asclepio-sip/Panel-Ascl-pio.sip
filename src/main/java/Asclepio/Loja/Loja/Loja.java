@@ -2,6 +2,7 @@ package Asclepio.Loja.Loja;
 
 import Asclepio.Empresa.Empresa;
 import Asclepio.Loja.Bairro.Enum.TipoAtendimentoLoja;
+import Asclepio.Loja.FormaPagamento.LojaFormaPagamento;
 import Asclepio.Loja.LojaBairro.LojaBairro;
 import Asclepio.UserLoja.UserLoja;
 import Asclepio.exception.BusinessException;
@@ -55,7 +56,14 @@ public class Loja {
     @OneToMany(mappedBy = "loja", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserLoja> usuarios = new ArrayList<>();
 
-    protected Loja() {
+    @OneToMany(
+            mappedBy = "loja",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<LojaFormaPagamento> formasPagamento = new ArrayList<>();
+
+    public Loja() {
     }
 
     public Loja(Long id, String nomeLoja, String cep, String cnpj, String telefone, String textoDescricao, TipoAtendimentoLoja tipoAtendimento, String imagemUrl, Empresa empresa) {
@@ -68,6 +76,22 @@ public class Loja {
         this.tipoAtendimento = tipoAtendimento;
         this.imagemUrl = imagemUrl;
         this.empresa = empresa;
+    }
+
+    public List<UserLoja> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<UserLoja> usuarios) {
+        this.usuarios = usuarios;
+    }
+
+    public List<LojaFormaPagamento> getFormasPagamento() {
+        return formasPagamento;
+    }
+
+    public void setFormasPagamento(List<LojaFormaPagamento> formasPagamento) {
+        this.formasPagamento = formasPagamento;
     }
 
     public Empresa getEmpresa() {
@@ -180,6 +204,8 @@ public class Loja {
     public void setValorMinimoFreteGratis(BigDecimal valorMinimoFreteGratis) {
         this.valorMinimoFreteGratis = valorMinimoFreteGratis;
     }
+
+
 
     public void setBairros(List<LojaBairro> bairros) {
         this.bairros = bairros;

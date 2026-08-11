@@ -65,7 +65,7 @@ public record MovimentacaoEstoqueResponse(
                 null,
 
                 mov.getUsuario() != null
-                        ? mov.getUsuario().getUsername()
+                        ? mov.getUsuario().getNome()
                         : "Sistema",
 
                 mov.getTipo(),

@@ -1,5 +1,6 @@
 package Asclepio.Usuario.User.Repository;
 
+import Asclepio.UserLoja.UserLoja;
 import Asclepio.Usuario.Role.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -14,7 +15,5 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByIdAndEmpresa_Id(UUID id, Long empresaId);
 
-    Optional<User> findByUsernameAndEmpresa_Id(String username, Long empresaId);
 }

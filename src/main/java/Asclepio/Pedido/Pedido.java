@@ -1,5 +1,6 @@
 package Asclepio.Pedido;
 
+import Asclepio.ClienteEmpresa.ClienteEmpresa;
 import Asclepio.Empresa.Empresa;
 import Asclepio.ItemPedido.ItemPedido;
 import Asclepio.Loja.Loja.Loja;
@@ -87,6 +88,11 @@ public class Pedido {
     @Column(name = "PED_TIPO_ATENDIMENTO", nullable = false, length = 40)
     private TipoAtendimentoPedido tipoAtendimentoPedido;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "PED_CLIENTE_ID", nullable = true)
+    private ClienteEmpresa cliente;
+
+
     public Pedido() {
     }
 
@@ -96,10 +102,7 @@ public class Pedido {
             return;
         }
 
-        this.totalProdutos = itens.stream()
-                .map(ItemPedido::getSubtotal)
-                .filter(subtotal -> subtotal != null)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        this.totalProdutos = itens.stream().map(ItemPedido::getSubtotal).filter(subtotal -> subtotal != null).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void definirStatusInicial() {
@@ -138,6 +141,15 @@ public class Pedido {
         }
 
         this.itens.add(item);
+    }
+
+
+    public ClienteEmpresa getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(ClienteEmpresa cliente) {
+        this.cliente = cliente;
     }
 
     public Long getId() {
@@ -307,4 +319,6 @@ public class Pedido {
     public void setTipoAtendimentoPedido(TipoAtendimentoPedido tipoAtendimentoPedido) {
         this.tipoAtendimentoPedido = tipoAtendimentoPedido;
     }
+
+
 }

@@ -33,40 +33,6 @@ public class ServiceRole {
                 permissionRepository.findAll()
         );
 
-        criarRole(
-                empresa,
-                "Gerente",
-                "Gerente da farmácia",
-                permissionRepository.findByNomeIn(List.of(
-
-                        "VerUsuario", "CriarUsuario", "EditarUsuario", "ExcluirUsuario",
-
-                        "VerProduto", "CriarProduto", "EditarProduto", "ExcluirProduto",
-
-                        "VerEstoque", "CriarEstoque", "EditarEstoque", "ExcluirEstoque", "PromocaoEstoque",
-
-                        "VerPedido", "CriarPedido", "EditarPedido", "ExcluirPedido",
-
-                        "VerUsuario", "CriarUsuario", "EditarUsuario", "ExcluirUsuario",
-
-                        "VerCategoria", "CriarCategoria", "EditarCategoria", "ExcluirCategoria",
-
-                        "VerBairro", "CriarBairro", "EditarBairro", "ExcluirBairro",
-
-                        "VerLojaBairro", "CriarLojaBairro", "EditarLojaBairro", "ExcluirLojaBairro",
-
-                        "VerEmpresa", "CriarEmpresa", "EditarEmpresa", "ExcluirEmpresa",
-
-                        "VerPermissoes",
-
-                        "VerProdutoVariacao",
-                        "CriarProdutoVariacao",
-                        "EditarProdutoVariacao",
-                        "ExcluirProdutoVariacao",
-
-                        "VerLoja",    "VerMovimentacaoEstoque"
-                ))
-        );
 
         criarRole(
                 empresa,
@@ -113,12 +79,6 @@ public class ServiceRole {
                 ))
         );
 
-        criarRole(
-                empresa,
-                "Generico",
-                "Usuário sem permissões",
-                List.of()
-        );
     }
 
     @Transactional
@@ -144,8 +104,11 @@ public class ServiceRole {
                 });
     }
 
-    public List<RoleResponseDTO> listaDeRole() {
-        return roleRepository.findAll()
+
+    public List<RoleResponseDTO> listaDeRole(Long empresaId) {
+
+        return roleRepository
+                .findAllByEmpresa_Id(empresaId)
                 .stream()
                 .map(RoleResponseDTO::from)
                 .toList();

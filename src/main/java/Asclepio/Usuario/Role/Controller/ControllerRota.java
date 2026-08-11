@@ -1,7 +1,9 @@
 package Asclepio.Usuario.Role.Controller;
 
 import Asclepio.Usuario.Role.dto.RoleResponseDTO;
+import Asclepio.config.security.UsuarioAutenticado;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 import Asclepio.Usuario.Role.Controller.api.RoleApi;
 import Asclepio.Usuario.Role.Role;
@@ -21,6 +23,11 @@ public class ControllerRota implements RoleApi {
 
     @Override
     public ResponseEntity<List<RoleResponseDTO>> listaDeRole() {
-        return ResponseEntity.ok(serviceRole.listaDeRole());
+
+        UsuarioAutenticado usuario = (UsuarioAutenticado) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long empresaId = usuario.getEmpresaId();
+
+        return ResponseEntity.ok(serviceRole.listaDeRole(empresaId));
     }
 }

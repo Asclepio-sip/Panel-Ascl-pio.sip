@@ -44,6 +44,19 @@ public class ProdutoService {
         );
     }
 
+    public ProdutoStorageResponse atualizarImagemComStorage(Long id, MultipartFile imagem) {
+
+        if (id == null) {
+            throw new BusinessException("ID do produto é obrigatório");
+        }
+
+        if (imagem == null || imagem.isEmpty()) {
+            throw new BusinessException("Imagem é obrigatória");
+        }
+
+        return produtoStorageClient.atualizarImagem(id, imagem);
+    }
+
 
     public PageResponse<ProdutoStorageResponse> listarTodosStorage(
             ProdutoFiltro filtro,

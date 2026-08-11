@@ -1,5 +1,6 @@
 package Asclepio.Pedido.dto;
 
+import Asclepio.Pedido.Enum.FormaDePagamento;
 import Asclepio.Pedido.Enum.StatusDoPedido;
 import Asclepio.Pedido.Enum.TipoAtendimentoPedido;
 import Asclepio.Pedido.Pedido;
@@ -27,7 +28,8 @@ public record DetalhePedidoDTO(
         BigDecimal valorFrete,
         BigDecimal totalFinal,
         Boolean freteGratis,
-        List<ItemDTO> itens
+        List<ItemDTO> itens,
+        FormaDePagamento formaDePagamento
 
 ) {
 
@@ -61,7 +63,8 @@ public record DetalhePedidoDTO(
                 pedido.getValorFrete(),
                 pedido.getTotalFinal(),
                 pedido.getFreteGratis(),
-                itensDTO
+                itensDTO,
+                pedido.getFormaDePagamento()
         );
     }
 

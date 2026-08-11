@@ -2,6 +2,14 @@ package Asclepio.config.bootstrap;
 
 import Asclepio.Empresa.Empresa;
 import Asclepio.Empresa.EmpresaRepository;
+import Asclepio.Loja.Bairro.Enum.TipoAtendimentoLoja;
+import Asclepio.Loja.FormaPagamento.LojaFormaPagamento;
+import Asclepio.Loja.FormaPagamento.LojaFormaPagamentoRepository;
+import Asclepio.Loja.Loja.Loja;
+import Asclepio.Loja.Loja.Repository.LojaRepository;
+import Asclepio.Pedido.Enum.FormaDePagamento;
+import Asclepio.UserLoja.UserLoja;
+import Asclepio.UserLoja.UserLojaRepository;
 import Asclepio.Usuario.Role.ServiceRole;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +32,9 @@ public class DataInitializer implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
     private final EmpresaRepository empresaRepository;
     private final ServiceRole serviceRole;
-
+    private final LojaRepository lojaRepository;
+    private final UserLojaRepository userLojaRepository;
+    private final LojaFormaPagamentoRepository lojaFormaPagamentoRepository;
 
     public DataInitializer(
             PermissionRepository permissionRepository,
@@ -32,7 +42,10 @@ public class DataInitializer implements CommandLineRunner {
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             EmpresaRepository empresaRepository,
-            ServiceRole serviceRole
+            ServiceRole serviceRole,
+            LojaRepository lojaRepository,
+            UserLojaRepository userLojaRepository,
+            LojaFormaPagamentoRepository lojaFormaPagamentoRepository
     ) {
         this.permissionRepository = permissionRepository;
         this.roleRepository = roleRepository;
@@ -40,6 +53,9 @@ public class DataInitializer implements CommandLineRunner {
         this.passwordEncoder = passwordEncoder;
         this.empresaRepository = empresaRepository;
         this.serviceRole = serviceRole;
+        this.lojaRepository = lojaRepository;
+        this.userLojaRepository = userLojaRepository;
+        this.lojaFormaPagamentoRepository = lojaFormaPagamentoRepository;
     }
 
     @Override
@@ -122,41 +138,89 @@ public class DataInitializer implements CommandLineRunner {
     }
 
 
-
     private void criarAdmin() {
 
-
-        if(userRepository.findByUsername("suporte1").isPresent()){
-            return;
-        }
-        Empresa empresa = new Empresa();
-        empresa.setNome("Empresa Suporte");
-        empresa.setCnpj("00000000000000");
-        empresa.setAtiva(true);
-
-        empresa = empresaRepository.save(empresa);
+        Empresa empresa = empresaRepository
+                .findByNome("Empresa Suporte")
+                .orElseGet(() -> {
+                    Empresa nova = new Empresa();
+                    nova.setNome("Empresa Suporte");
+                    nova.setCnpj("00000000000000");
+                    nova.setAtiva(true);
+                    return empresaRepository.save(nova);
+                });
 
         serviceRole.criarRolesPadrao(empresa);
 
         Role role = serviceRole.buscarSuperAdministrador(empresa);
-        User user = new User();
 
-        user.setUsername("suporte1");
+        String emailSuporte = "suporte@email.com";
 
-        user.setPassword(
-                passwordEncoder.encode("123")
-        );
+        User user = userRepository
+                .findByUsername(emailSuporte)
+                .orElseGet(() -> {
+                    User novo = new User();
+                    novo.setUsername(emailSuporte);       // login = e-mail
+                    novo.setNome("Suporte");               // nome de exibição
+                    novo.setPassword(passwordEncoder.encode("123"));
+                    novo.setEmail(emailSuporte);
+                    novo.setAtivo(true);
+                    return userRepository.save(novo);
+                });
 
-        user.setEmail("suporte@email.com");
-        user.setAtivo(true);
-        user.setEmpresa(empresa);
-        user.setRole(role);
-        userRepository.save(user);
+        Loja loja = lojaRepository
+                .findByNomeLoja("Loja Suporte")
+                .orElseGet(() -> {
+                    Loja nova = new Loja();
+                    nova.setNomeLoja("Loja Suporte");
+                    nova.setEmpresa(empresa);
+                    nova.setCep("00000000");
+                    nova.setCnpj("00000000000000");
+                    nova.setTelefone("0000000000");
+                    nova.setTextoDescricao("Loja de suporte do sistema");
+                    nova.setTipoAtendimento(TipoAtendimentoLoja.RETIRADA);
+                    return lojaRepository.save(nova);
+                });
 
+        criarFormasPagamento(loja);
 
-        System.out.println(
-                "Usuário administrador criado!"
-        );
+        boolean possuiAcesso =
+                userLojaRepository
+                        .existsByUser_IdAndLoja_Id(
+                                user.getId(),
+                                loja.getId()
+                        );
 
+        if (!possuiAcesso) {
+            UserLoja userLoja = new UserLoja();
+            userLoja.setUser(user);
+            userLoja.setLoja(loja);
+            userLoja.setRole(role);
+            userLojaRepository.save(userLoja);
+        }
+
+        System.out.println("Admin suporte criado/validado");
+    }
+
+    private void criarFormasPagamento(Loja loja) {
+
+        for (FormaDePagamento formaPagamento : FormaDePagamento.values()) {
+
+            boolean existe =
+                    lojaFormaPagamentoRepository
+                            .findByLojaAndFormaPagamento(loja, formaPagamento)
+                            .isPresent();
+
+            if (!existe) {
+
+                LojaFormaPagamento novaForma = new LojaFormaPagamento();
+
+                novaForma.setLoja(loja);
+                novaForma.setFormaPagamento(formaPagamento);
+                novaForma.setAtivo(true);
+
+                lojaFormaPagamentoRepository.save(novaForma);
+            }
+        }
     }
 }

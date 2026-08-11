@@ -4,22 +4,86 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="88792f31-c9d2-42fd-9c39-246dd5948413" name="Changes" comment="feat:ajuste na arquitetura">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/CadastroProduto/CadastroProdutoController/CadastroProdutoController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/CadastroProduto/CadastroProdutoController/api/CadastroProdutoApi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/CadastroProduto/CadastroProdutoService/CadastroProdutoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/CadastroProduto/dto/CadastroEstoqueDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/CadastroProduto/dto/CadastroProdutoCompletoDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/CadastroProduto/dto/CadastroProdutoCompletoResponse.java" afterDir="false" />
+    <list default="true" id="88792f31-c9d2-42fd-9c39-246dd5948413" name="Changes" comment="feat:ajuste na na forma de login">
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ClienteEmpresa/ClienteEmpresaSpecification.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ClienteEmpresa/dto/ClienteEmpresaFiltro.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/dto/CriarUsuarioResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/PasswordEncoderConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/PepperedPasswordEncoder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/EstoqueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Estoque/EstoqueService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/Controller/CategoriaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Categoria/Controller/CategoriaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/ClienteEmpresa/ClienteEmpresaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ClienteEmpresa/ClienteEmpresaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/ClienteEmpresa/ClienteEmpresaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ClienteEmpresa/ClienteEmpresaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/ClienteEmpresa/ClienteEmpresaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ClienteEmpresa/ClienteEmpresaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/ClienteEmpresa/Controller/ApiClienteEmpresa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/ClienteEmpresa/Controller/ApiClienteEmpresa.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Empresa/Empresa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Empresa/Empresa.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/ItemPedido/DTO/ItemPedidoDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/Loja.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/Loja.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/LojaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Loja/Loja/LojaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/dto/MovimentacaoEstoqueResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/MovimentacaoEstoque/dto/MovimentacaoEstoqueResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Pedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/Pedido.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/PedidoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/PedidoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/dto/DetalhePedidoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Pedido/dto/DetalhePedidoDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/Controller/TelaProdutos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/Controller/TelaProdutos.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/Controller/api/ProdutoApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/Controller/api/ProdutoApi.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/ProdutoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/ProdutoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/dto/ProdutoStorageResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/dto/ProdutoStorageResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Estoque/EstoqueService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Estoque/EstoqueService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/ProdutoStorageClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Produto/ProdutoStorageClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/UserLoja/UsuarioLojaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/UserLoja/UsuarioLojaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Role/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Role/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Role/ServiceRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/Role/ServiceRole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Controller/API/UserAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Controller/API/UserAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Controller/ControllerUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Controller/ControllerUsuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Repository/UserSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/Repository/UserSpecification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/UserValidationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/UserValidationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/dto/EscolherLojaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/dto/EscolherLojaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/dto/LoginResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/dto/LoginResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/dto/RegisterDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/dto/RegisterDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/dto/RequestCriarContaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/dto/RequestCriarContaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/dto/ResponseListaDeUserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/Usuario/User/dto/ResponseListaDeUserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/config/bootstrap/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/config/bootstrap/DataInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/RestTemplateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/RestTemplateConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/SecurityConfigurations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/SecurityConfigurations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/SecurityFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/SecurityFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/TokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Asclepio/config/security/TokenService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Categoria/Controller/CategoriaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Categoria/Controller/CategoriaController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Empresa/Empresa.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Empresa/Empresa.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/ItemPedido/DTO/ItemPedidoDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Loja/Loja/Loja.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Loja/Loja/Loja.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Loja/Loja/LojaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Loja/Loja/LojaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/MovimentacaoEstoque/dto/MovimentacaoEstoqueResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/MovimentacaoEstoque/dto/MovimentacaoEstoqueResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/Controller/Pedido.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/Controller/Pedido.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/DetalhePedidoDTO$ItemDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/DetalhePedidoDTO$ItemDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/DetalhePedidoDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Pedido/dto/DetalhePedidoDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/Controller/TelaProdutos.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/Controller/TelaProdutos.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/Controller/api/ProdutoApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/Controller/api/ProdutoApi.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/dto/ProdutoStorageResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/dto/ProdutoStorageResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Produto/ProdutoStorageClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/Role/Controller/ControllerRota.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/Role/Controller/ControllerRota.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/Role/Role$RoleBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/Role/Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/Role/Role.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/Role/RoleRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/Role/RoleRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/Role/ServiceRole.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/Role/ServiceRole.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/Controller/API/UserAPI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/Controller/API/UserAPI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/Controller/ControllerUsuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/Controller/ControllerUsuario.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/Repository/UserSpecification.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/Repository/UserSpecification.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/UserValidationService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/UserValidationService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/dto/LoginResponseDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/dto/LoginResponseDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/dto/RegisterDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/dto/RegisterDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/dto/RequestCriarContaDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/dto/RequestCriarContaDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/dto/ResponseListaDeUserDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/Usuario/User/dto/ResponseListaDeUserDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/config/bootstrap/DataInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/config/bootstrap/DataInitializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/config/security/RestTemplateConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/config/security/RestTemplateConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/config/security/SecurityConfigurations.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/config/security/SecurityConfigurations.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/config/security/SecurityFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/config/security/SecurityFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Asclepio/config/security/TokenService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Asclepio/config/security/TokenService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +132,7 @@
     </option>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -97,7 +161,7 @@
     &quot;git-widget-placeholder&quot;: &quot;feat/movimentacao__estoque&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/asclepio-storage-service&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -106,7 +170,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -132,6 +196,7 @@
         <env name="DB_URL" value="jdbc:postgresql://ep-wild-fog-ach34lki-pooler.sa-east-1.aws.neon.tech/neondb?&amp;sslmode=require&amp;channelBinding=require" />
         <env name="DB_USERNAME" value="neondb_owner" />
         <env name="STORAGE_SERVICE_URL" value="http://localhost:8081" />
+        <env name="PASSWORD_PEPPER" value="662e20a1-5f9d-4bee-99a6-7ac8c6479252" />
       </envs>
       <option name="MAIN_CLASS_NAME" value="Asclepio.Asclepio" />
       <module name="Asclepio-painel" />
@@ -180,8 +245,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-63390994e64e-intellij.indexing.shared.core-IU-262.8665.258" />
-        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.8665.258" />
+        <option value="bundled-jdk-30f59d01ecdd-63390994e64e-intellij.indexing.shared.core-IU-262.8665.337" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.8665.337" />
       </set>
     </attachedChunks>
   </component>
@@ -218,7 +283,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat:ajuste nos dtos" />
     <MESSAGE value="feat:ajuste na arquitetura" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat:ajuste na arquitetura" />
+    <MESSAGE value="feat:ajuste na na forma de login" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat:ajuste na na forma de login" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

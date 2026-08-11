@@ -1,18 +1,27 @@
 package Asclepio.Loja.Loja;
 
 import Asclepio.Empresa.Empresa;
+import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Empresa.EmpresaRepository;
+import Asclepio.Loja.FormaPagamento.LojaFormaPagamento;
+import Asclepio.Loja.FormaPagamento.LojaFormaPagamentoRepository;
 import Asclepio.Loja.Loja.Repository.LojaRepository;
 import Asclepio.Loja.Loja.Repository.LojaSpecification;
 import Asclepio.Loja.Loja.dto.CreateLojaRequest;
 import Asclepio.Loja.Loja.dto.LojaFiltroDTO;
 import Asclepio.Loja.Loja.dto.LojaResponse;
+import Asclepio.Pedido.Enum.FormaDePagamento;
+import Asclepio.UserLoja.UserLoja;
+import Asclepio.UserLoja.UserLojaRepository;
+import Asclepio.Usuario.Role.Role;
+import Asclepio.Usuario.Role.ServiceRole;
 import Asclepio.Usuario.User.User;
 import Asclepio.config.security.UsuarioAutenticado;
 import Asclepio.exception.BusinessException;
 import Asclepio.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +30,25 @@ public class LojaService {
 
     private final LojaRepository repository;
     private final EmpresaRepository empresaRepository;
+    private final LojaFormaPagamentoRepository formaPagamentoRepository;
+    private final EmpresaContext empresaContext;
+    private final UserLojaRepository userLojaRepository;
+    private final ServiceRole serviceRole;
 
     public LojaService(
             LojaRepository repository,
-            EmpresaRepository empresaRepository
+            EmpresaRepository empresaRepository,
+            LojaFormaPagamentoRepository formaPagamentoRepository,
+            EmpresaContext empresaContext,
+            UserLojaRepository userLojaRepository,
+            ServiceRole serviceRole
     ) {
         this.repository = repository;
         this.empresaRepository = empresaRepository;
+        this.formaPagamentoRepository = formaPagamentoRepository;
+        this.empresaContext = empresaContext;
+        this.userLojaRepository = userLojaRepository;
+        this.serviceRole = serviceRole;
     }
 
     public LojaResponse criar(CreateLojaRequest request) {
@@ -52,7 +73,70 @@ public class LojaService {
 
         loja.configurarFreteGratis(request.valorMinimoFreteGratis());
 
-        return LojaResponse.fromEntity(repository.save(loja));
+        Loja lojaSalva = repository.save(loja);
+
+        criarFormasPagamentoPadrao(lojaSalva);
+
+        vincularCriadorComoGerente(lojaSalva, empresa);
+
+        return LojaResponse.fromEntity(lojaSalva);
+    }
+
+    private void vincularCriadorComoGerente(Loja loja, Empresa empresa) {
+
+        User usuarioLogado = getUsuarioLogado();
+
+        if (usuarioLogado == null) {
+            return; // segurança: se por algum motivo não achar o usuário logado, não quebra a criação da loja
+        }
+
+        boolean jaTemAcesso = userLojaRepository
+                .existsByUser_IdAndLoja_Id(usuarioLogado.getId(), loja.getId());
+
+        if (jaTemAcesso) {
+            return;
+        }
+
+        Role roleGerente = serviceRole.buscarSuperAdministrador(empresa);
+
+        UserLoja userLoja = new UserLoja();
+        userLoja.setUser(usuarioLogado);
+        userLoja.setLoja(loja);
+        userLoja.setRole(roleGerente);
+
+        userLojaRepository.save(userLoja);
+    }
+
+    private User getUsuarioLogado() {
+
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof UsuarioAutenticado usuarioAutenticado) {
+            return usuarioAutenticado.getUser();
+        }
+
+        return null;
+    }
+    private void criarFormasPagamentoPadrao(Loja loja) {
+
+        for (FormaDePagamento forma : FormaDePagamento.values()) {
+
+            LojaFormaPagamento item = new LojaFormaPagamento();
+
+            item.setLoja(loja);
+            item.setFormaPagamento(forma);
+            item.setAtivo(true);
+
+            formaPagamentoRepository.save(item);
+        }
     }
 
     public Page<LojaResponse> listar(LojaFiltroDTO filtro, Pageable pageable) {
@@ -170,23 +254,11 @@ public class LojaService {
 
     private Empresa getEmpresaAtual() {
 
-        UsuarioAutenticado autenticado =
-                (UsuarioAutenticado) SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getPrincipal();
+        Long empresaId = empresaContext.getEmpresaId();
 
-        User usuario = autenticado.getUser();
-
-
-        if (usuario.getEmpresa() == null) {
-            throw new ResourceNotFoundException(
-                    "Usuário não possui empresa vinculada"
-            );
-        }
-
-
-        return usuario.getEmpresa();
+        return empresaRepository.findById(empresaId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Empresa não encontrada"));
     }
 
     private String tratarTexto(String valor) {
