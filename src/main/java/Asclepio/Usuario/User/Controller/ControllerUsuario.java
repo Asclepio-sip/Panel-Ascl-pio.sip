@@ -1,12 +1,9 @@
 package Asclepio.Usuario.User.Controller;
 
 import Asclepio.ClienteEmpresa.ClienteEmpresa;
-import Asclepio.UserLoja.UserLoja;
 import Asclepio.UserLoja.UserLojaRepository;
-import Asclepio.Usuario.StorageWakeUpService;
 import Asclepio.Usuario.User.User;
 import Asclepio.Usuario.User.dto.*;
-import Asclepio.exception.BusinessException;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import Asclepio.Usuario.User.Controller.API.UserAPI;
@@ -23,7 +19,6 @@ import Asclepio.config.security.UsuarioAutenticado;
 import Asclepio.Usuario.User.UserService;
 import Asclepio.config.security.TokenService;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,14 +27,12 @@ public class ControllerUsuario implements UserAPI {
     private final UserService userService;
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
-    private final StorageWakeUpService storageWakeUpService;
     private final UserLojaRepository userLojaRepository;
 
-    public ControllerUsuario(UserService userService, TokenService tokenService, AuthenticationManager authenticationManager, StorageWakeUpService storageWakeUpService, UserLojaRepository userLojaRepository) {
+    public ControllerUsuario(UserService userService, TokenService tokenService, AuthenticationManager authenticationManager, UserLojaRepository userLojaRepository) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
-        this.storageWakeUpService = storageWakeUpService;
         this.userLojaRepository = userLojaRepository;
     }
 

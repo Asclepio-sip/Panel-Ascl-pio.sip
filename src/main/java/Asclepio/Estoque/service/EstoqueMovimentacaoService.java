@@ -4,31 +4,28 @@ import Asclepio.Estoque.Estoque;
 import Asclepio.MovimentacaoEstoque.Enum.TipoMovimentacaoEstoque;
 import Asclepio.MovimentacaoEstoque.MovimentacaoEstoque;
 import Asclepio.MovimentacaoEstoque.Repository.MovimentacaoEstoqueRepository;
-import Asclepio.ProdutoVariacao.ProdutoVariacaoStorageClient;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoFiltro;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
+import Asclepio.ProdutoVariacao.ProdutoVariacaoService;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponse;
 import Asclepio.Usuario.User.User;
-import Asclepio.exception.ResourceNotFoundException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 import Asclepio.config.security.UsuarioAutenticado;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 
 @Service
 public class EstoqueMovimentacaoService {
 
     private final MovimentacaoEstoqueRepository repository;
-    private final ProdutoVariacaoStorageClient produtoVariacaoClient;
+    private final ProdutoVariacaoService produtoVariacaoService;
 
     public EstoqueMovimentacaoService(
             MovimentacaoEstoqueRepository repository,
-            ProdutoVariacaoStorageClient produtoVariacaoClient
+            ProdutoVariacaoService produtoVariacaoService
     ) {
         this.repository = repository;
-        this.produtoVariacaoClient = produtoVariacaoClient;
+        this.produtoVariacaoService = produtoVariacaoService;
     }
 
     public void registrarCriacao(Estoque estoque) {
@@ -160,24 +157,8 @@ public class EstoqueMovimentacaoService {
         repository.save(movimentacao);
     }
 
-    private ProdutoVariacaoResponseDTO buscarVariacao(Long variacaoId) {
-
-        ProdutoVariacaoFiltro filtro = new ProdutoVariacaoFiltro(
-                variacaoId,
-                null,
-                null,
-                null,
-                null,
-                true
-        );
-
-        var page = produtoVariacaoClient.listar(filtro, PageRequest.of(0, 1));
-
-        if (page == null || page.content() == null || page.content().isEmpty()) {
-            throw new ResourceNotFoundException("Variação não encontrada com id: " + variacaoId);
-        }
-
-        return page.content().get(0);
+    private ProdutoVariacaoResponse buscarVariacao(Long variacaoId) {
+        return produtoVariacaoService.buscarPorIdDTO(variacaoId);
     }
 
     private User usuarioLogado() {

@@ -15,7 +15,6 @@ import Asclepio.Usuario.Permission.Permission;
 import Asclepio.Usuario.Permission.PermissionRepository;
 import Asclepio.Usuario.Role.Role;
 import Asclepio.Usuario.Role.RoleRepository;
-import Asclepio.Usuario.StorageWakeUpService;
 import Asclepio.Usuario.User.Repository.UserRepository;
 import Asclepio.Usuario.User.Repository.UserSpecification;
 import Asclepio.Usuario.User.dto.*;
@@ -53,12 +52,11 @@ public class UserService {
     private final TokenService tokenService;
 
     private final AuthenticationManager authenticationManager;
-    private final StorageWakeUpService storageWakeUpService;
 
     private final LojaFormaPagamentoRepository lojaFormaPagamentoRepository;
 
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PermissionRepository permissionRepository, EmpresaService empresaService, UserValidationService validationService, ServiceRole serviceRole, EmpresaContext empresaContext, LojaRepository lojaRepository, UserLojaRepository userLojaRepository, TokenService tokenService, AuthenticationManager authenticationManager, StorageWakeUpService storageWakeUpService,LojaFormaPagamentoRepository lojaFormaPagamentoRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PermissionRepository permissionRepository, EmpresaService empresaService, UserValidationService validationService, ServiceRole serviceRole, EmpresaContext empresaContext, LojaRepository lojaRepository, UserLojaRepository userLojaRepository, TokenService tokenService, AuthenticationManager authenticationManager, LojaFormaPagamentoRepository lojaFormaPagamentoRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -71,7 +69,7 @@ public class UserService {
         this.userLojaRepository = userLojaRepository;
         this.tokenService = tokenService;
         this.authenticationManager = authenticationManager;
-        this.storageWakeUpService = storageWakeUpService;
+
         this.lojaFormaPagamentoRepository = lojaFormaPagamentoRepository;
     }
 
@@ -305,7 +303,11 @@ public class UserService {
         loja.setNomeLoja(dto.nomeLoja().trim());
         loja.setEmpresa(empresa);
 
-        loja.setCep(dto.cep().trim());
+        if(dto.cep() != null && !dto.cep().isBlank()) {
+            loja.setCep(dto.cep());
+        } else {
+            loja.setCep(null);
+        }
 
         if (dto.cnpj() != null && !dto.cnpj().isBlank()) {
             loja.setCnpj(dto.cnpj().trim());
@@ -429,7 +431,7 @@ public class UserService {
                     false
             );
 
-            storageWakeUpService.acordarStorage();
+
 
             return new LoginResponseDTO(token, false, List.of(), userLoja.getLoja().getNomeLoja());
         }

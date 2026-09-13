@@ -5,7 +5,7 @@ import Asclepio.Categoria.dto.CategoriaPageResponse;
 import Asclepio.Categoria.dto.CategoriaResponse;
 import Asclepio.Categoria.dto.CriarCategoria;
 import Asclepio.Empresa.EmpresaContext;
-import Asclepio.Produto.dto.ProdutoFiltro;
+
 import Asclepio.exception.BusinessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;

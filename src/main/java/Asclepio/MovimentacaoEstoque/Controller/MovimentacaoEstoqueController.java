@@ -7,9 +7,8 @@ import Asclepio.Loja.Loja.LojaService;
 import Asclepio.Loja.Loja.dto.LojaFiltroDTO;
 import Asclepio.Loja.Loja.dto.LojaResponse;
 import Asclepio.Produto.ProdutoService;
-import Asclepio.Produto.dto.PageResponse;
 import Asclepio.Produto.dto.ProdutoFiltro;
-import Asclepio.Produto.dto.ProdutoStorageResponse;
+import Asclepio.Produto.dto.ProdutoResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +26,12 @@ public class MovimentacaoEstoqueController implements MovimentacaoEstoqueApi {
     private final EstoqueQueryService estoqueQueryService;
     private final ProdutoService produtoService;
 
-
-
-    public MovimentacaoEstoqueController(MovimentacaoEstoqueService service,LojaService lojaService,EstoqueQueryService estoqueQueryService,ProdutoService produtoService) {
+    public MovimentacaoEstoqueController(
+            MovimentacaoEstoqueService service,
+            LojaService lojaService,
+            EstoqueQueryService estoqueQueryService,
+            ProdutoService produtoService
+    ) {
         this.service = service;
         this.lojaService = lojaService;
         this.estoqueQueryService = estoqueQueryService;
@@ -46,16 +48,13 @@ public class MovimentacaoEstoqueController implements MovimentacaoEstoqueApi {
         return ResponseEntity.ok(lojaService.listar(filtro, pageable));
     }
 
-
     @Override
     public ResponseEntity<Page<ListaDeEstoqueDasLojasResponse>> lista(EstoqueFiltro filtro, Pageable pageable) {
         return ResponseEntity.ok(estoqueQueryService.listarTodos(filtro, pageable));
     }
 
     @Override
-    public ResponseEntity<PageResponse<ProdutoStorageResponse>> listar(ProdutoFiltro filtro, Pageable pageable) {
-        return ResponseEntity.ok(produtoService.listarTodosStorage(filtro, pageable));
+    public ResponseEntity<Page<ProdutoResponse>> listar(ProdutoFiltro filtro, Pageable pageable) {
+        return ResponseEntity.ok(produtoService.listarTodos(filtro, pageable));
     }
-
-
 }

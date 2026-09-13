@@ -6,7 +6,7 @@ import Asclepio.ItemPedido.ItemPedido;
 import Asclepio.Loja.Loja.Loja;
 import Asclepio.Pedido.Enum.FormaDePagamento;
 import Asclepio.Pedido.Pedido;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponse;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,7 +22,6 @@ public record PedidoBalcaoAddDTO(
         String telefone,
         UUID clienteId,
         List<ItemPedidoAddDTO> itens,
-
         FormaDePagamento formaDePagamento
 
 ) {
@@ -30,18 +29,16 @@ public record PedidoBalcaoAddDTO(
     public Pedido toEntity(
             Loja loja,
             List<Estoque> estoquesDaLoja,
-            Map<Long, ProdutoVariacaoResponseDTO> variacoesPorId
+            Map<Long, ProdutoVariacaoResponse> variacoesPorId
     ) {
 
         Pedido pedido = new Pedido();
 
         pedido.setLoja(loja);
-
         pedido.setNomeCliente(nomeCliente);
         pedido.setEmail(email);
         pedido.setTelefone(telefone);
         pedido.setFormaDePagamento(formaDePagamento);
-
         pedido.setCriadoEm(LocalDateTime.now());
 
         List<ItemPedido> itensEntity = new ArrayList<>(
@@ -55,16 +52,13 @@ public record PedidoBalcaoAddDTO(
                                             new RuntimeException("Variação não encontrada no estoque")
                                     );
 
-                            ProdutoVariacaoResponseDTO variacao =
-                                    variacoesPorId.get(itemDto.variacaoId());
+                            ProdutoVariacaoResponse variacao = variacoesPorId.get(itemDto.variacaoId());
 
                             if (variacao == null) {
                                 throw new RuntimeException("Dados da variação não encontrados");
                             }
 
-
-                            System.out.println("Imagem: " + variacao.imagemUrl());
-
+                            System.out.println("Imagem: " + estoque.getImagemUrl());
 
                             return new ItemPedido(
                                     null,
@@ -72,7 +66,7 @@ public record PedidoBalcaoAddDTO(
                                     variacao.produtoId(),
                                     variacao.nomeProduto(),
                                     variacao.nomeVariacao(),
-                                    variacao.imagemUrl(),
+                                    estoque.getImagemUrl(),
                                     null,
                                     estoque.getPrecoVenda(),
                                     itemDto.quantidade(),

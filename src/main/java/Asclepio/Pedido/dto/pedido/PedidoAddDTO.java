@@ -7,7 +7,7 @@ import Asclepio.Loja.Loja.Loja;
 import Asclepio.Pedido.Enum.FormaDePagamento;
 import Asclepio.Pedido.Enum.TipoAtendimentoPedido;
 import Asclepio.Pedido.Pedido;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponse;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public record PedidoAddDTO(
     public Pedido toEntity(
             Loja loja,
             List<Estoque> estoquesDaLoja,
-            Map<Long, ProdutoVariacaoResponseDTO> variacoesPorId
+            Map<Long, ProdutoVariacaoResponse> variacoesPorId
     ) {
 
         Pedido pedido = new Pedido();
@@ -67,8 +67,7 @@ public record PedidoAddDTO(
                                             new RuntimeException("Variação não encontrada no estoque")
                                     );
 
-                            ProdutoVariacaoResponseDTO variacao =
-                                    variacoesPorId.get(itemDto.variacaoId());
+                            ProdutoVariacaoResponse variacao = variacoesPorId.get(itemDto.variacaoId());
 
                             if (variacao == null) {
                                 throw new RuntimeException("Dados da variação não encontrados");
@@ -80,7 +79,7 @@ public record PedidoAddDTO(
                                     variacao.produtoId(),
                                     variacao.nomeProduto(),
                                     variacao.nomeVariacao(),
-                                    null,
+                                    estoque.getImagemUrl(),
                                     null,
                                     estoque.getPrecoVenda(),
                                     itemDto.quantidade(),

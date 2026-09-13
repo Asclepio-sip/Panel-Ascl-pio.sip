@@ -4,9 +4,8 @@ import Asclepio.Estoque.dto.EstoqueFiltro;
 import Asclepio.Estoque.dto.ListaDeEstoqueDasLojasResponse;
 import Asclepio.Loja.Loja.dto.LojaFiltroDTO;
 import Asclepio.Loja.Loja.dto.LojaResponse;
-import Asclepio.Produto.dto.PageResponse;
 import Asclepio.Produto.dto.ProdutoFiltro;
-import Asclepio.Produto.dto.ProdutoStorageResponse;
+import Asclepio.Produto.dto.ProdutoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -101,7 +100,6 @@ public interface MovimentacaoEstoqueApi {
     ResponseEntity<Page<LojaResponse>> listar(@ParameterObject LojaFiltroDTO filtro, @ParameterObject Pageable pageable);
 
 
-
     @Operation(
             summary = "Relatório de estoque das lojas",
             description = """
@@ -117,12 +115,12 @@ public interface MovimentacaoEstoqueApi {
                 - semEstoque: true para listar apenas itens com quantidade 0
 
                 Exemplos:
-                /estoques/relatorio?page=0&size=10
-                /estoques/relatorio?categoriaId=1&page=0&size=10
-                /estoques/relatorio?nomeCategoria=medicamento&page=0&size=10
-                /estoques/relatorio?lojaId=2&categoriaId=1&page=0&size=10
-                /estoques/relatorio?nomeProduto=dipirona&semEstoque=true&page=0&size=10
-                /estoques/relatorio?page=0&size=10&sort=precoVenda,asc
+                /movimentacoes-estoque/relatorio?page=0&size=10
+                /movimentacoes-estoque/relatorio?categoriaId=1&page=0&size=10
+                /movimentacoes-estoque/relatorio?nomeCategoria=medicamento&page=0&size=10
+                /movimentacoes-estoque/relatorio?lojaId=2&categoriaId=1&page=0&size=10
+                /movimentacoes-estoque/relatorio?nomeProduto=dipirona&semEstoque=true&page=0&size=10
+                /movimentacoes-estoque/relatorio?page=0&size=10&sort=precoVenda,asc
                 """
     )
     @GetMapping("/relatorio")
@@ -144,26 +142,24 @@ public interface MovimentacaoEstoqueApi {
             Exemplos:
             
             Listar todos:
-            /produtos?page=0&size=10
+            /movimentacoes-estoque/produtos?page=0&size=10
             
             Buscar por nome:
-            /produtos?nome=dipirona&page=0&size=10
+            /movimentacoes-estoque/produtos?nome=dipirona&page=0&size=10
             
             Buscar por categoria:
-            /produtos?categoriaId=1&page=0&size=10
+            /movimentacoes-estoque/produtos?categoriaId=1&page=0&size=10
             
             Buscar por nome da categoria:
-            /produtos?nomeCategoria=medicamento&page=0&size=10
+            /movimentacoes-estoque/produtos?nomeCategoria=medicamento&page=0&size=10
             
             Buscar por nome e categoria:
-            /produtos?nome=dipirona&categoriaId=1&page=0&size=10
+            /movimentacoes-estoque/produtos?nome=dipirona&categoriaId=1&page=0&size=10
             
             Ordenar por nome:
-            /produtos?page=0&size=10&sort=name,asc
+            /movimentacoes-estoque/produtos?page=0&size=10&sort=nome,asc
             """)
     @GetMapping("/produtos")
     @PreAuthorize("hasAuthority('VerMovimentacaoEstoque')")
-    ResponseEntity<PageResponse<ProdutoStorageResponse>> listar(@ParameterObject ProdutoFiltro filtro, @ParameterObject Pageable pageable);
-
-
+    ResponseEntity<Page<ProdutoResponse>> listar(@ParameterObject ProdutoFiltro filtro, @ParameterObject Pageable pageable);
 }

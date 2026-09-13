@@ -24,10 +24,10 @@ public class Loja {
     @Column(name = "LOJ_NOME", nullable = false, length = 150)
     private String nomeLoja;
 
-    @Column(name = "LOJ_CEP", nullable = false, length = 9)
+    @Column(name = "LOJ_CEP", nullable = true, length = 9)
     private String cep;
 
-    @Column(name = "LOJ_CNPJ", length = 18)
+    @Column(name = "LOJ_CNPJ", nullable = true, length = 18)
     private String cnpj;
 
     @Column(name = "LOJ_TELEFONE", nullable = false, length = 11)

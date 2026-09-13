@@ -28,7 +28,7 @@ public record ProdutoVariacaoResponseDTO(
 
                 p.getProduto().getId(),
 
-                p.getProduto().getName(),
+                p.getProduto().getNome(),
 
                 p.getProduto().getImagemUrl(),
 

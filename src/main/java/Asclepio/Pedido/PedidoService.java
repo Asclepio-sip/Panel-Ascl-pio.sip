@@ -2,7 +2,6 @@ package Asclepio.Pedido;
 
 import Asclepio.ClienteEmpresa.ClienteEmpresa;
 import Asclepio.ClienteEmpresa.ClienteEmpresaRepository;
-import Asclepio.ClienteEmpresa.ClienteEmpresaService;
 import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Estoque.Estoque;
 import Asclepio.Estoque.Repository.EstoqueRepository;
@@ -19,8 +18,8 @@ import Asclepio.Pedido.dto.pedido.PedidoAddDTO;
 import Asclepio.Pedido.dto.PedidoCriadoResponseDTO;
 import Asclepio.Pedido.dto.PedidoStatusResponseDTO;
 import Asclepio.Pedido.dto.pedido.PedidoBalcaoAddDTO;
-import Asclepio.ProdutoVariacao.ProdutoVariacaoStorageClient;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
+import Asclepio.ProdutoVariacao.ProdutoVariacaoService;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponse;
 import Asclepio.exception.BusinessException;
 import Asclepio.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -47,7 +46,7 @@ public class PedidoService {
 
     private final EmpresaContext empresaContext;
 
-    private final ProdutoVariacaoStorageClient produtoVariacaoClient;
+    private final ProdutoVariacaoService produtoVariacaoService;
 
     private final ClienteEmpresaRepository clienteEmpresaRepository;
 
@@ -63,7 +62,7 @@ public class PedidoService {
             PedidoEstoqueService estoqueService,
             PedidoCodigoService codigoService,
             PedidoQueryService queryService,
-            ProdutoVariacaoStorageClient produtoVariacaoClient,
+            ProdutoVariacaoService produtoVariacaoService,
             EmpresaContext empresaContext,
             ClienteEmpresaRepository clienteEmpresaRepository,
             LojaFormaPagamentoService formaPagamentoService
@@ -77,9 +76,9 @@ public class PedidoService {
         this.estoqueService = estoqueService;
         this.codigoService = codigoService;
         this.queryService = queryService;
-        this.produtoVariacaoClient = produtoVariacaoClient;
+        this.produtoVariacaoService = produtoVariacaoService;
         this.empresaContext = empresaContext;
-        this.clienteEmpresaRepository =clienteEmpresaRepository;
+        this.clienteEmpresaRepository = clienteEmpresaRepository;
         this.formaPagamentoService = formaPagamentoService;
     }
 
@@ -97,18 +96,18 @@ public class PedidoService {
         );
 
         List<Estoque> estoquesDaLoja =
-                 estoqueRepository.findByLoja_IdAndLoja_Empresa_Id(
+                estoqueRepository.findByLoja_IdAndLoja_Empresa_Id(
                         loja.getId(),
                         loja.getEmpresa().getId()
                 );
 
         validator.validarEstoqueDosItens(dto, estoquesDaLoja);
 
-        Map<Long, ProdutoVariacaoResponseDTO> variacoesPorId = dto.itens()
+        Map<Long, ProdutoVariacaoResponse> variacoesPorId = dto.itens()
                 .stream()
                 .collect(Collectors.toMap(
                         ItemPedidoAddDTO::variacaoId,
-                        item -> produtoVariacaoClient.buscarPorId(item.variacaoId())
+                        item -> produtoVariacaoService.buscarPorIdDTO(item.variacaoId())
                 ));
 
         Pedido pedido = dto.toEntity(loja, estoquesDaLoja, variacoesPorId);
@@ -139,7 +138,7 @@ public class PedidoService {
     }
 
     @Transactional
-    public PedidoCriadoResponseDTO criarPedidoBalcao(PedidoBalcaoAddDTO dto){
+    public PedidoCriadoResponseDTO criarPedidoBalcao(PedidoBalcaoAddDTO dto) {
 
         validator.validarCriacaoBalcao(dto);
 
@@ -160,11 +159,11 @@ public class PedidoService {
 
         validator.validarEstoqueDosItensBalcao(dto, estoquesDaLoja);
 
-        Map<Long, ProdutoVariacaoResponseDTO> variacoesPorId = dto.itens()
+        Map<Long, ProdutoVariacaoResponse> variacoesPorId = dto.itens()
                 .stream()
                 .collect(Collectors.toMap(
                         ItemPedidoAddDTO::variacaoId,
-                        item -> produtoVariacaoClient.buscarPorId(item.variacaoId())
+                        item -> produtoVariacaoService.buscarPorIdDTO(item.variacaoId())
                 ));
 
         Pedido pedido = dto.toEntity(loja, estoquesDaLoja, variacoesPorId);

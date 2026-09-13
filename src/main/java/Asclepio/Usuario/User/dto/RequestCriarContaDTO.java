@@ -27,7 +27,6 @@ public record RequestCriarContaDTO(
         @NotBlank
         String nomeLoja,
 
-        @NotBlank
         String cep,
 
         String cnpj,

@@ -1,6 +1,7 @@
 package Asclepio.Produto.dto;
 
-import Asclepio.Produto.Product;
+
+import Asclepio.Produto.Produto;
 
 public record ProductoResponseDto (
         Long id,
@@ -9,11 +10,11 @@ public record ProductoResponseDto (
         String categoriaNome
 ){
 
-    public static ProductoResponseDto fromEntity(Product p) {
+    public static ProductoResponseDto fromEntity(Produto p) {
 
         return new ProductoResponseDto(
                 p.getId(),
-                p.getName(),
+                p.getNome(),
                 p.getImagemUrl(),
                 p.getCategoria() != null
                         ? p.getCategoria().getNomeCategoria()

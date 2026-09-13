@@ -8,13 +8,11 @@ import Asclepio.Estoque.service.EstoqueMovimentacaoService;
 import Asclepio.Estoque.service.EstoqueQueryService;
 import Asclepio.Estoque.service.EstoqueValidator;
 import Asclepio.Loja.Loja.Repository.LojaRepository;
-import Asclepio.Produto.ProdutoStorageClient;
-import Asclepio.Produto.dto.ProdutoStorageResponse;
-import Asclepio.ProdutoVariacao.ProdutoVariacaoStorageClient;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoFiltro;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
+import Asclepio.Produto.Produto;
+import Asclepio.Produto.ProdutoService;
+import Asclepio.ProdutoVariacao.ProdutoVariacaoService;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponse;
 import Asclepio.exception.ResourceNotFoundException;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,18 +27,27 @@ public class EstoqueService {
     private final EstoqueValidator validator;
     private final EstoqueQueryService queryService;
     private final EstoqueMovimentacaoService movimentacaoService;
-    private final ProdutoVariacaoStorageClient produtoVariacaoClient;
-    private final ProdutoStorageClient produtoStorageClient;
+    private final ProdutoVariacaoService produtoVariacaoService;
+    private final ProdutoService produtoService;
     private final EmpresaContext empresaContext;
 
-    public EstoqueService(EstoqueRepository estoqueRepository, LojaRepository lojaRepository, EstoqueValidator validator, EstoqueQueryService queryService, EstoqueMovimentacaoService movimentacaoService, ProdutoVariacaoStorageClient produtoVariacaoClient, ProdutoStorageClient produtoStorageClient, EmpresaContext empresaContext) {
+    public EstoqueService(
+            EstoqueRepository estoqueRepository,
+            LojaRepository lojaRepository,
+            EstoqueValidator validator,
+            EstoqueQueryService queryService,
+            EstoqueMovimentacaoService movimentacaoService,
+            ProdutoVariacaoService produtoVariacaoService,
+            ProdutoService produtoService,
+            EmpresaContext empresaContext
+    ) {
         this.estoqueRepository = estoqueRepository;
         this.lojaRepository = lojaRepository;
         this.validator = validator;
         this.queryService = queryService;
         this.movimentacaoService = movimentacaoService;
-        this.produtoVariacaoClient = produtoVariacaoClient;
-        this.produtoStorageClient = produtoStorageClient;
+        this.produtoVariacaoService = produtoVariacaoService;
+        this.produtoService = produtoService;
         this.empresaContext = empresaContext;
     }
 
@@ -51,26 +58,29 @@ public class EstoqueService {
 
         Long empresaId = empresaContext.getEmpresaId();
 
-        var lojaOptional = dto.lojaID() != null ? lojaRepository.findByIdAndEmpresa_Id(dto.lojaID(), empresaId) : lojaRepository.findByNomeLojaIgnoreCaseAndEmpresa_Id(dto.nomeLoja(), empresaId);
+        var lojaOptional = dto.lojaID() != null
+                ? lojaRepository.findByIdAndEmpresa_Id(dto.lojaID(), empresaId)
+                : lojaRepository.findByNomeLojaIgnoreCaseAndEmpresa_Id(dto.nomeLoja(), empresaId);
 
         var lojaFinal = lojaOptional.orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
 
-        ProdutoVariacaoFiltro filtro = new ProdutoVariacaoFiltro(dto.variacaoId(), null, null, null, null, true);
-
-        var page = produtoVariacaoClient.listar(filtro, PageRequest.of(0, 1));
-
-        if (page == null || page.content() == null || page.content().isEmpty()) {
-            throw new ResourceNotFoundException("Variação não encontrada");
-        }
-
-        ProdutoVariacaoResponseDTO variacaoFinal = page.content().get(0);
+        // Busca direta da variação pelo ID via Service local
+        ProdutoVariacaoResponse variacaoFinal = produtoVariacaoService.buscarPorIdDTO(dto.variacaoId());
 
         validator.validarEstoqueDuplicado(lojaFinal.getId(), variacaoFinal.id());
 
-        ProdutoStorageResponse produto = produtoStorageClient.buscarPorId(variacaoFinal.produtoId());
+        // Busca direta do produto pelo ID via Service local
+        Produto produto = produtoService.buscarPorId(variacaoFinal.produtoId());
 
-
-        Estoque estoque = new Estoque(null, lojaFinal, variacaoFinal.id(), dto.quantidade(), dto.precoVenda(), BigDecimal.ZERO, produto.imagemUrl());
+        Estoque estoque = new Estoque(
+                null,
+                lojaFinal,
+                variacaoFinal.id(),
+                dto.quantidade(),
+                dto.precoVenda(),
+                BigDecimal.ZERO,
+                produto.getImagemUrl()
+        );
 
         Estoque estoqueSalvo = estoqueRepository.save(estoque);
 
@@ -92,7 +102,8 @@ public class EstoqueService {
         validator.validarPreco(precoVenda);
 
         if (quantidade != null) {
-            estoque.atualizarQuantidade(quantidade);        }
+            estoque.atualizarQuantidade(quantidade);
+        }
 
         if (precoVenda != null) {
             estoque.atualizarPrecoVenda(precoVenda);
@@ -132,11 +143,12 @@ public class EstoqueService {
 
         estoqueRepository.save(estoque);
 
-        String observacao = percentual.compareTo(BigDecimal.ZERO) == 0 ? "Promoção removida" : "Promoção aplicada de " + percentual + "%";
+        String observacao = percentual.compareTo(BigDecimal.ZERO) == 0
+                ? "Promoção removida"
+                : "Promoção aplicada de " + percentual + "%";
 
         movimentacaoService.registrarPromocao(estoque, descontoAntes, observacao);
     }
-
 
     @Transactional
     public Estoque criar(CadastroEstoqueDTO dto) {
@@ -148,30 +160,15 @@ public class EstoqueService {
 
         var loja = lojaRepository
                 .findByIdAndEmpresa_Id(dto.lojaId(), empresaId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Loja não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada"));
 
-        ProdutoVariacaoFiltro filtro = new ProdutoVariacaoFiltro(
-                dto.variacaoId(),
-                null,
-                null,
-                null,
-                null,
-                true
-        );
-
-        var page = produtoVariacaoClient.listar(filtro, PageRequest.of(0, 1));
-
-        if (page == null || page.content() == null || page.content().isEmpty()) {
-            throw new ResourceNotFoundException("Variação não encontrada");
-        }
-
-        ProdutoVariacaoResponseDTO variacao = page.content().get(0);
+        // Busca direta da variação pelo ID via Service local
+        ProdutoVariacaoResponse variacao = produtoVariacaoService.buscarPorIdDTO(dto.variacaoId());
 
         validator.validarEstoqueDuplicado(loja.getId(), variacao.id());
 
-        ProdutoStorageResponse produto =
-                produtoStorageClient.buscarPorId(variacao.produtoId());
+        // Busca direta do produto pelo ID via Service local
+        Produto produto = produtoService.buscarPorId(variacao.produtoId());
 
         Estoque estoque = new Estoque(
                 null,
@@ -180,7 +177,7 @@ public class EstoqueService {
                 dto.quantidade(),
                 dto.precoVenda(),
                 BigDecimal.ZERO,
-                produto.imagemUrl()
+                produto.getImagemUrl()
         );
 
         Estoque estoqueSalvo = estoqueRepository.save(estoque);
@@ -188,4 +185,5 @@ public class EstoqueService {
         movimentacaoService.registrarCriacao(estoqueSalvo);
 
         return estoqueSalvo;
-    }}
+    }
+}
