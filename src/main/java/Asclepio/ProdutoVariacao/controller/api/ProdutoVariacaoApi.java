@@ -2,49 +2,49 @@ package Asclepio.ProdutoVariacao.controller.api;
 
 import Asclepio.Categoria.dto.CategoriaFiltro;
 import Asclepio.Categoria.dto.CategoriaPageResponse;
-import Asclepio.Produto.dto.PageResponse;
 import Asclepio.Produto.dto.ProdutoFiltro;
-import Asclepio.Produto.dto.ProdutoStorageResponse;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoPageResponse;
-import Asclepio.ProdutoVariacao.dto.*;
+import Asclepio.Produto.dto.ProdutoResponse;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoFiltro;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoRequest;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponse;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/variacoes")
+@Tag(name = "Produto Variações")
 public interface ProdutoVariacaoApi {
 
     @GetMapping
-    @PreAuthorize("hasAuthority('VerProdutoVariacao') or hasAuthority('CriarProdutoVariacao') ")
-    ResponseEntity<ProdutoVariacaoPageResponse> listar(
+    @PreAuthorize("hasAuthority('VerProdutoVariacao') or hasAuthority('CriarProdutoVariacao')")
+    ResponseEntity<Page<ProdutoVariacaoResponse>> listar(
             @ParameterObject ProdutoVariacaoFiltro filtro,
             @ParameterObject Pageable pageable
     );
 
-
     @PostMapping("/produtos/{produtoId}")
     @PreAuthorize("hasAuthority('CriarProdutoVariacao')")
-    ResponseEntity<ProdutoVariacaoResponseDTO> criar(
+    ResponseEntity<ProdutoVariacaoResponse> criar(
             @PathVariable Long produtoId,
-            @RequestBody ProdutoVariacaoAddDTO dto
+            @RequestBody ProdutoVariacaoRequest dto
     );
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('EditarProdutoVariacao') or hasAuthority('CriarProdutoVariacao') ")
-    ResponseEntity<ProdutoVariacaoResponseDTO> atualizar(
+    @PreAuthorize("hasAuthority('EditarProdutoVariacao') or hasAuthority('CriarProdutoVariacao')")
+    ResponseEntity<ProdutoVariacaoResponse> atualizar(
             @PathVariable Long id,
-            @RequestBody ProdutoVariacaoUpdateDTO dto
+            @RequestBody ProdutoVariacaoUpdateRequest dto
     );
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ExcluirProdutoVariacao')")
-    ResponseEntity<Void> deletar(
-            @PathVariable Long id
-    );
-
+    ResponseEntity<Void> deletar(@PathVariable Long id);
 
     @GetMapping("/categorias")
     @Operation(summary = "Listar categorias com filtros")
@@ -53,7 +53,6 @@ public interface ProdutoVariacaoApi {
             @ParameterObject CategoriaFiltro filtro,
             @ParameterObject Pageable pageable
     );
-
 
     @Operation(summary = "Listar produtos", description = """
             Lista os produtos com paginação e filtros opcionais.
@@ -66,25 +65,27 @@ public interface ProdutoVariacaoApi {
             Exemplos:
             
             Listar todos:
-            /produtos?page=0&size=10
+            /variacoes/produtos?page=0&size=10
             
             Buscar por nome:
-            /produtos?nome=dipirona&page=0&size=10
+            /variacoes/produtos?nome=dipirona&page=0&size=10
             
             Buscar por categoria:
-            /produtos?categoriaId=1&page=0&size=10
+            /variacoes/produtos?categoriaId=1&page=0&size=10
             
             Buscar por nome da categoria:
-            /produtos?nomeCategoria=medicamento&page=0&size=10
+            /variacoes/produtos?nomeCategoria=medicamento&page=0&size=10
             
             Buscar por nome e categoria:
-            /produtos?nome=dipirona&categoriaId=1&page=0&size=10
+            /variacoes/produtos?nome=dipirona&categoriaId=1&page=0&size=10
             
             Ordenar por nome:
-            /produtos?page=0&size=10&sort=name,asc
+            /variacoes/produtos?page=0&size=10&sort=nome,asc
             """)
     @GetMapping("/produtos")
     @PreAuthorize("hasAuthority('VerProduto')")
-    ResponseEntity<PageResponse<ProdutoStorageResponse>> listar(@ParameterObject ProdutoFiltro filtro, @ParameterObject Pageable pageable);
-
+    ResponseEntity<Page<ProdutoResponse>> listar(
+            @ParameterObject ProdutoFiltro filtro,
+            @ParameterObject Pageable pageable
+    );
 }

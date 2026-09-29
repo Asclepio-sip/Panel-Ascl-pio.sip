@@ -59,13 +59,18 @@ public class LojaService {
 
         validarDuplicidade(null, request, empresa.getId());
 
+        // Tratamento preventivo de CEP
+        String cepTratado = (request.cep() != null && !request.cep().isBlank())
+                ? request.cep().trim()
+                : null;
+
         Loja loja = new Loja(
                 null,
                 request.nomeLoja().trim(),
-                request.cep().trim(),
+                cepTratado,                      // Passado diretamente no construtor
                 tratarTexto(request.cnpj()),
                 request.telefone().trim(),
-                request.TextoDescricao(),
+                tratarTexto(request.TextoDescricao()), // Tratado com segurança contra null
                 request.tipoAtendimento(),
                 request.imagemUrl(),
                 empresa
@@ -203,9 +208,6 @@ public class LojaService {
             throw new BusinessException("Nome da loja é obrigatório");
         }
 
-        if (request.cep() == null || request.cep().isBlank()) {
-            throw new BusinessException("CEP é obrigatório");
-        }
 
         if (request.telefone() == null || request.telefone().isBlank()) {
             throw new BusinessException("Telefone é obrigatório");

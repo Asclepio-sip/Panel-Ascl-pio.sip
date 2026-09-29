@@ -2,7 +2,7 @@ package Asclepio.Estoque.dto;
 
 import Asclepio.Estoque.Estoque;
 import Asclepio.Loja.Bairro.Enum.TipoAtendimentoLoja;
-import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponseDTO;
+import Asclepio.ProdutoVariacao.dto.ProdutoVariacaoResponse;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -27,7 +27,7 @@ public record ListaDeEstoqueDasLojasResponse(
 
     public static ListaDeEstoqueDasLojasResponse fromDomain(
             Estoque estoque,
-            ProdutoVariacaoResponseDTO variacao
+            ProdutoVariacaoResponse variacao
     ) {
 
         String entregar;
@@ -80,8 +80,8 @@ public record ListaDeEstoqueDasLojasResponse(
                 variacao.nomeVariacao(),
 
                 variacao.id(),
+
                 entregar
         );
     }
-
 }

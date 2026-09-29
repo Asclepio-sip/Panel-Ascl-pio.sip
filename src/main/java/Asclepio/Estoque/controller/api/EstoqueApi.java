@@ -5,6 +5,7 @@ import Asclepio.Loja.Loja.dto.LojaFiltroDTO;
 import Asclepio.Loja.Loja.dto.LojaResponse;
 import Asclepio.Produto.dto.PageResponse;
 import Asclepio.Produto.dto.ProdutoFiltro;
+import Asclepio.Produto.dto.ProdutoResponse;
 import Asclepio.Produto.dto.ProdutoStorageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -61,8 +62,6 @@ public interface EstoqueApi {
     ResponseEntity<Void> deletar(@PathVariable Long id);
 
 
-
-
     @Operation(summary = "Listar produtos", description = """
             Lista os produtos com paginação e filtros opcionais.
             
@@ -93,9 +92,7 @@ public interface EstoqueApi {
             """)
     @GetMapping("/Produtos")
     @PreAuthorize("hasAuthority('CriarEstoque')")
-    ResponseEntity<PageResponse<ProdutoStorageResponse>> listar(@ParameterObject ProdutoFiltro filtro, @ParameterObject Pageable pageable);
-
-
+    ResponseEntity<Page<ProdutoResponse>> listar(@ParameterObject ProdutoFiltro filtro, @ParameterObject Pageable pageable);
 
 
     //===========================================================atualiza estoque ================================
