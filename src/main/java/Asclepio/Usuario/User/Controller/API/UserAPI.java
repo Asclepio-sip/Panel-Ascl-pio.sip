@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/user")
@@ -72,4 +73,26 @@ public interface UserAPI {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('EditarUser')")
     ResponseEntity<Void> atualizarUsuario(@PathVariable UUID id, @RequestBody @Valid UpdateUserDTO dto);
+
+    @Operation(
+            summary = "Listar lojas e cargos do usuário",
+            description = "Retorna as lojas da empresa autenticada que o usuario selecionado possui acesso, "
+                    + "junto com o cargo (role) que ele tem em cada uma. "
+                    + "Exemplo de resposta: [ { \"lojaId\": 1, \"lojaNome\": \"Centro\", \"roleId\": \"uuid\", \"roleNome\": \"Caixa\" } ]"
+    )
+    @GetMapping("/{id}/lojas")
+    @PreAuthorize("hasAuthority('VerUser')")
+    ResponseEntity<List<UserLojaAcessoDTO>> listarLojasDoUsuario(@PathVariable UUID id);
+
+    @Operation(
+            summary = "Atualizar lojas e cargos do usuário",
+            description = "Substitui o conjunto de lojas e cargos (roles) que o usuario selecionado possui acesso. "
+                    + "Lojas que nao estiverem na lista enviada perdem o acesso; lojas novas sao adicionadas; "
+                    + "lojas ja existentes tem o cargo atualizado conforme enviado. "
+                    + "Exemplo de payload: { \"lojas\": [ { \"lojaId\": 1, \"roleId\": \"uuid-role-atendente\" }, "
+                    + "{ \"lojaId\": 2, \"roleId\": \"uuid-role-caixa\" } ] }"
+    )
+    @PutMapping("/{id}/lojas")
+    @PreAuthorize("hasAuthority('EditarUser')")
+    ResponseEntity<Void> atualizarLojasDoUsuario(@PathVariable UUID id, @RequestBody @Valid AtualizarLojasUsuarioDTO dto);
 }

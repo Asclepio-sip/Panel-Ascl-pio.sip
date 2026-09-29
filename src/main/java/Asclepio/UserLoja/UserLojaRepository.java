@@ -22,5 +22,7 @@ public interface UserLojaRepository extends JpaRepository<UserLoja, Long> {
 
     boolean existsByUser_IdAndLoja_Id(UUID userId, Long lojaId);
 
+    List<UserLoja> findAllByUser_IdAndLoja_Empresa_Id(UUID userId, Long empresaId);
+
 
 }
