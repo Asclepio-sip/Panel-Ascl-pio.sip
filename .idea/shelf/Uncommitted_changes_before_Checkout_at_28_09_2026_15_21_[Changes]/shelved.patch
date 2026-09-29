@@ -1,0 +1,275 @@
+Index: src/main/java/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package projeto_base_de_telas_e_login.config.security;\n\nimport org.springframework.context.annotation.Bean;\nimport org.springframework.context.annotation.Configuration;\nimport org.springframework.http.HttpMethod;\nimport org.springframework.security.authentication.AuthenticationManager;\nimport org.springframework.security.authentication.dao.DaoAuthenticationProvider;\nimport org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;\nimport org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;\nimport org.springframework.security.config.annotation.web.builders.HttpSecurity;\nimport org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;\nimport org.springframework.security.config.http.SessionCreationPolicy;\nimport org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;\nimport org.springframework.security.crypto.password.PasswordEncoder;\nimport org.springframework.security.web.SecurityFilterChain;\nimport org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;\n\n@Configuration\n@EnableWebSecurity\n@EnableMethodSecurity(prePostEnabled = true)\npublic class SecurityConfigurations {\n\n    private final SecurityFilter securityFilter;\n    private final AuthorizationService authorizationService;\n\n    public SecurityConfigurations(\n            SecurityFilter securityFilter,\n            AuthorizationService authorizationService\n    ) {\n        this.securityFilter = securityFilter;\n        this.authorizationService = authorizationService;\n    }\n\n    @Bean\n    public SecurityFilterChain securityFilterChain(\n            HttpSecurity http\n    ) throws Exception {\n\n        return http\n                .cors(cors -> {\n                })\n                .csrf(csrf -> csrf.disable())\n                .sessionManagement(session ->\n                        session.sessionCreationPolicy(\n                                SessionCreationPolicy.STATELESS\n                        )\n                )\n                .authorizeHttpRequests(auth -> auth\n                        .requestMatchers(\"/v3/api-docs/**\", \"/swagger-ui/**\", \"/swagger-ui.html\").permitAll()\n                        .requestMatchers(HttpMethod.POST, \"/user/login\").permitAll()\n                        .requestMatchers(HttpMethod.GET, \"//loja-bairros/lojas-com-bairros\").permitAll()\n                        .requestMatchers(HttpMethod.GET, \"/categorias\").permitAll()\n                        .requestMatchers(HttpMethod.GET, \"/estoque/**\").permitAll()\n                        .requestMatchers(HttpMethod.GET, \"/bairro\").permitAll()\n                        .requestMatchers(HttpMethod.GET, \"/products\").permitAll()\n\n\n                        .anyRequest()\n                        .authenticated()\n                )\n                .addFilterBefore(\n                        securityFilter,\n                        UsernamePasswordAuthenticationFilter.class\n                )\n                .build();\n    }\n\n    @Bean\n    public DaoAuthenticationProvider authenticationProvider() {\n\n        DaoAuthenticationProvider provider =\n                new DaoAuthenticationProvider();\n\n        provider.setUserDetailsService(\n                authorizationService\n        );\n\n        provider.setPasswordEncoder(\n                passwordEncoder()\n        );\n\n        return provider;\n    }\n\n    @Bean\n    public AuthenticationManager authenticationManager(\n            AuthenticationConfiguration config\n    ) throws Exception {\n\n        return config.getAuthenticationManager();\n    }\n\n    @Bean\n    public PasswordEncoder passwordEncoder() {\n\n        return new BCryptPasswordEncoder();\n    }\n\n    @Bean\n    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {\n\n        org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();\n\n        configuration.setAllowedOrigins(\n                java.util.List.of(\"http://localhost:4200\",\n                        \"https://customer-ascl-pio-sip.vercel.app/\",\n                        \"https://administration-ascl-pio-sip.vercel.app/\",\n                        \"https://administration-ascl-pio-jlb0ylz07-mateusss-projects.vercel.app/\"\n\n                ));\n\n        configuration.setAllowedMethods(\n                java.util.List.of(\"GET\", \"POST\", \"PUT\", \"DELETE\", \"PATCH\", \"OPTIONS\"));\n\n        configuration.setAllowedHeaders(java.util.List.of(\"*\"));\n\n        configuration.setAllowCredentials(true);\n\n        org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();\n\n        source.registerCorsConfiguration(\"/**\", configuration);\n\n        return source;\n    }\n}\n\n\n
+===================================================================
+diff --git a/src/main/java/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.java b/src/main/java/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.java
+--- a/src/main/java/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.java	(revision 7c246bbf391df44bfb82899820245a719ed8ce67)
++++ b/src/main/java/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.java	(date 1790250716090)
+@@ -32,31 +32,24 @@
+     }
+ 
+     @Bean
+-    public SecurityFilterChain securityFilterChain(
+-            HttpSecurity http
+-    ) throws Exception {
+-
++    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+         return http
+-                .cors(cors -> {
+-                })
++                .cors(cors -> cors.configurationSource(corsConfigurationSource())) //👈 Vincula a configuração do CORS
+                 .csrf(csrf -> csrf.disable())
+                 .sessionManagement(session ->
+-                        session.sessionCreationPolicy(
+-                                SessionCreationPolicy.STATELESS
+-                        )
++                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                 )
+                 .authorizeHttpRequests(auth -> auth
+                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+-                        .requestMatchers(HttpMethod.POST, "/user/login").permitAll()
+-                        .requestMatchers(HttpMethod.GET, "//loja-bairros/lojas-com-bairros").permitAll()
++                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
++                        .requestMatchers(HttpMethod.GET, "/loja-bairros/lojas-com-bairros").permitAll()
+                         .requestMatchers(HttpMethod.GET, "/categorias").permitAll()
++                        .requestMatchers(HttpMethod.GET, "/productsPublico/categorias").permitAll()
+                         .requestMatchers(HttpMethod.GET, "/estoque/**").permitAll()
+                         .requestMatchers(HttpMethod.GET, "/bairro").permitAll()
+                         .requestMatchers(HttpMethod.GET, "/products").permitAll()
+-
+-
+-                        .anyRequest()
+-                        .authenticated()
++                        .requestMatchers(HttpMethod.POST, "/register").permitAll()
++                        .anyRequest().authenticated()
+                 )
+                 .addFilterBefore(
+                         securityFilter,
+Index: src/main/java/projeto_base_de_telas_e_login/Usuario/User/Controller/API/UserAPI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package projeto_base_de_telas_e_login.Usuario.User.Controller.API;\n\n\nimport io.swagger.v3.oas.annotations.tags.Tag;\nimport jakarta.validation.Valid;\nimport org.springframework.data.domain.Page;\nimport org.springframework.data.domain.Pageable;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.security.access.prepost.PreAuthorize;\nimport org.springframework.security.authentication.UsernamePasswordAuthenticationToken;\nimport org.springframework.web.bind.annotation.*;\nimport projeto_base_de_telas_e_login.Usuario.User.User;\nimport projeto_base_de_telas_e_login.Usuario.User.dto.*;\n\nimport java.util.List;\nimport java.util.UUID;\n\n\n@RequestMapping(\"/user\")\n@Tag(name = \"user\", description = \"Gerenciamento de user\")\npublic interface UserAPI {\n\n\n    @PostMapping(\"/login\")\n    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) ;\n\n    @PostMapping\n    @PreAuthorize(\"hasAuthority('CriarUser')\")\n    public ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid RegisterDTO dto) ;\n\n    @GetMapping\n    @PreAuthorize(\"hasAuthority('VerUser')\")\n    public ResponseEntity<Page<ResponseListaDeUserDTO>>  listarUsuarios(Pageable pageable);\n\n    @PutMapping(\"{id}\")\n    @PreAuthorize(\"hasAuthority('EditarUser')\")\n    public ResponseEntity<Void> atualizarUsuario( @PathVariable UUID id,@RequestBody @Valid UpdateUserDTO dto);\n}\n
+===================================================================
+diff --git a/src/main/java/projeto_base_de_telas_e_login/Usuario/User/Controller/API/UserAPI.java b/src/main/java/projeto_base_de_telas_e_login/Usuario/User/Controller/API/UserAPI.java
+--- a/src/main/java/projeto_base_de_telas_e_login/Usuario/User/Controller/API/UserAPI.java	(revision 7c246bbf391df44bfb82899820245a719ed8ce67)
++++ b/src/main/java/projeto_base_de_telas_e_login/Usuario/User/Controller/API/UserAPI.java	(date 1790552736990)
+@@ -16,7 +16,7 @@
+ import java.util.UUID;
+ 
+ 
+-@RequestMapping("/user")
++@RequestMapping("/auth")
+ @Tag(name = "user", description = "Gerenciamento de user")
+ public interface UserAPI {
+ 
+@@ -24,7 +24,7 @@
+     @PostMapping("/login")
+     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) ;
+ 
+-    @PostMapping
++    @PostMapping("/register")
+     @PreAuthorize("hasAuthority('CriarUser')")
+     public ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid RegisterDTO dto) ;
+ 
+Index: src/main/java/projeto_base_de_telas_e_login/config/bootstrap/DataInitializer.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package projeto_base_de_telas_e_login.config.bootstrap;\n\nimport org.springframework.boot.CommandLineRunner;\nimport org.springframework.context.annotation.Configuration;\nimport org.springframework.security.crypto.password.PasswordEncoder;\nimport projeto_base_de_telas_e_login.Usuario.Permission.Permission;\nimport projeto_base_de_telas_e_login.Usuario.Permission.PermissionRepository;\nimport projeto_base_de_telas_e_login.Usuario.Role.Role;\nimport projeto_base_de_telas_e_login.Usuario.Role.RoleRepository;\nimport projeto_base_de_telas_e_login.Usuario.User.User;\nimport projeto_base_de_telas_e_login.Usuario.User.UserRepository;\n\nimport java.util.List;\n\n@Configuration\npublic class DataInitializer implements CommandLineRunner {\n\n    private final PermissionRepository permissionRepository;\n    private final RoleRepository roleRepository;\n    private final UserRepository userRepository;\n    private final PasswordEncoder passwordEncoder;\n\n    public DataInitializer(\n            PermissionRepository permissionRepository,\n            RoleRepository roleRepository,\n            UserRepository userRepository,\n            PasswordEncoder passwordEncoder\n    ) {\n        this.permissionRepository = permissionRepository;\n        this.roleRepository = roleRepository;\n        this.userRepository = userRepository;\n        this.passwordEncoder = passwordEncoder;\n    }\n\n    @Override\n    public void run(String... args) {\n        criarPermissoes();\n        criarRoles();\n        criarAdmin();\n    }\n\n    private void criarPermissoes() {\n\n        criarPermission(\"VerProduto\", \"Ver produtos\");\n        criarPermission(\"CriarProduto\", \"Criar produtos\");\n        criarPermission(\"EditarProduto\", \"Editar produtos\");\n        criarPermission(\"ExcluirProduto\", \"Excluir produtos\");\n\n        criarPermission(\"VerEstoque\", \"Ver estoque\");\n        criarPermission(\"CriarEstoque\", \"Criar estoque\");\n        criarPermission(\"EditarEstoque\", \"Editar estoque\");\n        criarPermission(\"ExcluirEstoque\", \"Excluir estoque\");\n        criarPermission(\"PromocaoEstoque\", \"Criar promoção no estoque\");\n\n        criarPermission(\"VerLoja\", \"Ver loja\");\n        criarPermission(\"CriarLoja\", \"Criar loja\");\n        criarPermission(\"EditarLoja\", \"Editar loja\");\n        criarPermission(\"ExcluirLoja\", \"Excluir loja\");\n\n        criarPermission(\"VerBairro\", \"Ver bairro\");\n        criarPermission(\"CriarBairro\", \"Criar bairro\");\n        criarPermission(\"EditarBairro\", \"Editar bairro\");\n        criarPermission(\"ExcluirBairro\", \"Excluir bairro\");\n\n        criarPermission(\"VerLojaBairro\", \"Ver loja bairro\");\n        criarPermission(\"CriarLojaBairro\", \"Criar loja bairro\");\n        criarPermission(\"EditarLojaBairro\", \"Editar loja bairro\");\n        criarPermission(\"ExcluirLojaBairro\", \"Excluir loja bairro\");\n\n        criarPermission(\"VerPedido\", \"Ver pedido\");\n        criarPermission(\"CriarPedido\", \"Criar pedido\");\n        criarPermission(\"EditarPedido\", \"Editar pedido\");\n        criarPermission(\"ExcluirPedido\", \"Excluir pedido\");\n\n        criarPermission(\"VerUsuario\", \"Ver usuário\");\n        criarPermission(\"CriarUsuario\", \"Criar usuário\");\n        criarPermission(\"EditarUsuario\", \"Editar usuário\");\n        criarPermission(\"ExcluirUsuario\", \"Excluir usuário\");\n\n        criarPermission(\"VerCategoria\", \"Ver categoria\");\n        criarPermission(\"CriarCategoria\", \"Criar categoria\");\n        criarPermission(\"EditarCategoria\", \"Editar categoria\");\n        criarPermission(\"ExcluirCategoria\", \"Excluir categoria\");\n\n\n        criarPermission(\"VerUser\", \"Ver User\");\n        criarPermission(\"CriarUser\", \"Criar User\");\n        criarPermission(\"EditarUser\", \"Editar User\");\n        criarPermission(\"ExcluirUser\", \"Excluir User\");\n\n        criarPermission(\"VerProdutoVariacao\", \"Ver variações de produto\");\n        criarPermission(\"CriarProdutoVariacao\", \"Criar variação de produto\");\n        criarPermission(\"EditarProdutoVariacao\", \"Editar variação de produto\");\n        criarPermission(\"ExcluirProdutoVariacao\", \"Excluir variação de produto\");\n\n        criarPermission(\"VerPermissoes\", \"Ver permissões\");\n\n        criarPermission(\"VerRole\", \"Ver Role\");\n\n    }\n\n    private void criarPermission(String nome, String descricao) {\n        if (permissionRepository.findByNome(nome).isEmpty()) {\n            permissionRepository.save(new Permission(null, nome, descricao));\n        }\n    }\n\n    private void criarRoles() {\n\n        Role superAdmin = roleRepository.findByNome(\"SuperAdministrador\").orElse(new Role());\n\n        superAdmin.setNome(\"SuperAdministrador\");\n        superAdmin.setDescricao(\"Administrador total\");\n        superAdmin.setPermissions(permissionRepository.findAll());\n\n        roleRepository.save(superAdmin);\n\n        Role gerente = roleRepository.findByNome(\"Gerente\").orElse(new Role());\n\n        gerente.setNome(\"Gerente\");\n        gerente.setDescricao(\"Gerente da farmácia\");\n\n        gerente.setPermissions(permissionRepository.findByNomeIn(List.of(\n                \"VerProduto\", \"CriarProduto\", \"EditarProduto\", \"ExcluirProduto\",\n\n                \"VerEstoque\", \"CriarEstoque\", \"EditarEstoque\", \"ExcluirEstoque\", \"PromocaoEstoque\",\n\n                \"VerPedido\", \"CriarPedido\", \"EditarPedido\", \"ExcluirPedido\",\n\n                \"VerUsuario\", \"CriarUsuario\", \"EditarUsuario\", \"ExcluirUsuario\",\n\n                \"VerCategoria\", \"CriarCategoria\", \"EditarCategoria\", \"ExcluirCategoria\",\n\n                \"VerBairro\", \"CriarBairro\", \"EditarBairro\", \"ExcluirBairro\",\n\n                \"VerLojaBairro\", \"CriarLojaBairro\", \"EditarLojaBairro\", \"ExcluirLojaBairro\",\n\n                \"VerPermissoes\",\n                \"VerProdutoVariacao\",\n                \"CriarProdutoVariacao\",\n                \"EditarProdutoVariacao\",\n                \"ExcluirProdutoVariacao\",\n                \"VerLoja\"\n        )));\n\n        roleRepository.save(gerente);\n\n        Role atendente = roleRepository.findByNome(\"Atendente\").orElse(new Role());\n\n        atendente.setNome(\"Atendente\");\n        atendente.setDescricao(\"Atendente da farmácia\");\n\n        atendente.setPermissions(permissionRepository.findByNomeIn(List.of(\n                \"VerProduto\",\n                \"VerEstoque\",\n                \"VerPedido\",\n                \"CriarPedido\",\n                \"EditarPedido\",\n                \"VerProdutoVariacao\",\n                \"VerCategoria\"\n        )));\n\n        roleRepository.save(atendente);\n\n        Role repositor = roleRepository.findByNome(\"Repositor\").orElse(new Role());\n\n        repositor.setNome(\"Repositor\");\n        repositor.setDescricao(\"Repositor / controle de estoque\");\n\n        repositor.setPermissions(permissionRepository.findByNomeIn(List.of(\n                \"VerProduto\",\n                \"VerEstoque\",\n                \"CriarEstoque\",\n                \"EditarEstoque\",\n                \"VerCategoria\",\n                \"VerProdutoVariacao\"\n        )));\n\n        roleRepository.save(repositor);\n\n        Role caixa = roleRepository.findByNome(\"Caixa\").orElse(new Role());\n\n        caixa.setNome(\"Caixa\");\n        caixa.setDescricao(\"Operador de caixa\");\n\n        caixa.setPermissions(permissionRepository.findByNomeIn(List.of(\n                \"VerProduto\",\n                \"VerEstoque\",\n                \"VerPedido\",\n                \"CriarPedido\",\n                \"VerProdutoVariacao\",\n                \"EditarPedido\"\n        )));\n\n        roleRepository.save(caixa);\n\n        Role farmaceutico = roleRepository.findByNome(\"Farmaceutico\").orElse(new Role());\n\n        farmaceutico.setNome(\"Farmaceutico\");\n        farmaceutico.setDescricao(\"Farmacêutico responsável\");\n\n        farmaceutico.setPermissions(permissionRepository.findByNomeIn(List.of(\n                \"VerProduto\",\n                \"VerEstoque\",\n                \"EditarEstoque\",\n                \"VerPedido\",\n                \"EditarPedido\",\n                \"VerProdutoVariacao\",\n                \"VerCategoria\"\n        )));\n\n        roleRepository.save(farmaceutico);\n\n\n        Role generico = roleRepository.findByNome(\"Generico\")\n                .orElse(new Role());\n\n        generico.setNome(\"Generico\");\n        generico.setDescricao(\"Usuário sem permissões\");\n\n        generico.setPermissions(List.of());\n\n        roleRepository.save(generico);\n    }\n\n    private void criarAdmin() {\n\n        if (userRepository.findByUsername(\"suporte1\").isEmpty()) {\n\n            Role role = roleRepository.findByNome(\"SuperAdministrador\")\n                    .orElseThrow();\n\n            User user = new User();\n\n            user.setUsername(\"suporte1\");\n\n            user.setPassword(\n                    passwordEncoder.encode(\"123\")\n            );\n\n            user.setEmail(\"suporte@email.com\");\n\n            user.setAtivo(true);\n\n            user.setRole(role);\n\n            userRepository.save(user);\n\n            System.out.println(\"Usuário administrador criado!\");\n        }\n    }\n}
+===================================================================
+diff --git a/src/main/java/projeto_base_de_telas_e_login/config/bootstrap/DataInitializer.java b/src/main/java/projeto_base_de_telas_e_login/config/bootstrap/DataInitializer.java
+--- a/src/main/java/projeto_base_de_telas_e_login/config/bootstrap/DataInitializer.java	(revision 7c246bbf391df44bfb82899820245a719ed8ce67)
++++ b/src/main/java/projeto_base_de_telas_e_login/config/bootstrap/DataInitializer.java	(date 1790249237930)
+@@ -82,7 +82,6 @@
+         criarPermission("EditarCategoria", "Editar categoria");
+         criarPermission("ExcluirCategoria", "Excluir categoria");
+ 
+-
+         criarPermission("VerUser", "Ver User");
+         criarPermission("CriarUser", "Criar User");
+         criarPermission("EditarUser", "Editar User");
+@@ -94,9 +93,7 @@
+         criarPermission("ExcluirProdutoVariacao", "Excluir variação de produto");
+ 
+         criarPermission("VerPermissoes", "Ver permissões");
+-
+         criarPermission("VerRole", "Ver Role");
+-
+     }
+ 
+     private void criarPermission(String nome, String descricao) {
+@@ -107,146 +104,90 @@
+ 
+     private void criarRoles() {
+ 
+-        Role superAdmin = roleRepository.findByNome("SuperAdministrador").orElse(new Role());
++        // ALTERADO: Nome padronizado para "ADMIN"
++        Role admin = roleRepository.findByNome("ADMIN")
++                .orElseGet(() -> roleRepository.findByNome("SuperAdministrador").orElse(new Role()));
+ 
+-        superAdmin.setNome("SuperAdministrador");
+-        superAdmin.setDescricao("Administrador total");
+-        superAdmin.setPermissions(permissionRepository.findAll());
++        admin.setNome("ADMIN");
++        admin.setDescricao("Administrador total");
++        admin.setPermissions(permissionRepository.findAll());
+ 
+-        roleRepository.save(superAdmin);
++        roleRepository.save(admin);
+ 
+         Role gerente = roleRepository.findByNome("Gerente").orElse(new Role());
+-
+         gerente.setNome("Gerente");
+         gerente.setDescricao("Gerente da farmácia");
+-
+         gerente.setPermissions(permissionRepository.findByNomeIn(List.of(
+                 "VerProduto", "CriarProduto", "EditarProduto", "ExcluirProduto",
+-
+                 "VerEstoque", "CriarEstoque", "EditarEstoque", "ExcluirEstoque", "PromocaoEstoque",
+-
+                 "VerPedido", "CriarPedido", "EditarPedido", "ExcluirPedido",
+-
+                 "VerUsuario", "CriarUsuario", "EditarUsuario", "ExcluirUsuario",
+-
+                 "VerCategoria", "CriarCategoria", "EditarCategoria", "ExcluirCategoria",
+-
+                 "VerBairro", "CriarBairro", "EditarBairro", "ExcluirBairro",
+-
+                 "VerLojaBairro", "CriarLojaBairro", "EditarLojaBairro", "ExcluirLojaBairro",
+-
+-                "VerPermissoes",
+-                "VerProdutoVariacao",
+-                "CriarProdutoVariacao",
+-                "EditarProdutoVariacao",
+-                "ExcluirProdutoVariacao",
+-                "VerLoja"
++                "VerPermissoes", "VerProdutoVariacao", "CriarProdutoVariacao",
++                "EditarProdutoVariacao", "ExcluirProdutoVariacao", "VerLoja"
+         )));
+-
+         roleRepository.save(gerente);
+ 
+         Role atendente = roleRepository.findByNome("Atendente").orElse(new Role());
+-
+         atendente.setNome("Atendente");
+         atendente.setDescricao("Atendente da farmácia");
+-
+         atendente.setPermissions(permissionRepository.findByNomeIn(List.of(
+-                "VerProduto",
+-                "VerEstoque",
+-                "VerPedido",
+-                "CriarPedido",
+-                "EditarPedido",
+-                "VerProdutoVariacao",
+-                "VerCategoria"
++                "VerProduto", "VerEstoque", "VerPedido", "CriarPedido",
++                "EditarPedido", "VerProdutoVariacao", "VerCategoria"
+         )));
+-
+         roleRepository.save(atendente);
+ 
+         Role repositor = roleRepository.findByNome("Repositor").orElse(new Role());
+-
+         repositor.setNome("Repositor");
+         repositor.setDescricao("Repositor / controle de estoque");
+-
+         repositor.setPermissions(permissionRepository.findByNomeIn(List.of(
+-                "VerProduto",
+-                "VerEstoque",
+-                "CriarEstoque",
+-                "EditarEstoque",
+-                "VerCategoria",
+-                "VerProdutoVariacao"
++                "VerProduto", "VerEstoque", "CriarEstoque", "EditarEstoque",
++                "VerCategoria", "VerProdutoVariacao"
+         )));
+-
+         roleRepository.save(repositor);
+ 
+         Role caixa = roleRepository.findByNome("Caixa").orElse(new Role());
+-
+         caixa.setNome("Caixa");
+         caixa.setDescricao("Operador de caixa");
+-
+         caixa.setPermissions(permissionRepository.findByNomeIn(List.of(
+-                "VerProduto",
+-                "VerEstoque",
+-                "VerPedido",
+-                "CriarPedido",
+-                "VerProdutoVariacao",
+-                "EditarPedido"
++                "VerProduto", "VerEstoque", "VerPedido", "CriarPedido",
++                "VerProdutoVariacao", "EditarPedido"
+         )));
+-
+         roleRepository.save(caixa);
+ 
+         Role farmaceutico = roleRepository.findByNome("Farmaceutico").orElse(new Role());
+-
+         farmaceutico.setNome("Farmaceutico");
+         farmaceutico.setDescricao("Farmacêutico responsável");
+-
+         farmaceutico.setPermissions(permissionRepository.findByNomeIn(List.of(
+-                "VerProduto",
+-                "VerEstoque",
+-                "EditarEstoque",
+-                "VerPedido",
+-                "EditarPedido",
+-                "VerProdutoVariacao",
+-                "VerCategoria"
++                "VerProduto", "VerEstoque", "EditarEstoque", "VerPedido",
++                "EditarPedido", "VerProdutoVariacao", "VerCategoria"
+         )));
+-
+         roleRepository.save(farmaceutico);
+ 
+-
+-        Role generico = roleRepository.findByNome("Generico")
+-                .orElse(new Role());
+-
++        Role generico = roleRepository.findByNome("Generico").orElse(new Role());
+         generico.setNome("Generico");
+         generico.setDescricao("Usuário sem permissões");
+-
+         generico.setPermissions(List.of());
+-
+         roleRepository.save(generico);
+     }
+ 
+     private void criarAdmin() {
+-
+-        if (userRepository.findByUsername("suporte1").isEmpty()) {
++        Role role = roleRepository.findByNome("ADMIN").orElseThrow();
+ 
+-            Role role = roleRepository.findByNome("SuperAdministrador")
+-                    .orElseThrow();
++        // Se o suporte1 já existir, apenas garante que a role foi atualizada para "ADMIN"
++        User user = userRepository.findByUsername("suporte1").orElseGet(User::new);
+ 
+-            User user = new User();
+-
++        if (user.getId() == null) {
+             user.setUsername("suporte1");
+-
+-            user.setPassword(
+-                    passwordEncoder.encode("123")
+-            );
+-
++            user.setPassword(passwordEncoder.encode("123"));
+             user.setEmail("suporte@email.com");
+-
+             user.setAtivo(true);
++            System.out.println("Usuário administrador criado!");
++        }
+ 
+-            user.setRole(role);
+-
+-            userRepository.save(user);
+-
+-            System.out.println("Usuário administrador criado!");
+-        }
++        user.setRole(role);
++        userRepository.save(user);
+     }
+ }
+\ No newline at end of file

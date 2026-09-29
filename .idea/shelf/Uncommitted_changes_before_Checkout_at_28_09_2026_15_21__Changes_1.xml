@@ -1,0 +1,59 @@
+<changelist name="Uncommitted_changes_before_Checkout_at_28_09_2026_15_21_[Changes]1" date="1790619695646" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_09_2026_15_21_[Changes]1/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 28/09/2026 15:21 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/projeto_base_de_telas_e_login/Pedido/dto/DetalhePedidoDTO.class" />
+    <option name="AFTER_PATH" value="target/classes/projeto_base_de_telas_e_login/Pedido/dto/DetalhePedidoDTO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_09_2026_15_21_[Changes]1/DetalhePedidoDTO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/projeto_base_de_telas_e_login/Categoria/CategoriaService.class" />
+    <option name="AFTER_PATH" value="target/classes/projeto_base_de_telas_e_login/Categoria/CategoriaService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_09_2026_15_21_[Changes]1/CategoriaService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/projeto_base_de_telas_e_login/Usuario/user/UserService.class" />
+    <option name="AFTER_PATH" value="target/classes/projeto_base_de_telas_e_login/Usuario/user/UserService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_09_2026_15_21_[Changes]1/UserService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroService.class" />
+    <option name="AFTER_PATH" value="target/classes/projeto_base_de_telas_e_login/Loja/LojaBairro/LojaBairroService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_09_2026_15_21_[Changes]1/LojaBairroService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/projeto_base_de_telas_e_login/Produto/ProdutoService.class" />
+    <option name="AFTER_PATH" value="target/classes/projeto_base_de_telas_e_login/Produto/ProdutoService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_09_2026_15_21_[Changes]1/ProdutoService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/projeto_base_de_telas_e_login/Estoque/EstoqueService.class" />
+    <option name="AFTER_PATH" value="target/classes/projeto_base_de_telas_e_login/Estoque/EstoqueService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_09_2026_15_21_[Changes]1/EstoqueService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/projeto_base_de_telas_e_login/config/bootstrap/DataInitializer.class" />
+    <option name="AFTER_PATH" value="target/classes/projeto_base_de_telas_e_login/config/bootstrap/DataInitializer.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_09_2026_15_21_[Changes]1/DataInitializer.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.class" />
+    <option name="AFTER_PATH" value="target/classes/projeto_base_de_telas_e_login/config/security/SecurityConfigurations.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_09_2026_15_21_[Changes]1/SecurityConfigurations.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/projeto_base_de_telas_e_login/Pedido/dto/PedidoAddDTO.class" />
+    <option name="AFTER_PATH" value="target/classes/projeto_base_de_telas_e_login/Pedido/dto/PedidoAddDTO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_09_2026_15_21_[Changes]1/PedidoAddDTO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/projeto_base_de_telas_e_login/Usuario/user/Controller/API/UserAPI.class" />
+    <option name="AFTER_PATH" value="target/classes/projeto_base_de_telas_e_login/Usuario/user/Controller/API/UserAPI.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_09_2026_15_21_[Changes]1/UserAPI.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/projeto_base_de_telas_e_login/ProdutoVariacao/ProdutoVariacaoService.class" />
+    <option name="AFTER_PATH" value="target/classes/projeto_base_de_telas_e_login/ProdutoVariacao/ProdutoVariacaoService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_09_2026_15_21_[Changes]1/ProdutoVariacaoService.class" />
+  </binary>
+</changelist>
