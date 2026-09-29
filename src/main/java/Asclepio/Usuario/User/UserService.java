@@ -255,12 +255,6 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(dto.password()));
         }
 
-        if (dto.roleId() != null) {
-            Long empresaId = empresaContext.getEmpresaId();
-
-            Role role = roleRepository.findByIdAndEmpresa_Id(dto.roleId(), empresaId).orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado"));
-        }
-
         if (dto.permissionIds() != null) {
             List<Permission> permissionsExtras = permissionRepository.findAllById(dto.permissionIds());
 
@@ -272,6 +266,66 @@ public class UserService {
         }
 
         userRepository.save(user);
+    }
+
+    @Transactional
+    public List<UserLojaAcessoDTO> listarLojasDoUsuario(UUID userId) {
+
+        findById(userId);
+
+        Long empresaId = empresaContext.getEmpresaId();
+
+        return userLojaRepository.findAllByUser_IdAndLoja_Empresa_Id(userId, empresaId)
+                .stream()
+                .map(UserLojaAcessoDTO::fromEntity)
+                .toList();
+    }
+
+    @Transactional
+    public void atualizarLojasDoUsuario(UUID userId, List<UsuarioLojaDTO> lojas) {
+
+        if (lojas == null || lojas.isEmpty()) {
+            throw new BusinessException("É necessário informar ao menos uma loja.");
+        }
+
+        User user = findById(userId);
+        Long empresaId = empresaContext.getEmpresaId();
+
+        List<UserLoja> vinculosAtuais = userLojaRepository.findAllByUser(user);
+
+        java.util.Set<Long> lojaIdsMantidos = lojas.stream()
+                .map(UsuarioLojaDTO::lojaId)
+                .collect(java.util.stream.Collectors.toSet());
+
+        for (UserLoja vinculo : vinculosAtuais) {
+            if (!lojaIdsMantidos.contains(vinculo.getLoja().getId())) {
+                userLojaRepository.delete(vinculo);
+            }
+        }
+
+        for (UsuarioLojaDTO item : lojas) {
+
+            Loja loja = lojaRepository
+                    .findByIdAndEmpresa_Id(item.lojaId(), empresaId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Loja não encontrada: " + item.lojaId()));
+
+            Role role = roleRepository
+                    .findByIdAndEmpresa_Id(item.roleId(), empresaId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Cargo não encontrado: " + item.roleId()));
+
+            UserLoja vinculo = userLojaRepository
+                    .findByUserAndLoja(user, loja)
+                    .orElseGet(() -> {
+                        UserLoja novo = new UserLoja();
+                        novo.setUser(user);
+                        novo.setLoja(loja);
+                        return novo;
+                    });
+
+            vinculo.setRole(role);
+
+            userLojaRepository.save(vinculo);
+        }
     }
 
     @Transactional

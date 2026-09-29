@@ -19,6 +19,7 @@ import Asclepio.config.security.UsuarioAutenticado;
 import Asclepio.Usuario.User.UserService;
 import Asclepio.config.security.TokenService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -73,6 +74,17 @@ public class ControllerUsuario implements UserAPI {
     @Override
     public ResponseEntity<Void> atualizarUsuario(@PathVariable UUID id, @RequestBody @Valid UpdateUserDTO dto) {
         userService.updateUser(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<List<UserLojaAcessoDTO>> listarLojasDoUsuario(@PathVariable UUID id) {
+        return ResponseEntity.ok(userService.listarLojasDoUsuario(id));
+    }
+
+    @Override
+    public ResponseEntity<Void> atualizarLojasDoUsuario(@PathVariable UUID id, @RequestBody @Valid AtualizarLojasUsuarioDTO dto) {
+        userService.atualizarLojasDoUsuario(id, dto.lojas());
         return ResponseEntity.ok().build();
     }
 }
