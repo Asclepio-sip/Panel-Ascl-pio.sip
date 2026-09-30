@@ -1,5 +1,6 @@
 package Asclepio.Usuario.User;
 
+import Asclepio.ConfigConta.ConfigContaService;
 import Asclepio.Empresa.Empresa;
 import Asclepio.Empresa.EmpresaContext;
 import Asclepio.Empresa.EmpresaService;
@@ -55,8 +56,10 @@ public class UserService {
 
     private final LojaFormaPagamentoRepository lojaFormaPagamentoRepository;
 
+    private final ConfigContaService configContaService;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PermissionRepository permissionRepository, EmpresaService empresaService, UserValidationService validationService, ServiceRole serviceRole, EmpresaContext empresaContext, LojaRepository lojaRepository, UserLojaRepository userLojaRepository, TokenService tokenService, AuthenticationManager authenticationManager, LojaFormaPagamentoRepository lojaFormaPagamentoRepository) {
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PermissionRepository permissionRepository, EmpresaService empresaService, UserValidationService validationService, ServiceRole serviceRole, EmpresaContext empresaContext, LojaRepository lojaRepository, UserLojaRepository userLojaRepository, TokenService tokenService, AuthenticationManager authenticationManager, LojaFormaPagamentoRepository lojaFormaPagamentoRepository, ConfigContaService configContaService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -71,6 +74,7 @@ public class UserService {
         this.authenticationManager = authenticationManager;
 
         this.lojaFormaPagamentoRepository = lojaFormaPagamentoRepository;
+        this.configContaService = configContaService;
     }
 
     @Transactional
@@ -339,6 +343,9 @@ public class UserService {
         );
 
         serviceRole.criarRolesPadrao(empresa);
+
+        // Nome do link do catálogo nasce a partir do nome da empresa (pode ser trocado depois pelo PUT)
+        configContaService.criarPadraoParaEmpresa(empresa);
 
         Role role = serviceRole.buscarSuperAdministrador(empresa);
 
