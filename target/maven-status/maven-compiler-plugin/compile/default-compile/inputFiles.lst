@@ -216,7 +216,6 @@
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Usuario/User/dto/UserFiltroDTO.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Usuario/User/dto/UserLojaAcessoDTO.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Usuario/User/dto/UserResponseDTO.java
-/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/config/bootstrap/DataInitializer.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/config/security/AuthorizationService.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/config/security/CatalogoPedidoRateLimitFilter.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/config/security/CodigoRastreioGenerator.java

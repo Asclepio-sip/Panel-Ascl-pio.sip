@@ -172,7 +172,7 @@ public class DataInitializer implements CommandLineRunner {
                 });
 
         Loja loja = lojaRepository
-                .findByNomeLoja("Loja Suporte")
+                .findByCnpjAndEmpresa_Id("00000000000000", empresa.getId())
                 .orElseGet(() -> {
                     Loja nova = new Loja();
                     nova.setNomeLoja("Loja Suporte");

@@ -28,8 +28,8 @@ Asclepio/CatalogoOnline/dto/CatalogoOnlineFiltro.class
 Asclepio/ConfigConta/ConfigConta.class
 Asclepio/ConfigConta/dto/CatalogoOnlineRequest.class
 Asclepio/ConfigConta/dto/DesignCatalogoResponse.class
-Asclepio/ConfigConta/controller/ConfigContaController.class
 Asclepio/ConfigConta/dto/LogoStatusRequest.class
+Asclepio/ConfigConta/controller/ConfigContaController.class
 Asclepio/CatalogoOnline/CatalogoOnlineService.class
 Asclepio/ConfigConta/ConfigContaService.class
 Asclepio/CatalogoOnline/dto/CatalogoCategoriaResponse.class
