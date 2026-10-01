@@ -4,6 +4,7 @@ import Asclepio.Loja.LojaBairro.LojaBairro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface LojaBairroRepository extends JpaRepository<LojaBairro, Long>, JpaSpecificationExecutor<LojaBairro> {
@@ -19,6 +20,8 @@ public interface LojaBairroRepository extends JpaRepository<LojaBairro, Long>, J
     );
 
     Optional<LojaBairro> findByLoja_IdAndBairro_Id(Long lojaId, Long bairroId);
+
+    List<LojaBairro> findByLoja_IdOrderByBairro_NomeAsc(Long lojaId);
 
 
 }

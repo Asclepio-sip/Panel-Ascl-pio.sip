@@ -129,6 +129,9 @@ public class DataInitializer implements CommandLineRunner {
 
         criarPermission("VerMovimentacaoEstoque", "Ver VerMovimentacaoEstoque");
 
+        criarPermission("VerConfigConta", "Ver configurações da conta");
+        criarPermission("EditarConfigConta", "Editar configurações da conta");
+
     }
 
     private void criarPermission(String nome, String descricao) {
@@ -169,7 +172,7 @@ public class DataInitializer implements CommandLineRunner {
                 });
 
         Loja loja = lojaRepository
-                .findByNomeLoja("Loja Suporte")
+                .findByCnpjAndEmpresa_Id("00000000000000", empresa.getId())
                 .orElseGet(() -> {
                     Loja nova = new Loja();
                     nova.setNomeLoja("Loja Suporte");

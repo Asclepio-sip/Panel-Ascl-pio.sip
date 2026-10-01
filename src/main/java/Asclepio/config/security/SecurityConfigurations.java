@@ -53,6 +53,8 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/loja-bairros/lojas-com-bairros").permitAll()
                         .requestMatchers(HttpMethod.GET, "/categorias").permitAll()
                         .requestMatchers(HttpMethod.GET, "/estoque/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/catalogo-online/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/catalogo-online/*/lojas/*/pedidos").permitAll()
                         .requestMatchers(HttpMethod.GET, "/bairro").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products").permitAll()
                         .requestMatchers(HttpMethod.GET, "/pedidos/status/**").permitAll()

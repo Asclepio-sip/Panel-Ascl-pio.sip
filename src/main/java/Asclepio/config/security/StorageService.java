@@ -32,6 +32,10 @@ public class StorageService {
     }
 
     public String upload(MultipartFile file) throws Exception {
+        return upload(file, "produtos", 1200);
+    }
+
+    public String upload(MultipartFile file, String pasta, int tamanhoMaximo) throws Exception {
 
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Imagem é obrigatória");
@@ -47,7 +51,7 @@ public class StorageService {
             throw new IllegalArgumentException("Imagem inválida");
         }
 
-        BufferedImage imagemTratada = redimensionar(original, 1200);
+        BufferedImage imagemTratada = redimensionar(original, tamanhoMaximo);
 
         String contentType;
         String extensao;
@@ -63,7 +67,7 @@ public class StorageService {
             extensao = "jpg";
         }
 
-        String key = "produtos/" + UUID.randomUUID() + "." + extensao;
+        String key = pasta + "/" + UUID.randomUUID() + "." + extensao;
 
         s3Client.putObject(
                 b -> b.bucket(bucket)
