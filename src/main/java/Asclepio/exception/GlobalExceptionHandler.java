@@ -86,6 +86,36 @@ public class GlobalExceptionHandler {
         ));
     }
 
+    // Empresa bloqueada pelo painel SaaS (mensalidade não paga)
+    @ExceptionHandler(ContaBloqueadaException.class)
+    public ResponseEntity<ErrorResponse> handleContaBloqueada(
+            ContaBloqueadaException ex,
+            HttpServletRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                "Conta Bloqueada",
+                ex.getMessage(),
+                request.getRequestURI()
+        ));
+    }
+
+    // Catálogo público de empresa bloqueada pelo painel SaaS
+    @ExceptionHandler(CatalogoDesativadoException.class)
+    public ResponseEntity<ErrorResponse> handleCatalogoDesativado(
+            CatalogoDesativadoException ex,
+            HttpServletRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                "Catalogo Desativado",
+                ex.getMessage(),
+                request.getRequestURI()
+        ));
+    }
+
     @ExceptionHandler(ApiExternaException.class)
     public ResponseEntity<ErrorResponse> handleApiExterna(
             ApiExternaException ex,

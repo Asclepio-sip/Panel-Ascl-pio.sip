@@ -56,10 +56,6 @@ public interface UserAPI {
     @PreAuthorize("hasAuthority('CriarUser')")
     ResponseEntity<CriarUsuarioResponseDTO> register(@RequestBody @Valid RegisterDTO dto);
 
-    @Operation(summary = "Criar empresa e usuário administrador")
-    @PostMapping("/CriarConta")
-    ResponseEntity<LoginResponseDTO> CriarConta(@RequestBody @Valid RequestCriarContaDTO dto);
-
     @Operation(
             summary = "Listar usuários",
             description = "Lista os usuarios da empresa utilizando paginacao e filtros. "

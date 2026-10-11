@@ -77,6 +77,11 @@ public class ConfigConta {
     @Column(name = "CFG_MOSTRAR_BOTAO_WHATSAPP")
     private Boolean mostrarBotaoWhatsapp = false;
 
+    // Liga/desliga o botão "Enviar pedido pelo WhatsApp" depois que o cliente finaliza o pedido
+    // no catálogo (manda os dados do pedido para o número de "whatsapp")
+    @Column(name = "CFG_ENVIAR_PEDIDO_WHATSAPP")
+    private Boolean enviarPedidoWhatsapp = false;
+
     // Liga/desliga os ícones das redes sociais no rodapé
     @Column(name = "CFG_MOSTRAR_ICONES_REDES")
     private Boolean mostrarIconesRedesSociais = true;
@@ -149,6 +154,7 @@ public class ConfigConta {
         this.emailSuporte = tratarTexto(dto.emailSuporte());
         this.telefoneSuporte = tratarTexto(dto.telefoneSuporte());
         this.mostrarBotaoWhatsapp = Boolean.TRUE.equals(dto.mostrarBotaoWhatsapp());
+        this.enviarPedidoWhatsapp = Boolean.TRUE.equals(dto.enviarPedidoWhatsapp());
         this.mostrarIconesRedesSociais = !Boolean.FALSE.equals(dto.mostrarIconesRedesSociais());
         this.corPrimaria = corOuPadrao(dto.corPrimaria(), COR_PRIMARIA_PADRAO);
         this.corSecundaria = corOuPadrao(dto.corSecundaria(), COR_SECUNDARIA_PADRAO);
@@ -265,6 +271,11 @@ public class ConfigConta {
     // Colunas novas podem vir null em registros antigos: tratadas com o valor padrão
     public Boolean getMostrarBotaoWhatsapp() {
         return Boolean.TRUE.equals(mostrarBotaoWhatsapp);
+    }
+
+    // Coluna nova: em linhas antigas vem null = desligado
+    public Boolean getEnviarPedidoWhatsapp() {
+        return Boolean.TRUE.equals(enviarPedidoWhatsapp);
     }
 
     public Boolean getMostrarIconesRedesSociais() {

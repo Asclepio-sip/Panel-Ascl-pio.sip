@@ -40,6 +40,9 @@ public record DesignCatalogoRequest(
         // null = desligado
         Boolean mostrarBotaoWhatsapp,
 
+        // Botão "Enviar pedido pelo WhatsApp" ao finalizar o pedido. null = desligado
+        Boolean enviarPedidoWhatsapp,
+
         // null = ligado
         Boolean mostrarIconesRedesSociais,
 

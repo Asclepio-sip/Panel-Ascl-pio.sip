@@ -105,6 +105,8 @@ public interface ConfigContaApi {
             instagram / facebook / tiktok: @usuario ou link, até 150 caracteres.
             descricaoRodape: até 1000 caracteres.
             mostrarBotaoWhatsapp: botão flutuante do WhatsApp (null = desligado; ligado exige whatsapp).
+            enviarPedidoWhatsapp: botão "Enviar pedido pelo WhatsApp" depois que o cliente finaliza o pedido
+              no catálogo, com os dados do pedido (null = desligado; ligado exige whatsapp).
             mostrarIconesRedesSociais: ícones das redes no rodapé (null = ligado).
             corPrimaria / corSecundaria / corFundo: #RRGGBB (null ou vazio = cor padrão).
             corNavbar / corTextoNavbar: fundo e texto da navbar, #RRGGBB (null ou vazio = #FFFFFF / #1F2937).
@@ -121,6 +123,7 @@ public interface ConfigContaApi {
               "emailSuporte": "contato@farmaciacentral.com",
               "telefoneSuporte": "1133334444",
               "mostrarBotaoWhatsapp": true,
+              "enviarPedidoWhatsapp": true,
               "mostrarIconesRedesSociais": true,
               "corPrimaria": "#2563EB",
               "corSecundaria": "#1F2937",

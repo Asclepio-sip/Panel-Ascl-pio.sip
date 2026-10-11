@@ -59,14 +59,6 @@ public class ControllerUsuario implements UserAPI {
     }
 
     @Override
-    public ResponseEntity<LoginResponseDTO> CriarConta(@RequestBody @Valid RequestCriarContaDTO dto) {
-
-        userService.criarConta(dto);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @Override
     public ResponseEntity<Page<ResponseListaDeUserDTO>> listarUsuarios(UserFiltroDTO filtro, Pageable pageable) {
         return ResponseEntity.ok(userService.lista(filtro, pageable));
     }
