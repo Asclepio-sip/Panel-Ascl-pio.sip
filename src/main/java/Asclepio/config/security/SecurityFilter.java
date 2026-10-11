@@ -1,6 +1,8 @@
 package Asclepio.config.security;
 
+import Asclepio.Empresa.EmpresaRepository;
 import Asclepio.Usuario.User.User;
+import Asclepio.exception.ContaBloqueadaException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +27,9 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmpresaRepository empresaRepository;
 
     @Override
     protected void doFilterInternal(
@@ -68,6 +73,12 @@ public class SecurityFilter extends OncePerRequestFilter {
 
                 // token FULL (fluxo que já existia)
                 Long empresaId = jwt.getClaim("empresaId").asLong();
+
+                // Empresa bloqueada pelo painel SaaS: o token deixa de valer na hora.
+                if (empresaId != null && empresaRepository.existsByIdAndAtivaFalse(empresaId)) {
+                    responderContaBloqueada(request, response);
+                    return;
+                }
                 Long lojaId = jwt.getClaim("lojaId").asLong();
                 List<String> permissions =
                         jwt.getClaim("permissions").asList(String.class);
@@ -94,6 +105,18 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private void responderContaBloqueada(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        SecurityContextHolder.clearContext();
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("""
+                {"timestamp":"%s","status":403,"error":"Conta Bloqueada","message":"%s","path":"%s"}"""
+                .formatted(java.time.LocalDateTime.now(), ContaBloqueadaException.MENSAGEM,
+                        request.getRequestURI().replace("\"", "")));
     }
 
     private String recoverToken(HttpServletRequest request) {

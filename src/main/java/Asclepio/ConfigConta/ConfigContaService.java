@@ -14,6 +14,7 @@ import Asclepio.Empresa.Empresa;
 import Asclepio.Empresa.EmpresaContext;
 import Asclepio.config.security.StorageService;
 import Asclepio.exception.BusinessException;
+import Asclepio.exception.CatalogoDesativadoException;
 import Asclepio.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,6 +107,10 @@ public class ConfigContaService {
 
         if (Boolean.TRUE.equals(dto.mostrarBotaoWhatsapp()) && semWhatsapp) {
             throw new BusinessException("Informe o número do WhatsApp para mostrar o botão flutuante");
+        }
+
+        if (Boolean.TRUE.equals(dto.enviarPedidoWhatsapp()) && semWhatsapp) {
+            throw new BusinessException("Informe o número do WhatsApp para receber os pedidos por lá");
         }
 
         ConfigConta config = buscarOuCriarDaEmpresaAtual();
@@ -204,9 +209,18 @@ public class ConfigContaService {
     // Usado por rotas públicas: empresa dona do nome do link, só se o catálogo estiver ativo.
     @Transactional(readOnly = true)
     public ConfigConta buscarCatalogoAtivoPorNomeLink(String nomeLink) {
-        return repository.findByNomeLink(nomeLink)
-                .filter(ConfigConta::catalogoOnlineEstaAtivo)
+        ConfigConta config = repository.findByNomeLink(nomeLink)
                 .orElseThrow(() -> new ResourceNotFoundException("Catálogo não encontrado"));
+
+        // Empresa bloqueada pelo painel SaaS (mensalidade não paga): catálogo e pedidos fora do ar.
+        if (!Boolean.TRUE.equals(config.getEmpresa().getAtiva())) {
+            throw new CatalogoDesativadoException();
+        }
+
+        if (!config.catalogoOnlineEstaAtivo()) {
+            throw new ResourceNotFoundException("Catálogo não encontrado");
+        }
+        return config;
     }
 
     private NomeLinkResponse salvarNomeLink(ConfigConta config, String nomeLink) {

@@ -22,6 +22,7 @@ import Asclepio.Usuario.User.dto.*;
 import Asclepio.config.security.TokenService;
 import Asclepio.config.security.UsuarioAutenticado;
 import Asclepio.exception.BusinessException;
+import Asclepio.exception.ContaBloqueadaException;
 import Asclepio.exception.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -418,6 +419,15 @@ public class UserService {
         return user;
     }
 
+    /** Empresa bloqueada pelo painel SaaS (mensalidade não paga): ninguém dela entra. */
+    private void validarEmpresaAtiva(List<UserLoja> vinculos) {
+        boolean bloqueada = vinculos.stream()
+                .anyMatch(ul -> !Boolean.TRUE.equals(ul.getLoja().getEmpresa().getAtiva()));
+        if (bloqueada) {
+            throw new ContaBloqueadaException();
+        }
+    }
+
     private boolean ehGerente(List<UserLoja> vinculos) {
         return vinculos.stream()
                 .anyMatch(ul -> ul.getRole().getNome().equalsIgnoreCase("Gerente"));
@@ -426,6 +436,7 @@ public class UserService {
     public LoginResponseDTO escolherLoja(User user, Long lojaId) {
 
         List<UserLoja> vinculos = userLojaRepository.findAllByUser(user);
+        validarEmpresaAtiva(vinculos);
         boolean ehGerente = ehGerente(vinculos);
 
         if (lojaId == null) {
@@ -477,6 +488,7 @@ public class UserService {
         // ======================================
 
         List<UserLoja> lojas = userLojaRepository.findAllByUser(user);
+        validarEmpresaAtiva(lojas);
         boolean ehGerente = ehGerente(lojas);
 
         if (lojas.size() == 1 && !ehGerente) {

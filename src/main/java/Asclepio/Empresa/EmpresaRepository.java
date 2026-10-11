@@ -12,4 +12,7 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long>, JpaSpec
 
     Optional<Empresa> findByNome(String nome);
 
+    /** true se a empresa existe e está bloqueada (EMP_ATIVA = false). */
+    boolean existsByIdAndAtivaFalse(Long id);
+
 }

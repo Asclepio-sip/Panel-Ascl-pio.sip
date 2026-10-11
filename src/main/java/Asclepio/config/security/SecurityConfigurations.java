@@ -1,5 +1,6 @@
 package Asclepio.config.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,15 +23,18 @@ public class SecurityConfigurations {
     private final SecurityFilter securityFilter;
     private final AuthorizationService authorizationService;
     private final PasswordEncoder passwordEncoder;
+    private final String internoApiKey;
 
     public SecurityConfigurations(
             SecurityFilter securityFilter,
             AuthorizationService authorizationService,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            @Value("${interno.api-key:}") String internoApiKey
     ) {
         this.securityFilter = securityFilter;
         this.authorizationService = authorizationService;
         this.passwordEncoder = passwordEncoder;
+        this.internoApiKey = internoApiKey;
     }
 
     @Bean
@@ -52,6 +56,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/user/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/loja-bairros/lojas-com-bairros").permitAll()
                         .requestMatchers(HttpMethod.GET, "/categorias").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/planos").permitAll()
                         .requestMatchers(HttpMethod.GET, "/estoque/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/catalogo-online/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/catalogo-online/*/lojas/*/pedidos").permitAll()
@@ -60,7 +65,8 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/pedidos/status/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/pedidos/pedidos").permitAll()
                         .requestMatchers(HttpMethod.POST, "/products").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/user/CriarConta").permitAll()
+                        // Criar conta: só o back-end do painel SaaS (header X-Api-Key, ver InternoApiKeyFilter).
+                        .requestMatchers("/interno/**").hasAuthority(InternoApiKeyFilter.AUTORIDADE)
 
 
 
@@ -70,6 +76,10 @@ public class SecurityConfigurations {
                 .addFilterBefore(
                         securityFilter,
                         UsernamePasswordAuthenticationFilter.class
+                )
+                .addFilterBefore(
+                        new InternoApiKeyFilter(internoApiKey),
+                        SecurityFilter.class
                 )
                 .build();
     }
@@ -107,6 +117,7 @@ public class SecurityConfigurations {
 
         configuration.setAllowedOrigins(
                 java.util.List.of("http://localhost:4200",
+                        "http://localhost:4201",
                         "https://customer-ascl-pio-sip.vercel.app",
                         "https://administration-ascl-pio-sip.vercel.app",
                         "https://administration-ascl-pio-jlb0ylz07-mateusss-projects.vercel.app/"

@@ -79,6 +79,11 @@
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Estoque/service/EstoqueMovimentacaoService.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Estoque/service/EstoqueQueryService.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Estoque/service/EstoqueValidator.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Interno/AcessoContaDTO.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Interno/AcessoContaService.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Interno/ContaCriadaDTO.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Interno/ContaInternaController.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Interno/PlanoInternoController.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/ItemPedido/DTO/ItemPedidoAddDTO.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/ItemPedido/ItemPedido.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/ItemPedido/ItemPedidoRepository.java
@@ -153,6 +158,15 @@
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Pedido/dto/PedidoStatusResponseDTO.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Pedido/dto/pedido/PedidoAddDTO.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Pedido/dto/pedido/PedidoBalcaoAddDTO.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Plano/Controller/PlanoController.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Plano/Controller/api/PlanoApi.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Plano/Plano.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Plano/PlanoRepository.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Plano/PlanoService.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Plano/RecursoPlano.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Plano/dto/PlanoResponseDTO.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Plano/dto/PlanoSyncDTO.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Plano/dto/RecursoPlanoDTO.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Produto/Controller/TelaProdutos.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Produto/Controller/api/ProdutoApi.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Produto/Produto.java
@@ -219,6 +233,7 @@
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/config/security/AuthorizationService.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/config/security/CatalogoPedidoRateLimitFilter.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/config/security/CodigoRastreioGenerator.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/config/security/InternoApiKeyFilter.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/config/security/OpenApiConfig.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/config/security/PasswordEncoderConfig.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/config/security/PepperedPasswordEncoder.java
@@ -234,6 +249,8 @@
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/exception/ApiExternaException.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/exception/BadRequestException.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/exception/BusinessException.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/exception/CatalogoDesativadoException.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/exception/ContaBloqueadaException.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/exception/ErrorResponse.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/exception/GlobalExceptionHandler.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/exception/NotFoundException.java
