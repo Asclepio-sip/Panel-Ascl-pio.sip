@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import Asclepio.MovimentacaoEstoque.dto.MovimentacaoEstoqueFiltro;
 import Asclepio.MovimentacaoEstoque.dto.MovimentacaoEstoqueResponse;
+import Asclepio.MovimentacaoEstoque.dto.MovimentacaoUsuarioResponse;
+
+import java.util.List;
 
 @Tag(name = "Movimentações de Estoque", description = """
         Consulta do histórico de movimentações do estoque.
@@ -46,6 +49,8 @@ public interface MovimentacaoEstoqueApi {
             /movimentacoes-estoque?tipo=SAIDA_PEDIDO
             
             /movimentacoes-estoque?usuario=mateus
+
+            /movimentacoes-estoque?usuarioId=3f1c...
             
             /movimentacoes-estoque?dataInicio=2026-06-01&dataFim=2026-06-12
             
@@ -57,7 +62,8 @@ public interface MovimentacaoEstoqueApi {
             - estoqueId: filtra por ID do estoque
             - nomeLoja: busca parcial pelo nome da loja
             - nomeProduto: busca parcial pelo nome do produto
-            - usuario: busca parcial pelo nome do usuário
+            - usuarioId: só as movimentações desse usuário (lista em /movimentacoes-estoque/usuarios)
+            - usuario: busca parcial pelo nome ou login do usuário
             - tipo: CRIACAO, ATUALIZACAO, PROMOCAO, SAIDA_PEDIDO ou DELECAO
             - dataInicio: data inicial no formato yyyy-MM-dd
             - dataFim: data final no formato yyyy-MM-dd
@@ -78,6 +84,15 @@ public interface MovimentacaoEstoqueApi {
                                                                      page=0&size=20&sort=criadoEm,desc
                                                                      """) Pageable pageable);
 
+
+    @GetMapping("/usuarios")
+    @PreAuthorize("hasAuthority('VerMovimentacaoEstoque')")
+    @Operation(summary = "Usuários para o filtro do relatório", description = """
+            Usuários da empresa que já fizeram alguma movimentação de estoque, em ordem de nome.
+            Use o id em /movimentacoes-estoque?usuarioId=...
+            Movimentações automáticas sem usuário (ex.: pedido do catálogo online) não entram.
+            """)
+    ResponseEntity<List<MovimentacaoUsuarioResponse>> listarUsuarios();
 
     @GetMapping("/loja")
     @PreAuthorize("hasAuthority('VerMovimentacaoEstoque')")

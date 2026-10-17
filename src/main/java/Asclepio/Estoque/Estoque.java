@@ -38,6 +38,19 @@ public class Estoque {
     @Column(name = "EST_PRECO_VENDA", nullable = false, precision = 10, scale = 2)
     private BigDecimal precoVenda;
 
+    // Opcional: sem custo informado não dá para calcular o lucro.
+    @Column(name = "EST_PRECO_CUSTO", precision = 10, scale = 2)
+    private BigDecimal precoCusto;
+
+    // Opcional: quantidade igual ou abaixo disso conta como estoque baixo (null ou 0 = sem alerta).
+    @Column(name = "EST_ESTOQUE_MINIMO")
+    private Integer estoqueMinimo;
+
+    // false = item escondido do catálogo online (continua no estoque e no pedido de balcão).
+    // "default true" deixa os itens que já existiam visíveis quando o Hibernate cria a coluna.
+    @Column(name = "EST_MOSTRAR_CATALOGO", nullable = false, columnDefinition = "boolean default true")
+    private Boolean mostrarNoCatalogo = true;
+
     @Column(name = "EST_PERCENTUAL_DESCONTO", nullable = false, precision = 5, scale = 2)
     private BigDecimal percentualDesconto = BigDecimal.ZERO;
 
@@ -80,6 +93,10 @@ public class Estoque {
         if (this.percentualDesconto == null) {
             this.percentualDesconto = BigDecimal.ZERO;
         }
+
+        if (this.mostrarNoCatalogo == null) {
+            this.mostrarNoCatalogo = true;
+        }
     }
 
     @PreUpdate
@@ -105,6 +122,17 @@ public class Estoque {
         this.atualizadoEm = LocalDateTime.now();
     }
 
+    /** Devolve ao estoque itens de um pedido cancelado. */
+    public void reporEstoque(Integer quantidadeDevolvida) {
+
+        if (quantidadeDevolvida == null || quantidadeDevolvida <= 0) {
+            throw new BusinessException("Quantidade inválida");
+        }
+
+        this.quantidade += quantidadeDevolvida;
+        this.atualizadoEm = LocalDateTime.now();
+    }
+
     public boolean possuiEstoque(Integer quantidadeSolicitada) {
         return quantidadeSolicitada != null
                 && quantidadeSolicitada > 0
@@ -126,6 +154,21 @@ public class Estoque {
                 .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
         return precoVenda.subtract(valorDesconto);
+    }
+
+    /** Lucro por unidade: valor final (já com desconto) menos o custo. Null se o custo não foi informado. */
+    public BigDecimal getLucro() {
+        if (precoCusto == null) {
+            return null;
+        }
+        return getValorFinal().subtract(precoCusto);
+    }
+
+    public boolean isEstoqueBaixo() {
+        return estoqueMinimo != null
+                && estoqueMinimo > 0
+                && quantidade != null
+                && quantidade <= estoqueMinimo;
     }
 
     public boolean possuiPromocao() {
@@ -153,6 +196,33 @@ public class Estoque {
     public void atualizarPrecoVenda(BigDecimal precoVenda) {
         this.precoVenda = precoVenda;
         this.atualizadoEm = LocalDateTime.now();
+    }
+
+    public void atualizarPrecoCusto(BigDecimal precoCusto) {
+        this.precoCusto = precoCusto;
+        this.atualizadoEm = LocalDateTime.now();
+    }
+
+    public void atualizarEstoqueMinimo(Integer estoqueMinimo) {
+        this.estoqueMinimo = estoqueMinimo;
+        this.atualizadoEm = LocalDateTime.now();
+    }
+
+    public void alterarMostrarNoCatalogo(boolean mostrarNoCatalogo) {
+        this.mostrarNoCatalogo = mostrarNoCatalogo;
+        this.atualizadoEm = LocalDateTime.now();
+    }
+
+    public boolean isMostrarNoCatalogo() {
+        return !Boolean.FALSE.equals(mostrarNoCatalogo);
+    }
+
+    public BigDecimal getPrecoCusto() {
+        return precoCusto;
+    }
+
+    public Integer getEstoqueMinimo() {
+        return estoqueMinimo;
     }
 
     public Long getId() {

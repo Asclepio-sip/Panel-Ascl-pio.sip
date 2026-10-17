@@ -61,6 +61,7 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         criarPermissoes();
+        garantirPermissoesNovasNosGerentes();
         criarAdmin();
     }
 
@@ -132,6 +133,29 @@ public class DataInitializer implements CommandLineRunner {
         criarPermission("VerConfigConta", "Ver configurações da conta");
         criarPermission("EditarConfigConta", "Editar configurações da conta");
 
+        criarPermission("VerDashboard", "Ver dashboard financeiro (lucro e gastos)");
+
+    }
+
+    /**
+     * O cargo "Gerente" recebe todas as permissões só quando é criado (ServiceRole.criarRolesPadrao).
+     * Permissão criada depois precisa ser adicionada aqui para os gerentes que já existem.
+     */
+    private void garantirPermissoesNovasNosGerentes() {
+        List<Permission> novas = permissionRepository.findByNomeIn(List.of("VerDashboard"));
+
+        for (Role gerente : roleRepository.findAllByNome("Gerente")) {
+            boolean mudou = false;
+            for (Permission permission : novas) {
+                if (!gerente.possuiPermissao(permission.getNome())) {
+                    gerente.adicionarPermissao(permission);
+                    mudou = true;
+                }
+            }
+            if (mudou) {
+                roleRepository.save(gerente);
+            }
+        }
     }
 
     private void criarPermission(String nome, String descricao) {

@@ -21,6 +21,9 @@ public record CadastroProdutoCompletoDTO(
         // Estoque
         Long lojaId,
         Integer quantidade,
-        BigDecimal precoVenda
+        BigDecimal precoVenda,
+        BigDecimal precoCusto,     // opcional
+        Integer estoqueMinimo,     // opcional
+        Boolean mostrarNoCatalogo  // opcional, null = mostra
 
 ) {}

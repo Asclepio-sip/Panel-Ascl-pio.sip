@@ -41,7 +41,10 @@ public record RequestCriarContaDTO(
 
         // Formas de pagamento
         @NotNull
-        List<FormaDePagamento> formasPagamento
+        List<FormaDePagamento> formasPagamento,
+
+        // Plano contratado (id do plano no painel SaaS). Null = sem plano (sem limites).
+        Long planoId
 
 ) {
 }

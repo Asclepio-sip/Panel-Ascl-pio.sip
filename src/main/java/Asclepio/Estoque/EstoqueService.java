@@ -81,6 +81,10 @@ public class EstoqueService {
                 BigDecimal.ZERO,
                 produto.getImagemUrl()
         );
+        estoque.atualizarPrecoCusto(dto.precoCusto());
+        estoque.atualizarEstoqueMinimo(dto.estoqueMinimo());
+        // null = mostra (padrão)
+        estoque.alterarMostrarNoCatalogo(!Boolean.FALSE.equals(dto.mostrarNoCatalogo()));
 
         Estoque estoqueSalvo = estoqueRepository.save(estoque);
 
@@ -88,7 +92,8 @@ public class EstoqueService {
     }
 
     @Transactional
-    public void atualizar(Long lojaId, Long variacaoId, Integer quantidade, BigDecimal precoVenda) {
+    public void atualizar(Long lojaId, Long variacaoId, Integer quantidade, BigDecimal precoVenda,
+                          BigDecimal precoCusto, Integer estoqueMinimo, Boolean mostrarNoCatalogo) {
 
         Long empresaId = empresaContext.getEmpresaId();
 
@@ -100,6 +105,8 @@ public class EstoqueService {
 
         validator.validarQuantidade(quantidade);
         validator.validarPreco(precoVenda);
+        validator.validarPrecoCusto(precoCusto);
+        validator.validarEstoqueMinimo(estoqueMinimo);
 
         if (quantidade != null) {
             estoque.atualizarQuantidade(quantidade);
@@ -107,6 +114,18 @@ public class EstoqueService {
 
         if (precoVenda != null) {
             estoque.atualizarPrecoVenda(precoVenda);
+        }
+
+        if (precoCusto != null) {
+            estoque.atualizarPrecoCusto(precoCusto);
+        }
+
+        if (estoqueMinimo != null) {
+            estoque.atualizarEstoqueMinimo(estoqueMinimo);
+        }
+
+        if (mostrarNoCatalogo != null) {
+            estoque.alterarMostrarNoCatalogo(mostrarNoCatalogo);
         }
 
         estoque.setAtualizadoEm(LocalDateTime.now());
@@ -157,6 +176,8 @@ public class EstoqueService {
 
         validator.validarQuantidade(dto.quantidade());
         validator.validarPreco(dto.precoVenda());
+        validator.validarPrecoCusto(dto.precoCusto());
+        validator.validarEstoqueMinimo(dto.estoqueMinimo());
 
         var loja = lojaRepository
                 .findByIdAndEmpresa_Id(dto.lojaId(), empresaId)
@@ -179,6 +200,10 @@ public class EstoqueService {
                 BigDecimal.ZERO,
                 produto.getImagemUrl()
         );
+        estoque.atualizarPrecoCusto(dto.precoCusto());
+        estoque.atualizarEstoqueMinimo(dto.estoqueMinimo());
+        // null = mostra (padrão)
+        estoque.alterarMostrarNoCatalogo(!Boolean.FALSE.equals(dto.mostrarNoCatalogo()));
 
         Estoque estoqueSalvo = estoqueRepository.save(estoque);
 

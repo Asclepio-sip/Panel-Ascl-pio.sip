@@ -5,6 +5,7 @@ public enum TipoMovimentacaoEstoque {
     ATUALIZACAO,
     ENTRADA,
     SAIDA_PEDIDO,
+    DEVOLUCAO_PEDIDO,
     PROMOCAO,
     DELECAO
 }

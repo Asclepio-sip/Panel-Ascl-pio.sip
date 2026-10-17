@@ -25,6 +25,8 @@ public class EstoqueValidator {
         validarVariacaoInformada(dto.variacaoId());
         validarQuantidadeObrigatoria(dto.quantidade());
         validarPrecoObrigatorio(dto.precoVenda());
+        validarPrecoCusto(dto.precoCusto());
+        validarEstoqueMinimo(dto.estoqueMinimo());
     }
 
     public void validarLojaInformada(EstoqueAddDto dto) {
@@ -70,6 +72,18 @@ public class EstoqueValidator {
     public void validarPreco(BigDecimal precoVenda) {
         if (precoVenda != null && precoVenda.compareTo(BigDecimal.ZERO) < 0) {
             throw new BusinessException("Preço inválido");
+        }
+    }
+
+    public void validarPrecoCusto(BigDecimal precoCusto) {
+        if (precoCusto != null && precoCusto.compareTo(BigDecimal.ZERO) < 0) {
+            throw new BusinessException("Preço de custo inválido");
+        }
+    }
+
+    public void validarEstoqueMinimo(Integer estoqueMinimo) {
+        if (estoqueMinimo != null && estoqueMinimo < 0) {
+            throw new BusinessException("Estoque mínimo inválido");
         }
     }
 

@@ -121,6 +121,8 @@ public interface EstoqueApi {
             - categoriaId: filtra pelo ID da categoria
             - nomeCategoria: filtra pelo nome da categoria
             - semEstoque: true para listar apenas itens com quantidade 0
+            - estoqueBaixo: true para listar apenas itens com quantidade igual ou abaixo do estoque mínimo
+            - mostrarNoCatalogo: true = só os visíveis no catálogo online, false = só os escondidos
             
             Exemplos:
             /estoques/relatorio?page=0&size=10

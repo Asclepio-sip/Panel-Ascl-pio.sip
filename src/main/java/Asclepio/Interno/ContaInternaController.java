@@ -27,16 +27,29 @@ public class ContaInternaController {
 
     private final UserService userService;
     private final AcessoContaService acessoContaService;
+    private final PlanoContaService planoContaService;
 
-    public ContaInternaController(UserService userService, AcessoContaService acessoContaService) {
+    public ContaInternaController(UserService userService, AcessoContaService acessoContaService,
+                                  PlanoContaService planoContaService) {
         this.userService = userService;
         this.acessoContaService = acessoContaService;
+        this.planoContaService = planoContaService;
     }
 
-    /** Cria empresa + loja + usuário Super Administrador (mesma regra do antigo /user/CriarConta). */
+    /**
+     * Cria empresa + loja + usuário Super Administrador (mesma regra do antigo /user/CriarConta)
+     * já no plano escolhido (planoId opcional).
+     */
     @PostMapping("/contas")
     public ResponseEntity<ContaCriadaDTO> criarConta(@RequestBody @Valid RequestCriarContaDTO dto) {
+        // Confere o plano antes de criar, para não sobrar conta sem o plano certo.
+        if (dto.planoId() != null) {
+            planoContaService.buscarPlano(dto.planoId());
+        }
         User user = userService.criarConta(dto);
+        if (dto.planoId() != null) {
+            planoContaService.definirPlano(user.getId(), dto.planoId());
+        }
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ContaCriadaDTO(user.getId(), user.getNome(), user.getEmail()));
     }
@@ -48,6 +61,13 @@ public class ContaInternaController {
     @PutMapping("/contas/{userId}/acesso")
     public ResponseEntity<Void> alterarAcesso(@PathVariable UUID userId, @RequestBody @Valid AcessoContaDTO dto) {
         acessoContaService.alterarAcesso(userId, dto.ativo());
+        return ResponseEntity.noContent().build();
+    }
+
+    /** Troca o plano da conta (empresa do usuário dono). Os limites valem na hora, sem novo login. */
+    @PutMapping("/contas/{userId}/plano")
+    public ResponseEntity<Void> alterarPlano(@PathVariable UUID userId, @RequestBody PlanoContaDTO dto) {
+        planoContaService.definirPlano(userId, dto.planoId());
         return ResponseEntity.noContent().build();
     }
 }

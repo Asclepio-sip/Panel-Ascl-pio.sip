@@ -11,6 +11,7 @@ import Asclepio.Loja.Loja.dto.CreateLojaRequest;
 import Asclepio.Loja.Loja.dto.LojaFiltroDTO;
 import Asclepio.Loja.Loja.dto.LojaResponse;
 import Asclepio.Pedido.Enum.FormaDePagamento;
+import Asclepio.Plano.LimitePlanoService;
 import Asclepio.UserLoja.UserLoja;
 import Asclepio.UserLoja.UserLojaRepository;
 import Asclepio.Usuario.Role.Role;
@@ -34,6 +35,7 @@ public class LojaService {
     private final EmpresaContext empresaContext;
     private final UserLojaRepository userLojaRepository;
     private final ServiceRole serviceRole;
+    private final LimitePlanoService limitePlanoService;
 
     public LojaService(
             LojaRepository repository,
@@ -41,7 +43,8 @@ public class LojaService {
             LojaFormaPagamentoRepository formaPagamentoRepository,
             EmpresaContext empresaContext,
             UserLojaRepository userLojaRepository,
-            ServiceRole serviceRole
+            ServiceRole serviceRole,
+            LimitePlanoService limitePlanoService
     ) {
         this.repository = repository;
         this.empresaRepository = empresaRepository;
@@ -49,6 +52,7 @@ public class LojaService {
         this.empresaContext = empresaContext;
         this.userLojaRepository = userLojaRepository;
         this.serviceRole = serviceRole;
+        this.limitePlanoService = limitePlanoService;
     }
 
     public LojaResponse criar(CreateLojaRequest request) {
@@ -57,6 +61,7 @@ public class LojaService {
 
         Empresa empresa = getEmpresaAtual();
 
+        limitePlanoService.validarNovaLoja(empresa.getId());
         validarDuplicidade(null, request, empresa.getId());
 
         // Tratamento preventivo de CEP

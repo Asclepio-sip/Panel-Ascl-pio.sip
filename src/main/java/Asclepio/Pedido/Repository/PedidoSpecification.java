@@ -1,5 +1,6 @@
 package Asclepio.Pedido.Repository;
 
+import Asclepio.Pedido.Enum.TipoAtendimentoPedido;
 import Asclepio.Pedido.Pedido;
 import Asclepio.Pedido.dto.PedidoFiltro;
 import jakarta.persistence.criteria.Predicate;
@@ -65,6 +66,14 @@ public class PedidoSpecification {
 
             if (filtro.tipoAtendimentoPedido() != null) {
                 predicates.add(cb.equal(root.get("tipoAtendimentoPedido"), filtro.tipoAtendimentoPedido()));
+            }
+
+            if ("BALCAO".equalsIgnoreCase(filtro.tipoEntrega())) {
+                predicates.add(root.get("tipoAtendimentoPedido")
+                        .in(TipoAtendimentoPedido.BALCAO, TipoAtendimentoPedido.RETIRADA_NA_LOJA));
+            } else if ("DELIVERY".equalsIgnoreCase(filtro.tipoEntrega())) {
+                predicates.add(root.get("tipoAtendimentoPedido")
+                        .in(TipoAtendimentoPedido.ENTREGA_PROPRIA, TipoAtendimentoPedido.ENTREGA_TERCEIRIZADA));
             }
 
             if (filtro.formaDePagamento() != null) {

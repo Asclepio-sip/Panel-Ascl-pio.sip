@@ -157,6 +157,31 @@ public class EstoqueMovimentacaoService {
         repository.save(movimentacao);
     }
 
+    public void registrarDevolucaoPedido(
+            Estoque estoque,
+            Integer quantidadeAntes,
+            Long pedidoId
+    ) {
+
+        MovimentacaoEstoque movimentacao = new MovimentacaoEstoque(
+                estoque,
+                estoque.getLoja(),
+                null,
+                null,
+                usuarioLogado(),
+                TipoMovimentacaoEstoque.DEVOLUCAO_PEDIDO,
+                quantidadeAntes,
+                estoque.getQuantidade(),
+                estoque.getPrecoVenda(),
+                estoque.getPrecoVenda(),
+                estoque.getPercentualDesconto(),
+                estoque.getPercentualDesconto(),
+                "Devolução automática: pedido #" + pedidoId + " cancelado"
+        );
+
+        repository.save(movimentacao);
+    }
+
     private ProdutoVariacaoResponse buscarVariacao(Long variacaoId) {
         return produtoVariacaoService.buscarPorIdDTO(variacaoId);
     }

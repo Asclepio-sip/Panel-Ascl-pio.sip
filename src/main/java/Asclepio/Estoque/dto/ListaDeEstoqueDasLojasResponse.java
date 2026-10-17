@@ -19,6 +19,11 @@ public record ListaDeEstoqueDasLojasResponse(
         BigDecimal precoVenda,
         BigDecimal percentualDesconto,
         BigDecimal valorFinal,
+        BigDecimal precoCusto,
+        BigDecimal lucro,
+        Integer estoqueMinimo,
+        boolean estoqueBaixo,
+        boolean mostrarNoCatalogo,
         String Variacao,
         Long VaricaoId,
         String Entregar
@@ -76,6 +81,16 @@ public record ListaDeEstoqueDasLojasResponse(
                 desconto,
 
                 valorFinal,
+
+                estoque.getPrecoCusto(),
+
+                estoque.getLucro(),
+
+                estoque.getEstoqueMinimo(),
+
+                estoque.isEstoqueBaixo(),
+
+                estoque.isMostrarNoCatalogo(),
 
                 variacao.nomeVariacao(),
 
