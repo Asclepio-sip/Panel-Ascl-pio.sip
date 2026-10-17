@@ -17,6 +17,9 @@ import Asclepio.MovimentacaoEstoque.Controller.Api.MovimentacaoEstoqueApi;
 import Asclepio.MovimentacaoEstoque.MovimentacaoEstoqueService;
 import Asclepio.MovimentacaoEstoque.dto.MovimentacaoEstoqueFiltro;
 import Asclepio.MovimentacaoEstoque.dto.MovimentacaoEstoqueResponse;
+import Asclepio.MovimentacaoEstoque.dto.MovimentacaoUsuarioResponse;
+
+import java.util.List;
 
 @RestController
 public class MovimentacaoEstoqueController implements MovimentacaoEstoqueApi {
@@ -41,6 +44,11 @@ public class MovimentacaoEstoqueController implements MovimentacaoEstoqueApi {
     @Override
     public ResponseEntity<Page<MovimentacaoEstoqueResponse>> listar(MovimentacaoEstoqueFiltro filtro, Pageable pageable) {
         return ResponseEntity.ok(service.listar(filtro, pageable));
+    }
+
+    @Override
+    public ResponseEntity<List<MovimentacaoUsuarioResponse>> listarUsuarios() {
+        return ResponseEntity.ok(service.listarUsuarios());
     }
 
     @Override

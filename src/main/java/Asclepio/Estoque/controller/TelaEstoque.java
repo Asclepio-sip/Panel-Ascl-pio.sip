@@ -44,7 +44,8 @@ public class TelaEstoque implements EstoqueApi {
 
     @Override
     public ResponseEntity<Void> atualizar(AtulizarResquet dto) {
-        service.atualizar(dto.lojaID(), dto.produtoId(), dto.quantidade(), dto.precoVenda());
+        service.atualizar(dto.lojaID(), dto.produtoId(), dto.quantidade(), dto.precoVenda(),
+                dto.precoCusto(), dto.estoqueMinimo(), dto.mostrarNoCatalogo());
         return ResponseEntity.ok().build();
     }
 

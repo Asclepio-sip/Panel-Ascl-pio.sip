@@ -40,6 +40,11 @@ public class Pedido implements PedidoApi {
     }
 
     @Override
+    public ResponseEntity<ContadoresPedidoDTO> contadores(PedidoFiltro filtro) {
+        return ResponseEntity.ok(pedidoQueryService.contar(filtro));
+    }
+
+    @Override
     public ResponseEntity<Page<ListaDePedidoDTO>> listar(PedidoFiltro filtro, Pageable pageable) {
         return ResponseEntity.ok(pedidoQueryService.listarComFiltro(filtro, pageable));
     }

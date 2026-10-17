@@ -46,6 +46,11 @@ public class ItemPedido {
     @Column(name = "ITP_PERCENTUAL_DESCONTO", nullable = false, precision = 5, scale = 2)
     private BigDecimal percentualDesconto = BigDecimal.ZERO;
 
+    // Custo da unidade no momento da venda (cópia do Estoque.precoCusto), para o lucro do
+    // dashboard não mudar quando o custo for alterado depois. Null = custo não informado.
+    @Column(name = "ITP_CUSTO_UNITARIO", precision = 10, scale = 2)
+    private BigDecimal custoUnitario;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ITP_PEDIDO_ID", nullable = false)
     private Pedido pedido;
@@ -186,6 +191,14 @@ public class ItemPedido {
 
     public BigDecimal getPercentualDesconto() {
         return percentualDesconto;
+    }
+
+    public BigDecimal getCustoUnitario() {
+        return custoUnitario;
+    }
+
+    public void registrarCustoUnitario(BigDecimal custoUnitario) {
+        this.custoUnitario = custoUnitario;
     }
 
     public Pedido getPedido() {

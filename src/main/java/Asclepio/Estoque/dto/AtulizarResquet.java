@@ -14,5 +14,12 @@ public record AtulizarResquet(
 
         Integer quantidade,
 
-        BigDecimal precoVenda) {
+        BigDecimal precoVenda,
+
+        // Opcionais: null = não altera
+        BigDecimal precoCusto,
+
+        Integer estoqueMinimo,
+
+        Boolean mostrarNoCatalogo) {
 }

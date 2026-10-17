@@ -1,5 +1,6 @@
 package Asclepio.Plano.Controller.api;
 
+import Asclepio.Plano.dto.PlanoEmpresaResponseDTO;
 import Asclepio.Plano.dto.PlanoResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
@@ -22,4 +23,13 @@ public interface PlanoApi {
                     + "Os planos são criados/editados só pelo painel SaaS, que espelha aqui via /interno/planos."
     )
     ResponseEntity<List<PlanoResponseDTO>> listar();
+
+    @GetMapping("/atual")
+    @Operation(
+            summary = "Plano da empresa logada",
+            description = "Qualquer usuário logado. Limites de lojas e funcionários (usado/limite; limite null = "
+                    + "sem limite) e recursos liberados. Empresa sem plano = sem limites. Criar loja/usuário/"
+                    + "cliente além do plano dá 400 com a mensagem."
+    )
+    ResponseEntity<PlanoEmpresaResponseDTO> atual();
 }

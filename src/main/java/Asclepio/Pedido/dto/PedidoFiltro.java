@@ -19,7 +19,16 @@ public record PedidoFiltro(
         Boolean freteGratis,
         LocalDate dataInicio,
         LocalDate dataFim,
-        Boolean somenteHoje
+        Boolean somenteHoje,
+
+        /* BALCAO = balcão + retirada na loja; DELIVERY = entrega própria ou terceirizada */
+        String tipoEntrega
 
 ) {
+
+    /** Mesmo filtro sem o status (para contar pedidos de cada status). */
+    public PedidoFiltro semStatus() {
+        return new PedidoFiltro(lojaId, nomeLoja, nomeCliente, telefone, email, bairro, null,
+                tipoAtendimentoPedido, formaDePagamento, freteGratis, dataInicio, dataFim, somenteHoje, tipoEntrega);
+    }
 }

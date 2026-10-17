@@ -15,4 +15,6 @@ public interface RoleRepository extends JpaRepository<Role, UUID> {
 
     List<Role> findAllByEmpresa_Id(Long empresaId);
 
+    List<Role> findAllByNome(String nome);
+
 }

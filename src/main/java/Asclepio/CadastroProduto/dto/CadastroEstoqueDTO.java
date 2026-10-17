@@ -4,6 +4,7 @@ package Asclepio.CadastroProduto.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+import jakarta.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 
 public record CadastroEstoqueDTO(
@@ -19,7 +20,17 @@ public record CadastroEstoqueDTO(
         Integer quantidade,
 
         @NotNull
-        BigDecimal precoVenda
+        BigDecimal precoVenda,
+
+        // Opcionais
+        @DecimalMin("0.0")
+        BigDecimal precoCusto,
+
+        @Min(0)
+        Integer estoqueMinimo,
+
+        // null = mostra no catálogo online
+        Boolean mostrarNoCatalogo
 
 ) {
 }

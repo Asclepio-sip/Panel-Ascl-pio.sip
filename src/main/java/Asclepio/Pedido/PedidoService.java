@@ -218,7 +218,32 @@ public class PedidoService {
 
         Long empresaId = empresaContext.getEmpresaId();
 
-        Pedido pedido = queryService.buscarPorIdDaEmpresa(id, empresaId);
+        Pedido pedido = pedidoRepository.findComLockByIdAndEmpresa_Id(id, empresaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
+
+        if (pedido.getStatus() == StatusDoPedido.CANCELADO) {
+            if (status == StatusDoPedido.CANCELADO) {
+                return;
+            }
+            // O estoque já foi devolvido no cancelamento; voltar o status deixaria o estoque errado
+            throw new BusinessException("Pedido cancelado não pode mudar de status. Faça um pedido novo.");
+        }
+
+        TipoAtendimentoPedido tipo = pedido.getTipoAtendimentoPedido();
+        boolean entrega = tipo == null
+                || tipo == TipoAtendimentoPedido.ENTREGA_PROPRIA
+                || tipo == TipoAtendimentoPedido.ENTREGA_TERCEIRIZADA;
+        if (!entrega && (status == StatusDoPedido.SEPARACAO || status == StatusDoPedido.EM_TRANSITO)) {
+            throw new BusinessException("Separação e Em trânsito são só para pedidos de entrega");
+        }
+        // Balcão: venda feita na hora, só Concluído ou Cancelado
+        if (tipo == TipoAtendimentoPedido.BALCAO && status == StatusDoPedido.AGUARDANDO) {
+            throw new BusinessException("Pedido de balcão só pode ficar Concluído ou Cancelado");
+        }
+
+        if (status == StatusDoPedido.CANCELADO) {
+            estoqueService.devolverEstoqueDoPedido(pedido);
+        }
 
         pedido.setStatus(status);
 

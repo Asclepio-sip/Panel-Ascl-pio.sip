@@ -53,6 +53,15 @@ public class EstoqueSpecification {
                 predicates.add(cb.equal(root.get("quantidade"), 0));
             }
 
+            if (Boolean.TRUE.equals(filtro.estoqueBaixo())) {
+                predicates.add(cb.greaterThan(root.get("estoqueMinimo"), 0));
+                predicates.add(cb.lessThanOrEqualTo(root.get("quantidade"), root.get("estoqueMinimo")));
+            }
+
+            if (filtro.mostrarNoCatalogo() != null) {
+                predicates.add(cb.equal(root.get("mostrarNoCatalogo"), filtro.mostrarNoCatalogo()));
+            }
+
             return cb.and(predicates.toArray(Predicate[]::new));
         };
     }

@@ -7,6 +7,8 @@ public record EstoqueFiltro(
         String nomeVariacao,
         Long categoriaId,
         String nomeCategoria,
-        Boolean semEstoque
+        Boolean semEstoque,
+        Boolean estoqueBaixo,
+        Boolean mostrarNoCatalogo
 ) {
 }

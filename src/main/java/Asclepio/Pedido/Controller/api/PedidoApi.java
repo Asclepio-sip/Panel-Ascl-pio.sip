@@ -63,6 +63,7 @@ Filtros disponíveis:
 • dataInicio
 • dataFim
 • somenteHoje
+• tipoEntrega: BALCAO (balcão + retirada na loja) ou DELIVERY (entrega própria ou terceirizada)
 
 Exemplos:
 
@@ -90,6 +91,18 @@ Exemplos:
     )
     ResponseEntity<Page<ListaDePedidoDTO>> listar(@ParameterObject PedidoFiltro filtro, @ParameterObject Pageable pageable);
 
+
+    @GetMapping("/contadores")
+    @PreAuthorize("hasAuthority('VerPedido')")
+    @Operation(summary = "Quantidade de pedidos por status", description = """
+            Conta os pedidos de cada status com os mesmos filtros de GET /pedidos (o filtro status é ignorado).
+            Usado nos cards do painel de pedidos.
+
+            Exemplos:
+            /pedidos/contadores?somenteHoje=true
+            /pedidos/contadores?lojaId=1&tipoEntrega=BALCAO
+            """)
+    ResponseEntity<ContadoresPedidoDTO> contadores(@ParameterObject PedidoFiltro filtro);
 
     @GetMapping("/status/{codigoRastreio}")
     @Operation(summary = "Consultar status por código de rastreio", description = "Consulta pública do status do pedido usando o código de rastreio.")

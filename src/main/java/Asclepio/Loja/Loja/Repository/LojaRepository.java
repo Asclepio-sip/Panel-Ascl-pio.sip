@@ -19,4 +19,7 @@ public interface LojaRepository extends JpaRepository<Loja, Long>, JpaSpecificat
 
     List<Loja> findByEmpresa_IdOrderByNomeLojaAsc(Long empresaId);
 
+    /** Lojas da empresa (ativas ou não): é o que conta para o limite do plano. */
+    long countByEmpresa_Id(Long empresaId);
+
 }

@@ -63,7 +63,10 @@ public class CadastroProdutoService {
                         dto.lojaId(),
                         variacaoResponse.id(),
                         dto.quantidade(),
-                        dto.precoVenda()
+                        dto.precoVenda(),
+                        dto.precoCusto(),
+                        dto.estoqueMinimo(),
+                        dto.mostrarNoCatalogo()
                 )
         );
 

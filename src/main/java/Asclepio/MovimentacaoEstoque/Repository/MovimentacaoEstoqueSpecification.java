@@ -1,5 +1,7 @@
 package Asclepio.MovimentacaoEstoque.Repository;
 
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import Asclepio.MovimentacaoEstoque.MovimentacaoEstoque;
@@ -74,11 +76,20 @@ public class MovimentacaoEstoqueSpecification {
                 );
             }
 
-            if (filtro.usuario() != null && !filtro.usuario().isBlank()) {
+            if (filtro.usuarioId() != null) {
                 predicates.add(
-                        cb.like(
-                                cb.lower(root.get("usuario").get("username")),
-                                "%" + filtro.usuario().trim().toLowerCase(Locale.ROOT) + "%"
+                        cb.equal(root.get("usuario").get("id"), filtro.usuarioId())
+                );
+            }
+
+            // Texto livre: nome (o que o relatório mostra) ou login
+            if (filtro.usuario() != null && !filtro.usuario().isBlank()) {
+                String termo = "%" + filtro.usuario().trim().toLowerCase(Locale.ROOT) + "%";
+                Join<Object, Object> usuario = root.join("usuario", JoinType.LEFT);
+                predicates.add(
+                        cb.or(
+                                cb.like(cb.lower(usuario.get("nome")), termo),
+                                cb.like(cb.lower(usuario.get("username")), termo)
                         )
                 );
             }

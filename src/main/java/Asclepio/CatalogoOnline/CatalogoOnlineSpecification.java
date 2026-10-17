@@ -18,7 +18,7 @@ public class CatalogoOnlineSpecification {
     private CatalogoOnlineSpecification() {
     }
 
-    // Só itens da loja, com quantidade > 0 e variação ativa.
+    // Só itens da loja, com quantidade > 0, marcados para aparecer no catálogo e variação ativa.
     public static Specification<Estoque> filtrar(Long lojaId, CatalogoOnlineFiltro filtro) {
 
         return (root, query, cb) -> {
@@ -27,6 +27,7 @@ public class CatalogoOnlineSpecification {
 
             predicates.add(cb.equal(root.get("loja").get("id"), lojaId));
             predicates.add(cb.greaterThan(root.get("quantidade"), 0));
+            predicates.add(cb.isTrue(root.get("mostrarNoCatalogo")));
 
             // Estoque guarda só o variacaoId (sem relacionamento), então filtra a variação via subquery
             Subquery<Long> variacoes = query.subquery(Long.class);

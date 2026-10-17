@@ -1,5 +1,6 @@
 package Asclepio.Usuario.User;
 
+import Asclepio.Plano.LimitePlanoService;
 import Asclepio.ConfigConta.ConfigContaService;
 import Asclepio.Empresa.Empresa;
 import Asclepio.Empresa.EmpresaContext;
@@ -59,8 +60,10 @@ public class UserService {
 
     private final ConfigContaService configContaService;
 
+    private final LimitePlanoService limitePlanoService;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PermissionRepository permissionRepository, EmpresaService empresaService, UserValidationService validationService, ServiceRole serviceRole, EmpresaContext empresaContext, LojaRepository lojaRepository, UserLojaRepository userLojaRepository, TokenService tokenService, AuthenticationManager authenticationManager, LojaFormaPagamentoRepository lojaFormaPagamentoRepository, ConfigContaService configContaService) {
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, PermissionRepository permissionRepository, EmpresaService empresaService, UserValidationService validationService, ServiceRole serviceRole, EmpresaContext empresaContext, LojaRepository lojaRepository, UserLojaRepository userLojaRepository, TokenService tokenService, AuthenticationManager authenticationManager, LojaFormaPagamentoRepository lojaFormaPagamentoRepository, ConfigContaService configContaService, LimitePlanoService limitePlanoService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -76,6 +79,7 @@ public class UserService {
 
         this.lojaFormaPagamentoRepository = lojaFormaPagamentoRepository;
         this.configContaService = configContaService;
+        this.limitePlanoService = limitePlanoService;
     }
 
     @Transactional
@@ -84,6 +88,7 @@ public class UserService {
         validarCriacao(dto);
 
         Long empresaId = empresaContext.getEmpresaId();
+        limitePlanoService.validarNovoFuncionario(empresaId);
 
         // ==========================================
         // VALIDA E BUSCA TODAS AS LOJAS + ROLES

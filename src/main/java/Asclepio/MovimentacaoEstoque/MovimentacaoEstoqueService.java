@@ -8,6 +8,10 @@ import Asclepio.MovimentacaoEstoque.Repository.MovimentacaoEstoqueRepository;
 import Asclepio.MovimentacaoEstoque.Repository.MovimentacaoEstoqueSpecification;
 import Asclepio.MovimentacaoEstoque.dto.MovimentacaoEstoqueFiltro;
 import Asclepio.MovimentacaoEstoque.dto.MovimentacaoEstoqueResponse;
+import Asclepio.MovimentacaoEstoque.dto.MovimentacaoUsuarioResponse;
+
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 public class MovimentacaoEstoqueService {
@@ -21,6 +25,13 @@ public class MovimentacaoEstoqueService {
     ) {
         this.repository = repository;
         this.empresaContext = empresaContext;
+    }
+
+    public List<MovimentacaoUsuarioResponse> listarUsuarios() {
+        return repository.usuariosComMovimentacao(empresaContext.getEmpresaId())
+                .stream()
+                .sorted(Comparator.comparing(MovimentacaoUsuarioResponse::nome, String.CASE_INSENSITIVE_ORDER))
+                .toList();
     }
 
     public Page<MovimentacaoEstoqueResponse> listar(

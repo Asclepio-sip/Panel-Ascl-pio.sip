@@ -1,6 +1,7 @@
 package Asclepio.Empresa;
 
 import Asclepio.ClienteEmpresa.ClienteEmpresa;
+import Asclepio.Plano.Plano;
 import jakarta.persistence.*;
 
 
@@ -35,6 +36,11 @@ public class Empresa {
 
     @OneToMany(mappedBy = "empresa")
     private List<ClienteEmpresa> clientes;
+
+    /** Plano contratado (definido pelo painel SaaS). Null = sem limites (contas criadas antes dos planos). */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EMP_PLANO_ID")
+    private Plano plano;
 
     public Empresa() {
     }
@@ -94,5 +100,13 @@ public class Empresa {
 
     public void setClientes(List<ClienteEmpresa> clientes) {
         this.clientes = clientes;
+    }
+
+    public Plano getPlano() {
+        return plano;
+    }
+
+    public void setPlano(Plano plano) {
+        this.plano = plano;
     }
 }

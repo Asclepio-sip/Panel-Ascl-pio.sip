@@ -147,7 +147,7 @@ public class CatalogoOnlineService {
             throw new BusinessException("Pedido de balcão não pode ser feito pelo catálogo");
         }
 
-        validarItensDoCatalogo(dto.itens());
+        validarItensDoCatalogo(lojaId, dto.itens());
 
         return CatalogoPedidoResponse.fromPedidoCriado(
                 pedidoService.criarPedido(dto.toPedidoAddDTO(lojaId))
@@ -211,8 +211,8 @@ public class CatalogoOnlineService {
                 .orElseThrow(() -> new ResourceNotFoundException("Catálogo não encontrado"));
     }
 
-    // Só deixa pedir o que o catálogo mostra: variação ativa e sem item repetido
-    private void validarItensDoCatalogo(List<ItemPedidoAddDTO> itens) {
+    // Só deixa pedir o que o catálogo mostra: variação ativa, item visível no catálogo e sem item repetido
+    private void validarItensDoCatalogo(Long lojaId, List<ItemPedidoAddDTO> itens) {
 
         Set<Long> variacoes = new HashSet<>();
 
@@ -229,6 +229,13 @@ public class CatalogoOnlineService {
             if (!Boolean.TRUE.equals(produtoVariacaoService.buscarPorIdDTO(item.variacaoId()).ativo())) {
                 throw new BusinessException("Produto indisponível no catálogo (variação id: " + item.variacaoId() + ")");
             }
+
+            // Sem estoque na loja o PedidoService já recusa; aqui só barra o item escondido do catálogo
+            estoqueRepository.findByLoja_IdAndVariacaoId(lojaId, item.variacaoId())
+                    .filter(estoque -> !estoque.isMostrarNoCatalogo())
+                    .ifPresent(estoque -> {
+                        throw new BusinessException("Produto indisponível no catálogo (variação id: " + item.variacaoId() + ")");
+                    });
         }
     }
 }

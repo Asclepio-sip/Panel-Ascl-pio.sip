@@ -1,5 +1,6 @@
 package Asclepio.Plano;
 
+import Asclepio.Empresa.EmpresaRepository;
 import Asclepio.Plano.dto.PlanoResponseDTO;
 import Asclepio.Plano.dto.PlanoSyncDTO;
 import Asclepio.Plano.dto.RecursoPlanoDTO;
@@ -14,9 +15,11 @@ import java.util.List;
 public class PlanoService {
 
     private final PlanoRepository planoRepository;
+    private final EmpresaRepository empresaRepository;
 
-    public PlanoService(PlanoRepository planoRepository) {
+    public PlanoService(PlanoRepository planoRepository, EmpresaRepository empresaRepository) {
         this.planoRepository = planoRepository;
+        this.empresaRepository = empresaRepository;
     }
 
     @Transactional(readOnly = true)
@@ -65,6 +68,8 @@ public class PlanoService {
     public void remover(Long saasId) {
         Plano plano = planoRepository.findBySaasId(saasId)
                 .orElseThrow(() -> new ResourceNotFoundException("Plano " + saasId + " não encontrado."));
+        // Sem isso a FK de TB_EMPRESA impede a exclusão.
+        empresaRepository.removerPlano(plano);
         planoRepository.delete(plano);
     }
 }

@@ -1,5 +1,6 @@
 package Asclepio.ClienteEmpresa;
 
+import Asclepio.Plano.LimitePlanoService;
 import Asclepio.ClienteEmpresa.dto.ClienteEmpresaCreateDTO;
 import Asclepio.ClienteEmpresa.dto.ClienteEmpresaFiltro;
 import Asclepio.ClienteEmpresa.dto.ClienteEmpresaResponseDTO;
@@ -20,21 +21,25 @@ public class ClienteEmpresaService {
     private final ClienteEmpresaRepository repository;
     private final EmpresaRepository empresaRepository;
     private final EmpresaContext empresaContext;
+    private final LimitePlanoService limitePlanoService;
 
     public ClienteEmpresaService(
             ClienteEmpresaRepository repository,
             EmpresaRepository empresaRepository,
-            EmpresaContext empresaContext
+            EmpresaContext empresaContext,
+            LimitePlanoService limitePlanoService
     ) {
         this.repository = repository;
         this.empresaRepository = empresaRepository;
         this.empresaContext = empresaContext;
+        this.limitePlanoService = limitePlanoService;
     }
 
     @Transactional
     public ClienteEmpresaResponseDTO criar(ClienteEmpresaCreateDTO dto) {
 
         Long empresaId = empresaContext.getEmpresaId();
+        limitePlanoService.exigirCadastroClientes(empresaId);
 
         var empresa = empresaRepository.getReferenceById(empresaId);
 
@@ -62,6 +67,7 @@ public class ClienteEmpresaService {
     public ClienteEmpresaResponseDTO atualizar(UUID id, ClienteEmpresaUpdateDTO dto) {
 
         Long empresaId = empresaContext.getEmpresaId();
+        limitePlanoService.exigirCadastroClientes(empresaId);
 
         ClienteEmpresa cliente = repository
                 .findByIdAndEmpresa_Id(id, empresaId)

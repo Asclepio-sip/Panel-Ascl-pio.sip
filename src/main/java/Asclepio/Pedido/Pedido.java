@@ -105,9 +105,11 @@ public class Pedido {
         this.totalProdutos = itens.stream().map(ItemPedido::getSubtotal).filter(subtotal -> subtotal != null).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    /** Venda de balcão já sai concluída (só pode ser cancelada depois); o resto começa em AGUARDANDO. */
     public void definirStatusInicial() {
         if (tipoAtendimentoPedido == TipoAtendimentoPedido.BALCAO) {
-            status = StatusDoPedido.SEPARACAO;
+            status = StatusDoPedido.CONCLUIDO;
+            concluidoEm = LocalDateTime.now();
         } else {
             status = StatusDoPedido.AGUARDANDO;
         }
