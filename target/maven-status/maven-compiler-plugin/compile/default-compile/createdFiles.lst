@@ -3,6 +3,7 @@ Asclepio/CatalogoOnline/dto/CatalogoCheckoutResponse.class
 Asclepio/Plano/dto/PlanoSyncDTO.class
 Asclepio/Dashboard/dto/DashboardFinanceiroResponse$Agrupamento.class
 Asclepio/Plano/dto/RecursoPlanoDTO.class
+Asclepio/exception/UsuarioDesativadoException.class
 Asclepio/Dashboard/dto/DashboardFinanceiroResponse$Resumo.class
 Asclepio/CatalogoOnline/CatalogoOnlineSpecification.class
 Asclepio/MovimentacaoEstoque/dto/MovimentacaoUsuarioResponse.class
@@ -42,6 +43,7 @@ Asclepio/ConfigConta/controller/api/ConfigContaApi.class
 Asclepio/Dashboard/DashboardService$ProdutoAcumulado.class
 Asclepio/ConfigConta/ConfigContaRepository.class
 Asclepio/Usuario/User/dto/AtualizarLojasUsuarioDTO.class
+Asclepio/Usuario/User/dto/AlterarAtivoUsuarioDTO.class
 Asclepio/Dashboard/DashboardService$Acumulador.class
 Asclepio/CatalogoOnline/controller/CatalogoOnlineController.class
 Asclepio/CatalogoOnline/dto/CatalogoCheckoutResponse$FormaPagamento.class

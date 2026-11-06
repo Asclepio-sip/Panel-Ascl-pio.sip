@@ -79,4 +79,10 @@ public class ControllerUsuario implements UserAPI {
         userService.atualizarLojasDoUsuario(id, dto.lojas());
         return ResponseEntity.ok().build();
     }
+
+    @Override
+    public ResponseEntity<Void> alterarAtivo(@PathVariable UUID id, @RequestBody @Valid AlterarAtivoUsuarioDTO dto) {
+        userService.alterarAtivo(id, dto.ativo());
+        return ResponseEntity.ok().build();
+    }
 }

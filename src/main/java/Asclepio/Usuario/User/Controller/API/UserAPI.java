@@ -91,4 +91,16 @@ public interface UserAPI {
     @PutMapping("/{id}/lojas")
     @PreAuthorize("hasAuthority('EditarUser')")
     ResponseEntity<Void> atualizarLojasDoUsuario(@PathVariable UUID id, @RequestBody @Valid AtualizarLojasUsuarioDTO dto);
+
+    @Operation(
+            summary = "Ativar/desativar usuário",
+            description = "Liga ou desliga o acesso de um funcionario da empresa. "
+                    + "Usuario desativado nao consegue fazer login e os tokens ja emitidos passam a responder 403 \"Usuario Desativado\". "
+                    + "Ao reativar, o usuario volta a contar no limite de funcionarios do plano. "
+                    + "Nao e possivel desativar o proprio usuario, e apenas um Gerente pode desativar outro Gerente. "
+                    + "Exemplo de payload: { \"ativo\": false }"
+    )
+    @PutMapping("/{id}/ativo")
+    @PreAuthorize("hasAuthority('EditarUser')")
+    ResponseEntity<Void> alterarAtivo(@PathVariable UUID id, @RequestBody @Valid AlterarAtivoUsuarioDTO dto);
 }

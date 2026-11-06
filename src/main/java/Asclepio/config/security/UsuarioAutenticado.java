@@ -67,8 +67,10 @@ public class UsuarioAutenticado implements UserDetails {
         return true;
     }
 
+    // Usuário desativado é barrado no UserService.login (depois de conferir a senha) e no SecurityFilter,
+    // com 403 "Usuario Desativado". Se barrasse aqui, o Spring respondia 500 antes de checar a senha.
     @Override
     public boolean isEnabled() {
-        return user.getAtivo();
+        return true;
     }
 }

@@ -101,6 +101,21 @@ public class GlobalExceptionHandler {
         ));
     }
 
+    // Usuário desativado pelo dono/gerente da conta
+    @ExceptionHandler(UsuarioDesativadoException.class)
+    public ResponseEntity<ErrorResponse> handleUsuarioDesativado(
+            UsuarioDesativadoException ex,
+            HttpServletRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                "Usuario Desativado",
+                ex.getMessage(),
+                request.getRequestURI()
+        ));
+    }
+
     // Catálogo público de empresa bloqueada pelo painel SaaS
     @ExceptionHandler(CatalogoDesativadoException.class)
     public ResponseEntity<ErrorResponse> handleCatalogoDesativado(

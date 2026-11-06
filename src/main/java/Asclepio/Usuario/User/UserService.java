@@ -25,6 +25,7 @@ import Asclepio.config.security.UsuarioAutenticado;
 import Asclepio.exception.BusinessException;
 import Asclepio.exception.ContaBloqueadaException;
 import Asclepio.exception.ResourceNotFoundException;
+import Asclepio.exception.UsuarioDesativadoException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -338,6 +339,57 @@ public class UserService {
         }
     }
 
+    /**
+     * Ativa/desativa um funcionário da empresa. Desativado não faz login e os tokens já emitidos
+     * deixam de valer (SecurityFilter). Reativar conta de novo no limite de funcionários do plano.
+     */
+    @Transactional
+    public void alterarAtivo(UUID id, boolean ativo) {
+
+        User user = findById(id);
+
+        if (Boolean.valueOf(ativo).equals(user.getAtivo())) {
+            return;
+        }
+
+        if (ativo) {
+            limitePlanoService.validarNovoFuncionario(empresaContext.getEmpresaId());
+            user.ativar();
+        } else {
+            User logado = usuarioLogado();
+
+            if (logado != null && logado.getId().equals(user.getId())) {
+                throw new BusinessException("Você não pode desativar o seu próprio usuário.");
+            }
+
+            boolean alvoEhGerente = ehGerente(userLojaRepository.findAllByUser(user));
+            boolean logadoEhGerente = logado != null && ehGerente(userLojaRepository.findAllByUser(logado));
+
+            if (alvoEhGerente && !logadoEhGerente) {
+                throw new BusinessException("Apenas um Gerente pode desativar outro Gerente.");
+            }
+
+            user.desativar();
+        }
+
+        userRepository.save(user);
+    }
+
+    private User usuarioLogado() {
+        var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof UsuarioAutenticado usuario) {
+            return usuario.getUser();
+        }
+        return null;
+    }
+
+    /** Checado depois da senha conferir, para não revelar que o login existe. */
+    private void validarUsuarioAtivo(User user) {
+        if (!Boolean.TRUE.equals(user.getAtivo())) {
+            throw new UsuarioDesativadoException();
+        }
+    }
+
     @Transactional
     public User criarConta(RequestCriarContaDTO dto) {
 
@@ -440,6 +492,7 @@ public class UserService {
 
     public LoginResponseDTO escolherLoja(User user, Long lojaId) {
 
+        validarUsuarioAtivo(user);
         List<UserLoja> vinculos = userLojaRepository.findAllByUser(user);
         validarEmpresaAtiva(vinculos);
         boolean ehGerente = ehGerente(vinculos);
@@ -491,6 +544,8 @@ public class UserService {
             userRepository.save(user);
         }
         // ======================================
+
+        validarUsuarioAtivo(user);
 
         List<UserLoja> lojas = userLojaRepository.findAllByUser(user);
         validarEmpresaAtiva(lojas);

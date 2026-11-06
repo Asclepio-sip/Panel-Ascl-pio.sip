@@ -3,6 +3,7 @@ package Asclepio.config.security;
 import Asclepio.Empresa.EmpresaRepository;
 import Asclepio.Usuario.User.User;
 import Asclepio.exception.ContaBloqueadaException;
+import Asclepio.exception.UsuarioDesativadoException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,6 +57,11 @@ public class SecurityFilter extends OncePerRequestFilter {
 
                     User user = userRepository.findByUsername(login).orElse(null);
 
+                    if (user != null && !Boolean.TRUE.equals(user.getAtivo())) {
+                        responderUsuarioDesativado(request, response);
+                        return;
+                    }
+
                     if (user != null) {
                         UsuarioAutenticado usuarioAutenticado =
                                 new UsuarioAutenticado(user, null, null, List.of());
@@ -87,10 +93,16 @@ public class SecurityFilter extends OncePerRequestFilter {
                         .map(SimpleGrantedAuthority::new)
                         .toList();
 
-                UserDetails user = userRepository
-                        .findByUsername(login)
-                        .map(u -> new UsuarioAutenticado(u, empresaId, lojaId, authorities))
-                        .orElse(null);
+                User usuario = userRepository.findByUsername(login).orElse(null);
+
+                // Usuário desativado pelo gerente: o token deixa de valer na hora.
+                if (usuario != null && !Boolean.TRUE.equals(usuario.getAtivo())) {
+                    responderUsuarioDesativado(request, response);
+                    return;
+                }
+
+                UserDetails user = usuario == null ? null
+                        : new UsuarioAutenticado(usuario, empresaId, lojaId, authorities);
 
                 if (user != null) {
                     UsernamePasswordAuthenticationToken authentication =
@@ -116,6 +128,18 @@ public class SecurityFilter extends OncePerRequestFilter {
         response.getWriter().write("""
                 {"timestamp":"%s","status":403,"error":"Conta Bloqueada","message":"%s","path":"%s"}"""
                 .formatted(java.time.LocalDateTime.now(), ContaBloqueadaException.MENSAGEM,
+                        request.getRequestURI().replace("\"", "")));
+    }
+
+    private void responderUsuarioDesativado(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        SecurityContextHolder.clearContext();
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("""
+                {"timestamp":"%s","status":403,"error":"Usuario Desativado","message":"%s","path":"%s"}"""
+                .formatted(java.time.LocalDateTime.now(), UsuarioDesativadoException.MENSAGEM,
                         request.getRequestURI().replace("\"", "")));
     }
 

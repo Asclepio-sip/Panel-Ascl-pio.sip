@@ -231,6 +231,7 @@
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Usuario/User/User.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Usuario/User/UserService.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Usuario/User/UserValidationService.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Usuario/User/dto/AlterarAtivoUsuarioDTO.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Usuario/User/dto/AtualizarLojasUsuarioDTO.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Usuario/User/dto/AuthenticationDTO.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/Usuario/User/dto/CriarUsuarioResponseDTO.java
@@ -270,3 +271,4 @@
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/exception/GlobalExceptionHandler.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/exception/NotFoundException.java
 /run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/exception/ResourceNotFoundException.java
+/run/media/mateus/Arquivo/DEV/Avance.sip/Asclepio.sip/Back-end/Panel-Ascl-pio.sip/src/main/java/Asclepio/exception/UsuarioDesativadoException.java
