@@ -24,17 +24,25 @@ public class SecurityConfigurations {
     private final AuthorizationService authorizationService;
     private final PasswordEncoder passwordEncoder;
     private final String internoApiKey;
+    private final java.util.List<String> corsAllowedOrigins;
 
     public SecurityConfigurations(
             SecurityFilter securityFilter,
             AuthorizationService authorizationService,
             PasswordEncoder passwordEncoder,
-            @Value("${interno.api-key:}") String internoApiKey
+            @Value("${interno.api-key:}") String internoApiKey,
+            @Value("${cors.allowed-origins}") java.util.List<String> corsAllowedOrigins
     ) {
         this.securityFilter = securityFilter;
         this.authorizationService = authorizationService;
         this.passwordEncoder = passwordEncoder;
         this.internoApiKey = internoApiKey;
+        // Tira espaços e barra final: o navegador manda o Origin sem "/" no fim
+        this.corsAllowedOrigins = corsAllowedOrigins.stream()
+                .map(String::trim)
+                .map(origem -> origem.endsWith("/") ? origem.substring(0, origem.length() - 1) : origem)
+                .filter(origem -> !origem.isEmpty())
+                .toList();
     }
 
     @Bean
@@ -115,15 +123,7 @@ public class SecurityConfigurations {
 
         org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
 
-        configuration.setAllowedOrigins(
-                java.util.List.of("http://localhost:4200",
-                        "http://localhost:4201",
-                        "https://customer-ascl-pio-sip.vercel.app",
-                        "https://administration-ascl-pio-sip.vercel.app",
-                        "https://administration-ascl-pio-jlb0ylz07-mateusss-projects.vercel.app/"
-
-
-                ));
+        configuration.setAllowedOrigins(corsAllowedOrigins);
 
         configuration.setAllowedMethods(
                 java.util.List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
